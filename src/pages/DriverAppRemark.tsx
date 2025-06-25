@@ -17,7 +17,7 @@ export interface Transaction {
   receive_code?: string;
   serial_no?: string;
   customer_name?: string;
-  recipient_code?: string;
+  recipient_name?: string;
   to_warehouse?: string;
   package_name?: string;
   status_message?: string;
@@ -34,20 +34,6 @@ export interface LeditRow {
   first_name?: string;
   last_name?: string;
 }
-
-// *** 1. ลบ function filterTransactions ออก ***
-// function filterTransactions(
-//   transactions: Transaction[],
-//   search: string
-// ): Transaction[] {
-//   if (
-//     search.trim() !== "" &&
-//     transactions.some((tr) => tr.receive_code === search.trim())
-//   ) {
-//     return transactions.filter((tr) => tr.receive_code === search.trim());
-//   }
-//   return transactions;
-// }
 
 export default function DriverAppRemark() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -71,6 +57,10 @@ export default function DriverAppRemark() {
   const [leditError, setLeditError] = useState<string | null>(null);
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
+
+  // สำหรับ modal รับ receive_code
+  const [isReceiveCodeModalOpen, setIsReceiveCodeModalOpen] = useState(false);
+  const [modalReceiveCode, setModalReceiveCode] = useState<string | null>(null);
 
   const fetchTransactions = async () => {
     setLoading(true);
@@ -148,15 +138,7 @@ export default function DriverAppRemark() {
       fetchTransactions();
     }
     // eslint-disable-next-line
-  }, [
-    search,
-    selectedDate,
-    page,
-    sortBy,
-    order,
-    pageCount,
-    remarkFilter,
-  ]);
+  }, [search, selectedDate, page, sortBy, order, pageCount, remarkFilter]);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -164,13 +146,13 @@ export default function DriverAppRemark() {
     }
   }, [isLoggedIn, navigate]);
 
-  // *** 2. ลบการใช้ filterTransactions ออก ***
-  // const displayTransactions = filterTransactions(transactions, search);
+  // สำหรับ group receive_code ให้แสดงเฉพาะบรรทัดแรก
+  const shownReceiveCodes = new Set<string>();
 
-  // *** 3. สามารถลบ/ไม่ต้องใช้ shownReceiveCodes ได้เลย ***
-  // const shownReceiveCodes = new Set<string>();
-
-  // *** 4. ใช้ transactions ตรงๆ หรือจะทำ group/uniq ที่นี่ถ้าต้องการ ***
+  // สำหรับ modal ใหม่ แสดง serial_no, customer_name, to_warehouse ตาม receive_code
+  const modalSerialList = modalReceiveCode
+    ? transactions.filter((t) => t.receive_code === modalReceiveCode)
+    : [];
 
   return (
     <div className={`w-full mx-auto ${loading ? "cursor-wait" : ""}`}>
@@ -243,9 +225,6 @@ export default function DriverAppRemark() {
               <th className="w-72 px-4 py-2 border-b text-left">
                 customer_name
               </th>
-              <th className="w-60 px-4 py-2 border-b text-left">
-                recipient_code
-              </th>
               <th
                 className={`w-60 px-4 py-2 border-b text-left text-brand-500 cursor-pointer
                 ${sortBy === "to_warehouse" ? "bg-blue-100" : ""}`}
@@ -254,87 +233,101 @@ export default function DriverAppRemark() {
                 to_warehouse{" "}
                 {sortBy === "to_warehouse" && (order === "asc" ? "▲" : "▼")}
               </th>
-              <th className="w-60 px-4 py-2 border-b text-left">
-                package_name
-              </th>
             </tr>
           </thead>
           <tbody>
-            {/* ใช้ transactions.map แทน displayTransactions.map ได้เลย */}
-            {transactions.map((t, i) => (
-              <tr
-                key={t.id ?? i}
-                className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
-              >
-                <td className="px-4 py-2 border-b truncate">
-                  <button
-                    className="inline-flex gap-1 px-2.5 py-1.5 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    onClick={async () => {
-                      setIsModalOpen(true);
-                      setModalData(t);
-                      if (t.receive_code) {
-                        await fetchLedit(String(t.receive_code));
-                      } else {
-                        setLeditRows([]);
-                      }
-                    }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 20"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-4 h-4"
+            {transactions.map((t, i) => {
+              // สำหรับ group receive_code เฉพาะแถวแรก
+              let showReceiveCode = false;
+              if (t.receive_code && !shownReceiveCodes.has(t.receive_code)) {
+                showReceiveCode = true;
+                shownReceiveCodes.add(t.receive_code);
+              }
+              return (
+                <tr
+                  key={t.id ?? i}
+                  className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                >
+                  {/* log modal เดิม */}
+                  <td className="px-4 py-2 border-b truncate">
+                    <button
+                      className="inline-flex gap-1 px-2.5 py-1.5 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      onClick={async () => {
+                        setIsModalOpen(true);
+                        setModalData(t);
+                        if (t.receive_code) {
+                          await fetchLedit(String(t.receive_code));
+                        } else {
+                          setLeditRows([]);
+                        }
+                      }}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 8.25V6A2.25 2.25 0 0012.75 3.75h-5.5A2.25 2.25 0 005 6v2.25m10 0V14A2.25 2.25 0 0112.75 16.25h-5.5A2.25 2.25 0 015 14V8.25m10 0H5"
-                      />
-                    </svg>
-                  </button>
-                </td>
-                <td className="px-4 py-2 border-b truncate">
-                  {t.resend_create_date
-                    ? format(
-                        new Date(t.resend_create_date),
-                        "yyyy-MM-dd | HH:mm:ss"
-                      )
-                    : "-"}
-                </td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">
-                  {t.resend_reason_detail || "-"}
-                </td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">
-                  {t.remark || "-"}
-                </td>
-                <td className="px-4 py-2 border-b truncate">
-                  {t.create_date_1_2
-                    ? format(new Date(t.create_date_1_2), "yyyy-MM-dd")
-                    : "-"}
-                </td>
-                <td className="px-4 py-2 border-b truncate">
-                  {t.receive_code || ""}
-                </td>
-                <td className="px-4 py-2 border-b truncate">
-                  {t.customer_name || "-"}
-                </td>
-                <td className="px-4 py-2 border-b truncate">
-                  {t.recipient_code || "-"}
-                </td>
-                <td className="px-4 py-2 border-b truncate">
-                  {t.to_warehouse || "-"}
-                </td>
-                <td className="px-4 py-2 border-b truncate">
-                  {t.package_name || "-"}
-                </td>
-              </tr>
-            ))}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 20"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15 8.25V6A2.25 2.25 0 0012.75 3.75h-5.5A2.25 2.25 0 005 6v2.25m10 0V14A2.25 2.25 0 0112.75 16.25h-5.5A2.25 2.25 0 015 14V8.25m10 0H5"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                  <td className="px-4 py-2 border-b truncate">
+                    {t.resend_create_date
+                      ? format(
+                          new Date(t.resend_create_date),
+                          "yyyy-MM-dd | HH:mm:ss"
+                        )
+                      : "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.resend_reason_detail || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.remark || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate">
+                    {t.create_date_1_2
+                      ? format(new Date(t.create_date_1_2), "yyyy-MM-dd")
+                      : "-"}
+                  </td>
+                  {/* ช่อง receive_code: เพิ่มปุ่ม modal ใหม่ เฉพาะแถวแรก */}
+                  <td className="px-4 py-2 border-b truncate">
+                    {showReceiveCode ? (
+                      <button
+                        className="text-brand-500 hover:text-brand-600 underline"
+                        onClick={() => {
+                          setModalReceiveCode(t.receive_code ?? null);
+                          setIsReceiveCodeModalOpen(true);
+                        }}
+                      >
+                        {t.receive_code}
+                      </button>
+                    ) : (
+                      ""
+                    )}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate">
+                    {t.customer_name || "-"}
+                  </td>
+
+                  <td className="px-4 py-2 border-b truncate">
+                    {t.to_warehouse || "-"}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
 
+      {/* modal log เดิม */}
       {isModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm"
@@ -365,7 +358,7 @@ export default function DriverAppRemark() {
             {/* ตารางข้อมูล log การแก้ไข */}
             <div className="overflow-x-auto">
               {leditLoading && (
-                <div className="text-blue-500 py-2">กำลังโหลด log แก้ไข...</div>
+                <div className="text-brand-500 py-2">กำลังโหลด log แก้ไข...</div>
               )}
               {leditError && (
                 <div className="text-red-500 py-2">{leditError}</div>
@@ -412,6 +405,74 @@ export default function DriverAppRemark() {
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* modal ใหม่สำหรับ receive_code */}
+      {isReceiveCodeModalOpen && modalReceiveCode && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm"
+          onClick={() => {
+            setIsReceiveCodeModalOpen(false);
+            setModalReceiveCode(null);
+          }}
+        >
+          <div
+            className="bg-white p-6 rounded shadow-lg min-w-[320px] max-w-[90vw]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold">
+                รายการใน receive_code:{" "}
+                <span className="ml-2 text-base text-gray-600 font-normal">{modalReceiveCode}</span>
+              </h2>
+              <button
+                className="text-gray-500 hover:text-gray-900 text-xl"
+                onClick={() => {
+                  setIsReceiveCodeModalOpen(false);
+                  setModalReceiveCode(null);
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <table className="min-w-full border-collapse border">
+              <thead>
+                <tr>
+                  <th className="border px-2 py-1">serial_no</th>
+                  <th className="border px-2 py-1">customer_name</th>
+                  <th className="border px-2 py-1">recipient_name</th>
+                  <th className="border px-2 py-1">to_warehouse</th>
+                </tr>
+              </thead>
+              <tbody>
+                {modalSerialList.length > 0 ? (
+                  modalSerialList.map((item, idx) => (
+                    <tr key={item.serial_no ?? idx}>
+                      <td className="border px-2 py-1">
+                        {item.serial_no || "-"}
+                      </td>
+                      <td className="border px-2 py-1">
+                        {item.customer_name || "-"}
+                      </td>
+                       <td className="border px-2 py-1">
+                        {item.recipient_name || "-"}
+                      </td>
+                      <td className="border px-2 py-1">
+                        {item.to_warehouse || "-"}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td className="border px-2 py-1 text-center" colSpan={3}>
+                      ไม่มีข้อมูล
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
