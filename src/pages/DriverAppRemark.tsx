@@ -58,7 +58,6 @@ export default function DriverAppRemark() {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  // สำหรับ modal รับ receive_code
   const [isReceiveCodeModalOpen, setIsReceiveCodeModalOpen] = useState(false);
   const [modalReceiveCode, setModalReceiveCode] = useState<string | null>(null);
 
@@ -146,13 +145,20 @@ export default function DriverAppRemark() {
     }
   }, [isLoggedIn, navigate]);
 
-  // สำหรับ group receive_code ให้แสดงเฉพาะบรรทัดแรก
-  const shownReceiveCodes = new Set<string>();
-
   // สำหรับ modal ใหม่ แสดง serial_no, customer_name, to_warehouse ตาม receive_code
   const modalSerialList = modalReceiveCode
     ? transactions.filter((t) => t.receive_code === modalReceiveCode)
     : [];
+
+  const uniqReceiveCodeList = (() => {
+    const seen = new Set<string>();
+    return transactions.filter((t) => {
+      if (!t.receive_code) return false;
+      if (seen.has(t.receive_code)) return false;
+      seen.add(t.receive_code);
+      return true;
+    });
+  })();
 
   return (
     <div className={`w-full mx-auto ${loading ? "cursor-wait" : ""}`}>
@@ -225,6 +231,9 @@ export default function DriverAppRemark() {
               <th className="w-72 px-4 py-2 border-b text-left">
                 customer_name
               </th>
+              <th className="w-72 px-4 py-2 border-b text-left">
+                recipient_name
+              </th>
               <th
                 className={`w-60 px-4 py-2 border-b text-left text-brand-500 cursor-pointer
                 ${sortBy === "to_warehouse" ? "bg-blue-100" : ""}`}
@@ -236,13 +245,7 @@ export default function DriverAppRemark() {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((t, i) => {
-              // สำหรับ group receive_code เฉพาะแถวแรก
-              let showReceiveCode = false;
-              if (t.receive_code && !shownReceiveCodes.has(t.receive_code)) {
-                showReceiveCode = true;
-                shownReceiveCodes.add(t.receive_code);
-              }
+            {uniqReceiveCodeList.map((t, i) => {
               return (
                 <tr
                   key={t.id ?? i}
@@ -299,24 +302,22 @@ export default function DriverAppRemark() {
                   </td>
                   {/* ช่อง receive_code: เพิ่มปุ่ม modal ใหม่ เฉพาะแถวแรก */}
                   <td className="px-4 py-2 border-b truncate">
-                    {showReceiveCode ? (
-                      <button
-                        className="text-brand-500 hover:text-brand-600 underline"
-                        onClick={() => {
-                          setModalReceiveCode(t.receive_code ?? null);
-                          setIsReceiveCodeModalOpen(true);
-                        }}
-                      >
-                        {t.receive_code}
-                      </button>
-                    ) : (
-                      ""
-                    )}
+                    <button
+                      className="text-brand-500 hover:text-brand-600 underline"
+                      onClick={() => {
+                        setModalReceiveCode(t.receive_code ?? null);
+                        setIsReceiveCodeModalOpen(true);
+                      }}
+                    >
+                      {t.receive_code}
+                    </button>
                   </td>
                   <td className="px-4 py-2 border-b truncate">
                     {t.customer_name || "-"}
                   </td>
-
+                  <td className="px-4 py-2 border-b truncate">
+                    {t.recipient_name || "-"}
+                  </td>
                   <td className="px-4 py-2 border-b truncate">
                     {t.to_warehouse || "-"}
                   </td>
@@ -344,7 +345,7 @@ export default function DriverAppRemark() {
                   !Array.isArray(modalData) &&
                   (modalData.receive_code || modalData.id) && (
                     <span className="ml-2 text-base text-gray-600 font-normal">
-                      [{modalData.receive_code || modalData.id}]
+                      {modalData.receive_code || modalData.id}
                     </span>
                   )}
               </h2>
@@ -358,7 +359,9 @@ export default function DriverAppRemark() {
             {/* ตารางข้อมูล log การแก้ไข */}
             <div className="overflow-x-auto">
               {leditLoading && (
-                <div className="text-brand-500 py-2">กำลังโหลด log แก้ไข...</div>
+                <div className="text-brand-500 py-2">
+                  กำลังโหลด log แก้ไข...
+                </div>
               )}
               {leditError && (
                 <div className="text-red-500 py-2">{leditError}</div>
@@ -425,10 +428,12 @@ export default function DriverAppRemark() {
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">
                 รายการใน receive_code:{" "}
-                <span className="ml-2 text-base text-gray-600 font-normal">{modalReceiveCode}</span>
+                <span className="ml-2 text-base text-gray-600 font-normal">
+                  {modalReceiveCode}
+                </span>
               </h2>
               <button
-                className="text-gray-500 hover:text-gray-900 text-xl"
+                className="text-gray-500 hover:text-gray-900 text-xl ml-3"
                 onClick={() => {
                   setIsReceiveCodeModalOpen(false);
                   setModalReceiveCode(null);
@@ -441,9 +446,7 @@ export default function DriverAppRemark() {
               <thead>
                 <tr>
                   <th className="border px-2 py-1">serial_no</th>
-                  <th className="border px-2 py-1">customer_name</th>
-                  <th className="border px-2 py-1">recipient_name</th>
-                  <th className="border px-2 py-1">to_warehouse</th>
+                  <th className="border px-2 py-1">package_name</th>
                 </tr>
               </thead>
               <tbody>
@@ -454,13 +457,7 @@ export default function DriverAppRemark() {
                         {item.serial_no || "-"}
                       </td>
                       <td className="border px-2 py-1">
-                        {item.customer_name || "-"}
-                      </td>
-                       <td className="border px-2 py-1">
-                        {item.recipient_name || "-"}
-                      </td>
-                      <td className="border px-2 py-1">
-                        {item.to_warehouse || "-"}
+                        {item.package_name || "-"}
                       </td>
                     </tr>
                   ))
