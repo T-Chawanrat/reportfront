@@ -34,7 +34,7 @@ const navItems: NavItem[] = [
       // { name: "Dashboard", path: "/", pro: false },
       // { name: "Blank Page", path: "/blank", pro: false },
       // { name: "Basic Tables", path: "/basic-tables", pro: false },
-      { name: "remark", path: "/remark", pro: false },
+      { name: "Remark", path: "/remark", pro: false },
       // { name: "remarkcopy", path: "/remarkcopy", pro: false },
     ],
   },

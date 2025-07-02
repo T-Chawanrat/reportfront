@@ -7,21 +7,23 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
 import AxiosInstance from "../utils/AxiosInstance";
+import Button from "../components/ui/button/Button";
+import Input from "../components/form/input/InputField";
+import { ExportExcel } from "../utils/ExportExcel";
+import { FileDown, Logs } from "lucide-react";
 
 export interface Transaction {
   id?: number | string;
-  resend_create_date?: string;
-  resend_reason_detail?: string;
+  Create_date___tm_resend?: string;
+  detail?: string;
   remark?: string;
-  create_date_1_2?: string;
+  DATETIME?: string;
   receive_code?: string;
   serial_no?: string;
   customer_name?: string;
   recipient_name?: string;
-  to_warehouse?: string;
+  warehouse_name?: string;
   package_name?: string;
-  status_message?: string;
-  from_warehouse?: string;
   datetime?: string;
   update_date?: string;
 }
@@ -35,11 +37,11 @@ export interface LeditRow {
   last_name?: string;
 }
 
-export default function DriverAppRemark() {
+export default function Resend() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [search, setSearch] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [sortBy, setSortBy] = useState<string>("resend_create_date");
+  const [sortBy, setSortBy] = useState<string>("Create_date___tm_resend");
   const [order, setOrder] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -47,7 +49,7 @@ export default function DriverAppRemark() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const pageCount = Math.ceil(total / limit);
-  const [remarkFilter, setRemarkFilter] = useState<"all" | "yes" | "no">("all");
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalData, setModalData] = useState<
     Transaction | Transaction[] | null
@@ -74,10 +76,9 @@ export default function DriverAppRemark() {
         page,
         limit,
         date: dateFilter,
-        has_remark: remarkFilter,
       };
 
-      const res = await AxiosInstance.get("/app", { params });
+      const res = await AxiosInstance.get("/01", { params });
       setTransactions(res.data.data || []);
       setTotal(res.data.total || 0);
     } catch (err) {
@@ -137,7 +138,7 @@ export default function DriverAppRemark() {
       fetchTransactions();
     }
     // eslint-disable-next-line
-  }, [search, selectedDate, page, sortBy, order, pageCount, remarkFilter]);
+  }, [search, selectedDate, page, sortBy, order, pageCount]);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -150,25 +151,26 @@ export default function DriverAppRemark() {
     ? transactions.filter((t) => t.receive_code === modalReceiveCode)
     : [];
 
-  const uniqReceiveCodeList = (() => {
-    const seen = new Set<string>();
-    return transactions.filter((t) => {
-      if (!t.receive_code) return false;
-      if (seen.has(t.receive_code)) return false;
-      seen.add(t.receive_code);
-      return true;
-    });
-  })();
+  const handleDownload = async () => {
+    try {
+      await ExportExcel({
+        url: "/export",
+        filename: "รายงานremark.xlsx",
+      });
+    } catch (err) {
+      alert((err as Error).message);
+    }
+  };
 
   return (
     <div className={`w-full mx-auto ${loading ? "cursor-wait" : ""}`}>
-      <div className="flex flex-col md:flex-row gap-4 mb-6 font-thai">
-        <input
+      <div className="flex flex-col md:flex-row gap-4 mb-4 font-thai">
+        <Input
           type="text"
           placeholder="ค้นหา (receive_code)"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border border-gray-300 rounded px-3 py-1 h-10 w-96 focus:outline-none focus:border-brand-500"
+          className="border border-gray-300 rounded px-3 py-1 h-10 w-lg "
         />
 
         <DatePicker
@@ -179,18 +181,15 @@ export default function DriverAppRemark() {
           placeholderText="-- เลือกวันที่ --"
           className="border border-gray-300 rounded px-3 py-2"
         />
-
-        <select
-          className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-brand-500"
-          value={remarkFilter}
-          onChange={(e) =>
-            setRemarkFilter(e.target.value as "all" | "yes" | "no")
-          }
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={handleDownload}
+          className="h-10"
         >
-          <option value="all">ทั้งหมด</option>
-          <option value="yes">มีหมายเหตุ</option>
-          <option value="no">ไม่มีหมายเหตุ</option>
-        </select>
+          <FileDown />
+          Export Excel
+        </Button>
       </div>
 
       {/* ตารางข้อมูล */}
@@ -201,11 +200,11 @@ export default function DriverAppRemark() {
               <th className="w-20 px-4 py-2 border-b text-left">Log</th>
               <th
                 className={`w-60 px-4 py-2 border-b text-left text-brand-500 cursor-pointer
-                ${sortBy === "resend_create_date" ? "bg-blue-100" : ""}`}
-                onClick={() => handleSort("resend_create_date")}
+                ${sortBy === "Create_date___tm_resend" ? "bg-blue-100" : ""}`}
+                onClick={() => handleSort("Create_date___tm_resend")}
               >
                 วันที่กดแอพ{" "}
-                {sortBy === "resend_create_date" &&
+                {sortBy === "Create_date___tm_resend" &&
                   (order === "asc" ? "▲" : "▼")}
               </th>
               <th className="w-60 px-4 py-2 border-b text-left">รายละเอียด</th>
@@ -217,19 +216,11 @@ export default function DriverAppRemark() {
                 เลขที่บิล (receive_code)
               </th>
               <th className="w-72 px-4 py-2 border-b text-left">ชื่อผู้ส่ง</th>
-              <th className="w-72 px-4 py-2 border-b text-left">ชื่อผู้รับ</th>
-              <th
-                className={`w-60 px-4 py-2 border-b text-left text-brand-500 cursor-pointer
-                ${sortBy === "to_warehouse" ? "bg-blue-100" : ""}`}
-                onClick={() => handleSort("to_warehouse")}
-              >
-                คลังปลายทาง{" "}
-                {sortBy === "to_warehouse" && (order === "asc" ? "▲" : "▼")}
-              </th>
+              <th className="w-72 px-4 py-2 border-b text-left">คลังปลายทาง</th>
             </tr>
           </thead>
           <tbody className="font-thai">
-            {uniqReceiveCodeList.map((t, i) => {
+            {transactions.map((t, i) => {
               return (
                 <tr
                   key={t.id ?? i}
@@ -249,47 +240,26 @@ export default function DriverAppRemark() {
                         }
                       }}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        className="lucide lucide-logs-icon lucide-logs"
-                      >
-                        <path d="M13 12h8" />
-                        <path d="M13 18h8" />
-                        <path d="M13 6h8" />
-                        <path d="M3 12h1" />
-                        <path d="M3 18h1" />
-                        <path d="M3 6h1" />
-                        <path d="M8 12h1" />
-                        <path d="M8 18h1" />
-                        <path d="M8 6h1" />
-                      </svg>
+                      <Logs />
                     </button>
                   </td>
                   <td className="px-4 py-2 border-b truncate">
-                    {t.resend_create_date
+                    {t.Create_date___tm_resend
                       ? format(
-                          new Date(t.resend_create_date),
+                          new Date(t.Create_date___tm_resend),
                           "yyyy-MM-dd | HH:mm:ss"
                         )
                       : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.resend_reason_detail || "-"}
+                    {t.detail || "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
                     {t.remark || "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate">
-                    {t.create_date_1_2
-                      ? format(new Date(t.create_date_1_2), "yyyy-MM-dd")
+                    {t.DATETIME
+                      ? format(new Date(t.DATETIME), "yyyy-MM-dd")
                       : "-"}
                   </td>
                   {/* ช่อง receive_code: เพิ่มปุ่ม modal ใหม่ เฉพาะแถวแรก */}
@@ -311,10 +281,7 @@ export default function DriverAppRemark() {
                     {t.customer_name || "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate">
-                    {t.recipient_name || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.to_warehouse || "-"}
+                    {t.warehouse_name || "-"}
                   </td>
                 </tr>
               );
@@ -351,6 +318,19 @@ export default function DriverAppRemark() {
                 ×
               </button>
             </div>
+            <div className="flex gap-2 mb-2">
+              <input
+                type="text"
+                className="border px-2 py-1 rounded-md w-full"
+              />
+              {/* <button className="bg-brand-500 text-white px-2 rounded-md">
+                เพิ่ม
+              </button> */}
+              <Button variant="primary" size="sm">
+                เพิ่ม
+              </Button>
+            </div>
+
             {/* ตารางข้อมูล log การแก้ไข */}
             <div className="overflow-x-auto">
               {leditLoading && (

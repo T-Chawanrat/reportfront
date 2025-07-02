@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignIn from "./pages/AuthPages/SignIn";
 // import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
+
 // import UserProfiles from "./pages/UserProfiles";
 // import Videos from "./pages/UiElements/Videos";
 // import Images from "./pages/UiElements/Images";
@@ -15,10 +16,12 @@ import NotFound from "./pages/OtherPage/NotFound";
 // import BasicTables from "./pages/Tables/BasicTables";
 // import FormElements from "./pages/Forms/FormElements";
 // import Blank from "./pages/Blank";
+
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 // import Home from "./pages/Dashboard/Home";
 import DriverAppRemark from "./pages/DriverAppRemark";
+import Resend from "./pages/Resend";
 // import DriverApp from "./pages/DriverApp";
 
 export default function App() {
@@ -30,14 +33,15 @@ export default function App() {
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
             {/* <Route index path="/" element={<Home />} /> */}
-            {/* <Route index path="/" element={<Home />} /> */}
+            
 
             {/* Others Page */}
             {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/blank" element={<Blank />} /> */}
             <Route path="/remark" element={<DriverAppRemark />} />
-            {/* <Route path="/remarkcopy" element={<DriverApp />} /> */}
+            <Route path="/resend" element={<Resend />} />
+            
 
             {/* Forms */}
             {/* <Route path="/form-elements" element={<FormElements />} /> */}
