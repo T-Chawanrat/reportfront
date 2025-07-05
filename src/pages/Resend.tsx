@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { useAuth } from "../context/AuthContext";
@@ -14,18 +14,17 @@ import { FileDown, Logs } from "lucide-react";
 
 export interface Transaction {
   id?: number | string;
-  Create_date___tm_resend?: string;
+  Create_date_tm_resend?: string;
   detail?: string;
   remark?: string;
   DATETIME?: string;
   receive_code?: string;
-  serial_no?: string;
   customer_name?: string;
   recipient_name?: string;
   warehouse_name?: string;
-  package_name?: string;
-  datetime?: string;
-  update_date?: string;
+  reference_no?: string;
+  Last_status_nameTH?: string;
+  receive_business_id?: string;
 }
 
 export interface LeditRow {
@@ -33,23 +32,25 @@ export interface LeditRow {
   create_date?: string;
   value_new?: string;
   column?: string;
-  first_name?: string;
-  last_name?: string;
+  people_first_name?: string;
+  people_last_name?: string;
+  employee_first_name?: string;
+  employee_last_name?: string;
+  user_type?: string;
 }
 
 export default function Resend() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [search, setSearch] = useState<string>("");
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [sortBy, setSortBy] = useState<string>("Create_date___tm_resend");
-  const [order, setOrder] = useState<"asc" | "desc">("desc");
+  // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  // const [sortBy, setSortBy] = useState<string>("Create_date___tm_resend");
+  // const [order, setOrder] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const limit = 25;
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const pageCount = Math.ceil(total / limit);
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalData, setModalData] = useState<
     Transaction | Transaction[] | null
@@ -60,22 +61,22 @@ export default function Resend() {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  const [isReceiveCodeModalOpen, setIsReceiveCodeModalOpen] = useState(false);
-  const [modalReceiveCode, setModalReceiveCode] = useState<string | null>(null);
+  // const [isReceiveCodeModalOpen, setIsReceiveCodeModalOpen] = useState(false);
+  // const [modalReceiveCode, setModalReceiveCode] = useState<string | null>(null);
 
   const fetchTransactions = async () => {
     setLoading(true);
     setError(null);
     try {
-      const dateFilter = selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
+      // const dateFilter = selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
 
       const params = {
         search,
-        sort_by: sortBy,
-        order,
+        // sort_by: sortBy,
+        // order,
         page,
         limit,
-        date: dateFilter,
+        // date: dateFilter,
       };
 
       const res = await AxiosInstance.get("/01", { params });
@@ -94,12 +95,12 @@ export default function Resend() {
     }
   };
 
-  const fetchLedit = async (receive_code: string) => {
+  const fetchLedit = async (receive_id: string) => {
     setLeditLoading(true);
     setLeditError(null);
     try {
-      const res = await AxiosInstance.get("/ledit", {
-        params: { receive_code },
+      const res = await AxiosInstance.get("/vledit", {
+        params: { receive_id },
       });
       setLeditRows(res.data.data || []);
     } catch (err) {
@@ -116,15 +117,15 @@ export default function Resend() {
     }
   };
 
-  const handleSort = (key: string) => {
-    if (sortBy === key) {
-      setOrder(order === "asc" ? "desc" : "asc");
-    } else {
-      setSortBy(key);
-      setOrder("asc");
-    }
-    setPage(1);
-  };
+  // const handleSort = (key: string) => {
+  //   if (sortBy === key) {
+  //     setOrder(order === "asc" ? "desc" : "asc");
+  //   } else {
+  //     setSortBy(key);
+  //     setOrder("asc");
+  //   }
+  //   setPage(1);
+  // };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -138,7 +139,8 @@ export default function Resend() {
       fetchTransactions();
     }
     // eslint-disable-next-line
-  }, [search, selectedDate, page, sortBy, order, pageCount]);
+    // }, [search, selectedDate, page, sortBy, order, pageCount]);
+  }, [search, page, pageCount]);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -146,41 +148,59 @@ export default function Resend() {
     }
   }, [isLoggedIn, navigate]);
 
+  useEffect(() => {
+    if (
+      isModalOpen &&
+      modalData &&
+      !Array.isArray(modalData) &&
+      modalData.receive_business_id
+    ) {
+      setLeditRows([]);
+      setLeditLoading(true);
+      fetchLedit(String(modalData.receive_business_id));
+    }
+  }, [isModalOpen, modalData]);
+
   // สำหรับ modal ใหม่ แสดง serial_no, customer_name, to_warehouse ตาม receive_code
-  const modalSerialList = modalReceiveCode
-    ? transactions.filter((t) => t.receive_code === modalReceiveCode)
-    : [];
+  // const modalSerialList = modalReceiveCode
+  //   ? transactions.filter((t) => t.receive_code === modalReceiveCode)
+  //   : [];
 
   const handleDownload = async () => {
+    setLoading(true);
     try {
       await ExportExcel({
         url: "/export",
-        filename: "รายงานremark.xlsx",
+        filename: "Remark_app.xlsx",
       });
     } catch (err) {
       alert((err as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={`w-full mx-auto ${loading ? "cursor-wait" : ""}`}>
-      <div className="flex flex-col md:flex-row gap-4 mb-4 font-thai">
-        <Input
-          type="text"
-          placeholder="ค้นหา (receive_code)"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border border-gray-300 rounded px-3 py-1 h-10 w-lg "
-        />
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-col md:flex-row gap-4 font-thai">
+          <Input
+            type="text"
+            placeholder="ค้นหา Do หรือ Ref"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-1 h-10 w-lg "
+          />
 
-        <DatePicker
-          selected={selectedDate}
-          onChange={(date: Date | null) => setSelectedDate(date)}
-          dateFormat="yyyy-MM-dd"
-          isClearable
-          placeholderText="-- เลือกวันที่ --"
-          className="border border-gray-300 rounded px-3 py-2"
-        />
+          {/* <DatePicker
+            selected={selectedDate}
+            onChange={(date: Date | null) => setSelectedDate(date)}
+            dateFormat="yyyy-MM-dd"
+            isClearable
+            placeholderText="-- เลือกวันที่ --"
+            className="border border-gray-300 rounded px-3 py-2"
+          /> */}
+        </div>
         <Button
           variant="primary"
           size="sm"
@@ -198,25 +218,19 @@ export default function Resend() {
           <thead className="bg-gray-100">
             <tr>
               <th className="w-20 px-4 py-2 border-b text-left">Log</th>
-              <th
-                className={`w-60 px-4 py-2 border-b text-left text-brand-500 cursor-pointer
-                ${sortBy === "Create_date___tm_resend" ? "bg-blue-100" : ""}`}
-                onClick={() => handleSort("Create_date___tm_resend")}
-              >
-                วันที่กดแอพ{" "}
-                {sortBy === "Create_date___tm_resend" &&
-                  (order === "asc" ? "▲" : "▼")}
+              <th className="w-60 px-4 py-2 border-b text-left">
+                วันที่จากแอป
               </th>
-              <th className="w-60 px-4 py-2 border-b text-left">รายละเอียด</th>
+              <th className="w-60 px-4 py-2 border-b text-left">หมายเหตุแอป</th>
               <th className="w-80 px-4 py-2 border-b text-left">หมายเหตุ</th>
-              <th className="w-40 px-4 py-2 border-b text-left">
-                วันที่สร้างบิล
+              <th className="w-70 px-4 py-2 border-b text-left">เลขที่บิล</th>
+              <th className="w-70 px-4 py-2 border-b text-left">Reference</th>
+              <th className="w-72 px-4 py-2 border-b text-left">เจ้าของงาน</th>
+              <th className="w-72 px-4 py-2 border-b text-left">
+                ชื่อผู้รับสินค้า
               </th>
-              <th className="w-84 px-4 py-2 border-b text-left">
-                เลขที่บิล (receive_code)
-              </th>
-              <th className="w-72 px-4 py-2 border-b text-left">ชื่อผู้ส่ง</th>
-              <th className="w-72 px-4 py-2 border-b text-left">คลังปลายทาง</th>
+              <th className="w-52 px-4 py-2 border-b text-left">To DC</th>
+              <th className="w-72 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
             </tr>
           </thead>
           <tbody className="font-thai">
@@ -233,20 +247,31 @@ export default function Resend() {
                       onClick={async () => {
                         setIsModalOpen(true);
                         setModalData(t);
-                        if (t.receive_code) {
-                          await fetchLedit(String(t.receive_code));
+                        if (t.receive_business_id) {
+                          await fetchLedit(String(t.receive_business_id));
                         } else {
                           setLeditRows([]);
                         }
                       }}
+                      // onClick={async () => {
+                      //   setIsModalOpen(true);
+                      //   setModalData(t);
+                      //   setLeditRows([]); // reset log data
+                      //   setLeditLoading(true); // show loading spinner/message
+                      //   if (t.receive_business_id) {
+                      //     await fetchLedit(String(t.receive_business_id));
+                      //   } else {
+                      //     setLeditLoading(false);
+                      //   }
+                      // }}
                     >
                       <Logs />
                     </button>
                   </td>
                   <td className="px-4 py-2 border-b truncate">
-                    {t.Create_date___tm_resend
+                    {t.Create_date_tm_resend
                       ? format(
-                          new Date(t.Create_date___tm_resend),
+                          new Date(t.Create_date_tm_resend),
                           "yyyy-MM-dd | HH:mm:ss"
                         )
                       : "-"}
@@ -257,14 +282,12 @@ export default function Resend() {
                   <td className="px-4 py-2 border-b truncate max-w-xs">
                     {t.remark || "-"}
                   </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.DATETIME
-                      ? format(new Date(t.DATETIME), "yyyy-MM-dd")
-                      : "-"}
-                  </td>
                   {/* ช่อง receive_code: เพิ่มปุ่ม modal ใหม่ เฉพาะแถวแรก */}
                   <td className="px-4 py-2 border-b truncate">
                     {t.receive_code}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate">
+                    {t.reference_no || "-"}
                   </td>
                   {/* <td className="px-4 py-2 border-b truncate">
                     <button
@@ -281,7 +304,13 @@ export default function Resend() {
                     {t.customer_name || "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate">
+                    {t.recipient_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate">
                     {t.warehouse_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate">
+                    {t.Last_status_nameTH || "-"}
                   </td>
                 </tr>
               );
@@ -293,7 +322,7 @@ export default function Resend() {
       {/* modal log เดิม */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm font-thai"
+          className="fixed inset-0 z-100000 flex items-center justify-center bg-white/30 backdrop-blur-sm font-thai"
           onClick={closeModal}
         >
           <div
@@ -307,7 +336,9 @@ export default function Resend() {
                   !Array.isArray(modalData) &&
                   (modalData.receive_code || modalData.id) && (
                     <span className="ml-2 text-base text-gray-600 font-normal">
-                      {modalData.receive_code || modalData.id}
+                      {modalData.receive_code ||
+                        modalData.receive_business_id ||
+                        modalData.id}
                     </span>
                   )}
               </h2>
@@ -341,54 +372,75 @@ export default function Resend() {
               {leditError && (
                 <div className="text-red-500 py-2">{leditError}</div>
               )}
-
-              <table className="min-w-full border-collapse">
-                <thead>
-                  <tr>
-                    <th className="border px-2 py-1">create_date</th>
-                    <th className="border px-2 py-1">value_new</th>
-                    <th className="border px-2 py-1">column</th>
-                    <th className="border px-2 py-1">first_name</th>
-                    <th className="border px-2 py-1">last_name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.isArray(leditRows) && leditRows.length > 0 ? (
-                    leditRows.map((item, idx) => (
-                      <tr key={item.pk_id ?? idx}>
-                        <td className="border px-2 py-1">
-                          {item.create_date || "-"}
-                        </td>
-                        <td className="border px-2 py-1">
-                          {item.value_new || "-"}
-                        </td>
-                        <td className="border px-2 py-1">
-                          {item.column || "-"}
-                        </td>
-                        <td className="border px-2 py-1">
-                          {item.first_name || "-"}
-                        </td>
-                        <td className="border px-2 py-1">
-                          {item.last_name || "-"}
+              <div className="max-h-96 overflow-y-auto">
+                <table className="min-w-full border-collapse">
+                  <thead>
+                    <tr>
+                      <th className="border px-2 py-1">วันที่หมายเหตุ</th>
+                      <th className="border px-2 py-1">หมายเหตุ</th>
+                      <th className="border px-2 py-1">ช่องทางหมายเหตุ</th>
+                      <th className="border px-2 py-1">ชื่อ</th>
+                      <th className="border px-2 py-1">นามสกุล</th>
+                      <th className="border px-2 py-1">ชื่อ</th>
+                      <th className="border px-2 py-1">นามสกุล</th>
+                      <th className="border px-2 py-1">ประเภทผู้ใช้</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Array.isArray(leditRows) && leditRows.length > 0 ? (
+                      leditRows.map((i, idx) => (
+                        <tr key={i.pk_id ?? idx}>
+                          <td className="border px-2 py-1 truncate">
+                            {i.create_date
+                              ? format(
+                                  new Date(i.create_date),
+                                  "yyyy-MM-dd HH:mm:ss"
+                                )
+                              : "-"}
+                          </td>
+                          <td className="border px-2 py-1">
+                            {i.value_new || "-"}
+                          </td>
+                          <td className="border px-2 py-1">
+                            {i.column || "-"}
+                          </td>
+                          <td className="border px-2 py-1">
+                            {i.people_first_name || "-"}
+                          </td>
+                          <td className="border px-2 py-1">
+                            {i.people_last_name || "-"}
+                          </td>
+                          <td className="border px-2 py-1">
+                            {i.employee_first_name || "-"}
+                          </td>
+                          <td className="border px-2 py-1">
+                            {i.employee_last_name || "-"}
+                          </td>
+                          <td className="border px-2 py-1">
+                            {i.user_type || "-"}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          className="border px-2 py-1 text-center"
+                          colSpan={8}
+                        >
+                          ไม่มีข้อมูลการแก้ไข
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td className="border px-2 py-1 text-center" colSpan={5}>
-                        ไม่มีข้อมูลการแก้ไข
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {/* modal ใหม่สำหรับ receive_code */}
-      {isReceiveCodeModalOpen && modalReceiveCode && (
+      {/* {isReceiveCodeModalOpen && modalReceiveCode && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm"
           onClick={() => {
@@ -447,7 +499,7 @@ export default function Resend() {
             </table>
           </div>
         </div>
-      )}
+      )} */}
 
       {loading && (
         <div className="flex justify-center mt-4">

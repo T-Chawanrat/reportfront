@@ -16,32 +16,45 @@ import NotFound from "./pages/OtherPage/NotFound";
 // import BasicTables from "./pages/Tables/BasicTables";
 // import FormElements from "./pages/Forms/FormElements";
 // import Blank from "./pages/Blank";
-
+import ProtectedRoute from "./context/ProtectedRoute";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 // import Home from "./pages/Dashboard/Home";
 import DriverAppRemark from "./pages/DriverAppRemark";
 import Resend from "./pages/Resend";
+import { AuthProvider } from "./context/AuthContext";
 // import DriverApp from "./pages/DriverApp";
 
 export default function App() {
   return (
-    <>
+    <AuthProvider>
       <Router>
         <ScrollToTop />
         <Routes>
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
             {/* <Route index path="/" element={<Home />} /> */}
-            
 
             {/* Others Page */}
             {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/blank" element={<Blank />} /> */}
-            <Route path="/remark" element={<DriverAppRemark />} />
-            <Route path="/resend" element={<Resend />} />
-            
+            <Route
+              path="/remark"
+              element={
+                <ProtectedRoute>
+                  <DriverAppRemark />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/resend"
+              element={
+                <ProtectedRoute>
+                  <Resend />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Forms */}
             {/* <Route path="/form-elements" element={<FormElements />} /> */}
@@ -71,6 +84,6 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
-    </>
+    </AuthProvider>
   );
 }
