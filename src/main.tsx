@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import "swiper/swiper-bundle.css";
@@ -10,12 +9,10 @@ import { AuthProvider } from "./context/AuthContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
-  <StrictMode>
     <ThemeProvider>
       <AppWrapper>
         <App />
       </AppWrapper>
     </ThemeProvider>
-  </StrictMode>,
   </AuthProvider>
 );

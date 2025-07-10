@@ -206,7 +206,54 @@ export default function SignInForm() {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
-  const { setIsLoggedIn } = useAuth();
+  const { setIsLoggedIn, setUser } = useAuth();
+
+  // const handleSignIn = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setLoginError("");
+
+  //   if (!username || !password) {
+  //     setLoginError("Username and password are required.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post(
+  //       "https://api-admin.trantech.co.th/login/check",
+  //       { username, password }
+  //     );
+
+  //     const data = response.data;
+  //     if (data.ok && data.rows) {
+  //       const warehouses = data.rows.warehouses || [];
+
+  //       setIsLoggedIn(true);
+  //       localStorage.setItem("user_id", data.rows.user_id);
+  //       localStorage.setItem("warehouses", JSON.stringify(warehouses));
+
+  //       if (data.ok && data.rows) {
+  //         const warehouses = data.rows.warehouses || [];
+
+  //         setIsLoggedIn(true);
+  //         localStorage.setItem("user_id", data.rows.user_id);
+  //         localStorage.setItem("warehouses", JSON.stringify(warehouses));
+
+  //         navigate("/resend", { replace: true });
+  //       }
+  //     } else {
+  //       setLoginError("Username or password incorrect");
+  //     }
+  //   } catch (error: unknown) {
+  //     if (axios.isAxiosError(error)) {
+  //       setLoginError(
+  //         error.response?.data?.message ||
+  //           "An error occurred. Please try again."
+  //       );
+  //     } else {
+  //       setLoginError("An unknown error occurred.");
+  //     }
+  //   }
+  // };
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -228,18 +275,14 @@ export default function SignInForm() {
         const warehouses = data.rows.warehouses || [];
 
         setIsLoggedIn(true);
-        localStorage.setItem("user_id", data.rows.user_id);
+        setUser({
+          user_id: String(data.rows.user_id),
+          username: data.rows.username,
+        });
+        localStorage.setItem("user_id", String(data.rows.user_id));
         localStorage.setItem("warehouses", JSON.stringify(warehouses));
 
-        if (data.ok && data.rows) {
-          const warehouses = data.rows.warehouses || [];
-
-          setIsLoggedIn(true);
-          localStorage.setItem("user_id", data.rows.user_id);
-          localStorage.setItem("warehouses", JSON.stringify(warehouses));
-
-          navigate("/resend", { replace: true });
-        }
+        navigate("/resend", { replace: true });
       } else {
         setLoginError("Username or password incorrect");
       }

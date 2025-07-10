@@ -10,7 +10,7 @@ import AxiosInstance from "../utils/AxiosInstance";
 import Button from "../components/ui/button/Button";
 import Input from "../components/form/input/InputField";
 import { ExportExcel } from "../utils/ExportExcel";
-import { FileDown, Logs } from "lucide-react";
+import { FileDown, Loader2, Logs } from "lucide-react";
 
 export interface Transaction {
   id?: number | string;
@@ -58,8 +58,14 @@ export default function Resend() {
   const [leditRows, setLeditRows] = useState<LeditRow[]>([]);
   const [leditLoading, setLeditLoading] = useState(false);
   const [leditError, setLeditError] = useState<string | null>(null);
-  const { isLoggedIn } = useAuth();
+
+  const [newRemark, setNewRemark] = useState("");
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+
+  const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
+  console.log(user?.user_id, "user_id หน้า Resend");
 
   // const [isReceiveCodeModalOpen, setIsReceiveCodeModalOpen] = useState(false);
   // const [modalReceiveCode, setModalReceiveCode] = useState<string | null>(null);
@@ -180,6 +186,46 @@ export default function Resend() {
     }
   };
 
+  const handleAddRemark = async () => {
+    if (!newRemark.trim()) return;
+    if (
+      !modalData ||
+      Array.isArray(modalData) ||
+      !modalData.receive_business_id
+    )
+      return;
+
+    setUpdateLoading(true);
+    setUpdateError(null);
+    try {
+      await AxiosInstance.post("/update-remark", {
+        in_receive_code: modalData.receive_code,
+        in_user_id: String(user?.user_id),
+        in_new_remark: newRemark,
+      });
+
+      setNewRemark("");
+      fetchLedit(String(modalData.receive_business_id)); // refresh log
+
+      // อัปเดต remark ใน modalData ทันที (ไม่ต้อง fetch ใหม่ ไม่ต้องปิด-เปิด modal)
+      setModalData((prev) =>
+        prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev
+      );
+      // ถ้าอยากให้ remark ในตารางหลักอัปเดตทันที (โดยไม่ fetch ทั้ง table)
+      setTransactions((txs) =>
+        txs.map((tx) =>
+          tx.receive_code === modalData.receive_code
+            ? { ...tx, remark: newRemark }
+            : tx
+        )
+      );
+    } catch (err) {
+      setUpdateError((err as Error).message);
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
+
   return (
     <div className={`w-full mx-auto ${loading ? "cursor-wait" : ""}`}>
       <div className="flex items-center justify-between mb-2">
@@ -247,23 +293,7 @@ export default function Resend() {
                       onClick={async () => {
                         setIsModalOpen(true);
                         setModalData(t);
-                        if (t.receive_business_id) {
-                          await fetchLedit(String(t.receive_business_id));
-                        } else {
-                          setLeditRows([]);
-                        }
                       }}
-                      // onClick={async () => {
-                      //   setIsModalOpen(true);
-                      //   setModalData(t);
-                      //   setLeditRows([]); // reset log data
-                      //   setLeditLoading(true); // show loading spinner/message
-                      //   if (t.receive_business_id) {
-                      //     await fetchLedit(String(t.receive_business_id));
-                      //   } else {
-                      //     setLeditLoading(false);
-                      //   }
-                      // }}
                     >
                       <Logs />
                     </button>
@@ -353,14 +383,27 @@ export default function Resend() {
               <input
                 type="text"
                 className="border px-2 py-1 rounded-md w-full"
+                value={newRemark}
+                onChange={(e) => setNewRemark(e.target.value)}
+                placeholder="กรอกหมายเหตุใหม่"
+                disabled={updateLoading}
               />
-              {/* <button className="bg-brand-500 text-white px-2 rounded-md">
-                เพิ่ม
-              </button> */}
-              <Button variant="primary" size="sm">
-                เพิ่ม
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleAddRemark}
+                disabled={updateLoading || !newRemark.trim()}
+              >
+                {updateLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                ) : (
+                  "เพิ่ม"
+                )}
               </Button>
             </div>
+            {updateError && (
+              <div className="text-red-500 text-sm">{updateError}</div>
+            )}
 
             {/* ตารางข้อมูล log การแก้ไข */}
             <div className="overflow-x-auto">
