@@ -1,20 +1,19 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  ReactNode,
-} from "react";
+import React, { createContext, useState, useContext, ReactNode } from "react";
 
 export interface UserType {
   user_id: string;
   username?: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  warehouses?: unknown[];
 }
 interface AuthContextType {
   user: UserType | null;
   setUser: (user: UserType | null) => void;
   isLoggedIn: boolean;
   setIsLoggedIn: (val: boolean) => void;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,22 +21,19 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [user, setUserState] = useState<UserType | null>(null);
+  const [user, setUserState] = useState<UserType | null>(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+
   const [isLoggedIn, setIsLoggedInState] = useState(
     () => localStorage.getItem("isLoggedIn") === "true"
   );
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUserState(JSON.parse(storedUser));
-    }
-  }, []);
-
-  const setUser = (user: UserType | null) => {
-    setUserState(user);
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
+  const setUser = (userData: UserType | null) => {
+    setUserState(userData);
+    if (userData) {
+      localStorage.setItem("user", JSON.stringify(userData));
     } else {
       localStorage.removeItem("user");
     }
@@ -52,8 +48,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const logout = () => {
+    setUserState(null);
+    setIsLoggedInState(false);
+
+    localStorage.removeItem("user");
+    localStorage.removeItem("isLoggedIn");
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, setUser, setIsLoggedIn }}>
+    <AuthContext.Provider
+      value={{ user, isLoggedIn, setUser, setIsLoggedIn, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

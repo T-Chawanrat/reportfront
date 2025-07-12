@@ -65,7 +65,6 @@ export default function Resend() {
 
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
-  console.log(user?.user_id, "user_id หน้า Resend");
 
   // const [isReceiveCodeModalOpen, setIsReceiveCodeModalOpen] = useState(false);
   // const [modalReceiveCode, setModalReceiveCode] = useState<string | null>(null);
@@ -187,7 +186,7 @@ export default function Resend() {
   };
 
   const handleAddRemark = async () => {
-    if (updateLoading) return; 
+    if (updateLoading) return;
     if (!newRemark.trim()) return;
     if (
       !modalData ||

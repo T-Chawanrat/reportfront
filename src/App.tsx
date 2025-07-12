@@ -20,7 +20,7 @@ import ProtectedRoute from "./context/ProtectedRoute";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 // import Home from "./pages/Dashboard/Home";
-import DriverAppRemark from "./pages/DriverAppRemark";
+// import DriverAppRemark from "./pages/DriverAppRemark";
 import Resend from "./pages/Resend";
 import { AuthProvider } from "./context/AuthContext";
 // import DriverApp from "./pages/DriverApp";
@@ -41,14 +41,6 @@ export default function App() {
             <Route path="/blank" element={<Blank />} /> */}
             <Route
               path="/remark"
-              element={
-                <ProtectedRoute>
-                  <DriverAppRemark />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/resend"
               element={
                 <ProtectedRoute>
                   <Resend />

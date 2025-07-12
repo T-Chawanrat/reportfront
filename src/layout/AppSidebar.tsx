@@ -414,10 +414,7 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [
-      { name: "Remark", path: "/remark", pro: false },
-      { name: "หมายเหตุ (จากApp)", path: "/resend", pro: false },
-    ],
+    subItems: [{ name: "หมายเหตุ (จาก App)", path: "/remark", pro: false }],
   },
 ];
 
@@ -427,7 +424,7 @@ const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
   const navigate = useNavigate();
-  const { setIsLoggedIn } = useAuth();
+  const { logout } = useAuth();
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";
@@ -615,12 +612,17 @@ const AppSidebar: React.FC = () => {
     </ul>
   );
 
+  // const handleLogout = () => {
+  //   setIsLoggedIn(false);
+
+  //   localStorage.removeItem("user_id");
+  //   localStorage.removeItem("warehouses");
+
+  //   navigate("/signin", { replace: true });
+  // };
+
   const handleLogout = () => {
-    setIsLoggedIn(false);
-
-    localStorage.removeItem("user_id");
-    localStorage.removeItem("warehouses");
-
+    logout();
     navigate("/signin", { replace: true });
   };
 
