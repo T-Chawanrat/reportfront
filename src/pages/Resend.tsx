@@ -187,6 +187,7 @@ export default function Resend() {
   };
 
   const handleAddRemark = async () => {
+    if (updateLoading) return; 
     if (!newRemark.trim()) return;
     if (
       !modalData ||
@@ -291,6 +292,7 @@ export default function Resend() {
                     <button
                       className="inline-flex gap-1 px-2.5 py-1.5 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
                       onClick={async () => {
+                        if (updateLoading) return;
                         setIsModalOpen(true);
                         setModalData(t);
                       }}
@@ -353,7 +355,10 @@ export default function Resend() {
       {isModalOpen && (
         <div
           className="fixed inset-0 z-100000 flex items-center justify-center bg-white/30 backdrop-blur-sm font-thai"
-          onClick={closeModal}
+          onClick={() => {
+            if (updateLoading) return;
+            closeModal();
+          }}
         >
           <div
             className="bg-white p-6 rounded shadow-lg min-w-[320px] max-w-[90vw]"
@@ -374,7 +379,11 @@ export default function Resend() {
               </h2>
               <button
                 className="text-gray-500 hover:text-gray-900"
-                onClick={closeModal}
+                onClick={() => {
+                  if (updateLoading) return;
+                  closeModal();
+                }}
+                disabled={updateLoading}
               >
                 ×
               </button>
@@ -401,6 +410,11 @@ export default function Resend() {
                 )}
               </Button>
             </div>
+
+            {updateLoading && (
+              <div className="text-brand-500 py-2">กำลังบันทึกหมายเหตุ...</div>
+            )}
+
             {updateError && (
               <div className="text-red-500 text-sm">{updateError}</div>
             )}
