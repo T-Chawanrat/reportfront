@@ -227,15 +227,15 @@ export default function Resend() {
   };
 
   return (
-    <div className={`w-full mx-auto ${loading ? "cursor-wait" : ""}`}>
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex flex-col md:flex-row gap-4 font-thai">
+    <div className={`font-thai  w-full mx-auto ${loading ? "cursor-wait" : ""}`}>
+      <div className="flex items-center justify-between mb-2 gap-2 flex-nowrap">
+        <div>
           <Input
             type="text"
             placeholder="ค้นหา Do หรือ Ref"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-1 h-10 w-lg "
+            className="border border-gray-300 rounded px-3 py-1 h-10 md:w-lg"
           />
 
           {/* <DatePicker
@@ -251,7 +251,7 @@ export default function Resend() {
           variant="primary"
           size="sm"
           onClick={handleDownload}
-          className="h-10"
+          className="h-10 flex-shrink-0"
         >
           <FileDown />
           Export Excel
@@ -260,7 +260,7 @@ export default function Resend() {
 
       {/* ตารางข้อมูล */}
       <div className="overflow-x-auto">
-        <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden font-thai">
+        <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <thead className="bg-gray-100">
             <tr>
               <th className="w-20 px-4 py-2 border-b text-left">Log</th>
@@ -279,7 +279,7 @@ export default function Resend() {
               <th className="w-72 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
             </tr>
           </thead>
-          <tbody className="font-thai">
+          <tbody>
             {transactions.map((t, i) => {
               return (
                 <tr
@@ -353,7 +353,7 @@ export default function Resend() {
       {/* modal log เดิม */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-100000 flex items-center justify-center bg-white/30 backdrop-blur-sm font-thai"
+          className="fixed inset-0 z-100000 flex items-center justify-center bg-white/30 backdrop-blur-sm"
           onClick={() => {
             if (updateLoading) return;
             closeModal();

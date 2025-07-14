@@ -9,7 +9,7 @@ import { useAuth } from "../context/AuthContext";
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-    const { user } = useAuth();
+  const { user } = useAuth();
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -85,13 +85,13 @@ const AppHeader: React.FC = () => {
 
           <Link to="/" className="lg:hidden">
             <img
-              className="dark:hidden"
-              src="./images/logo/logo.svg"
+              className="dark:hidden w-38 h-auto"
+              src="./images/logo/logo.png"
               alt="Logo"
             />
             <img
-              className="hidden dark:block"
-              src="./images/logo/logo-dark.svg"
+              className="hidden dark:block w-38 h-auto"
+              src="https://img2.pic.in.th/pic/logotrachtechwhite.png"
               alt="Logo"
             />
           </Link>
