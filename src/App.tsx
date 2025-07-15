@@ -21,7 +21,8 @@ import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 // import Home from "./pages/Dashboard/Home";
 // import DriverAppRemark from "./pages/DriverAppRemark";
-import Resend from "./pages/Resend";
+import AppRemark from "./pages/AppRemark";
+import Page2 from "./pages/Page2";
 import { AuthProvider } from "./context/AuthContext";
 // import DriverApp from "./pages/DriverApp";
 
@@ -39,14 +40,8 @@ export default function App() {
             {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/blank" element={<Blank />} /> */}
-            <Route
-              path="/remark"
-              element={
-                <ProtectedRoute>
-                  <Resend />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/remark" element={<ProtectedRoute><AppRemark /></ProtectedRoute>} />
+            <Route path="/page2" element={<ProtectedRoute><Page2 /></ProtectedRoute>} />
 
             {/* Forms */}
             {/* <Route path="/form-elements" element={<FormElements />} /> */}

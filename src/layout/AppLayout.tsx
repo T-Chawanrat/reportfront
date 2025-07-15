@@ -4,7 +4,6 @@ import AppHeader from "./AppHeader";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
 
-
 const LayoutContent: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
 
@@ -18,11 +17,11 @@ const LayoutContent: React.FC = () => {
         className={`flex-1 transition-all duration-300 ease-in-out ${
           isExpanded || isHovered ? "lg:ml-[290px]" : "lg:ml-[90px]"
         } ${isMobileOpen ? "ml-0" : ""}`}
+        style={{ overflowX: "hidden" }}
       >
         <AppHeader />
         {/* <div className={`p-4 max-w-(--breakpoint-2xl) md:p-6`}> */}
-        <div className={` max-w-[1820px] md:p-2`}>
-        
+        <div className={`flex-1 text-sm md:p-1`}>
           <Outlet />
         </div>
       </div>

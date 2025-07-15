@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
 import AxiosInstance from "../utils/AxiosInstance";
 import Button from "../components/ui/button/Button";
-import Input from "../components/form/input/InputField";
+// import Input from "../components/form/input/InputField";
 import { ExportExcel } from "../utils/ExportExcel";
 import { FileDown, Loader2, Logs } from "lucide-react";
 
@@ -39,7 +39,7 @@ export interface LeditRow {
   user_type?: string;
 }
 
-export default function Resend() {
+export default function AppRemark() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [search, setSearch] = useState<string>("");
   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -47,7 +47,7 @@ export default function Resend() {
   // const [order, setOrder] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
-  const limit = 25;
+  const limit = 17;
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const pageCount = Math.ceil(total / limit);
@@ -227,15 +227,15 @@ export default function Resend() {
   };
 
   return (
-    <div className={`font-thai  w-full mx-auto ${loading ? "cursor-wait" : ""}`}>
-      <div className="flex items-center justify-between mb-2 gap-2 flex-nowrap">
+    <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
+      <div className="flex items-center justify-between mb-2 gap-2">
         <div>
-          <Input
+          <input
             type="text"
             placeholder="ค้นหา Do หรือ Ref"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-1 h-10 md:w-lg"
+            className="border border-gray-300 rounded-lg px-3 py-1 h-9 w-85 md:w-lg"
           />
 
           {/* <DatePicker
@@ -247,36 +247,34 @@ export default function Resend() {
             className="border border-gray-300 rounded px-3 py-2"
           /> */}
         </div>
-        <Button
-          variant="primary"
-          size="sm"
+        <button
           onClick={handleDownload}
-          className="h-10 flex-shrink-0"
+          className="h-9 flex-shrink-0 inline-flex items-center gap-2 px-2 py-1 rounded-md bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <FileDown />
-          Export Excel
-        </Button>
+          <span className="hidden md:inline">Export Excel</span>
+        </button>
       </div>
 
       {/* ตารางข้อมูล */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto w-full">
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <thead className="bg-gray-100">
             <tr>
-              <th className="w-20 px-4 py-2 border-b text-left">Log</th>
-              <th className="w-60 px-4 py-2 border-b text-left">
+              <th className="w-15 px-4 py-2 border-b text-left">Log</th>
+              <th className="w-40 px-4 py-2 border-b text-left">
                 วันที่จากแอป
               </th>
-              <th className="w-60 px-4 py-2 border-b text-left">หมายเหตุแอป</th>
-              <th className="w-80 px-4 py-2 border-b text-left">หมายเหตุ</th>
-              <th className="w-70 px-4 py-2 border-b text-left">เลขที่บิล</th>
-              <th className="w-70 px-4 py-2 border-b text-left">Reference</th>
-              <th className="w-72 px-4 py-2 border-b text-left">เจ้าของงาน</th>
-              <th className="w-72 px-4 py-2 border-b text-left">
+              <th className="w-40 px-4 py-2 border-b text-left">หมายเหตุแอป</th>
+              <th className="w-55 px-4 py-2 border-b text-left">หมายเหตุ</th>
+              <th className="w-55 px-4 py-2 border-b text-left">เลขที่บิล</th>
+              <th className="w-50 px-4 py-2 border-b text-left">Reference</th>
+              <th className="w-60 px-4 py-2 border-b text-left">เจ้าของงาน</th>
+              <th className="w-55 px-4 py-2 border-b text-left">
                 ชื่อผู้รับสินค้า
               </th>
-              <th className="w-52 px-4 py-2 border-b text-left">To DC</th>
-              <th className="w-72 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
+              <th className="w-35 px-4 py-2 border-b text-left">To DC</th>
+              <th className="w-55 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
             </tr>
           </thead>
           <tbody>
@@ -287,19 +285,19 @@ export default function Resend() {
                   className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
                 >
                   {/* log modal เดิม */}
-                  <td className="px-4 py-2 border-b truncate">
+                  <td className="px-3 py-1 border-b truncate">
                     <button
-                      className="inline-flex gap-1 px-2.5 py-1.5 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="inline-flex gap-1 px-1.5 py-1 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
                       onClick={async () => {
                         if (updateLoading) return;
                         setIsModalOpen(true);
                         setModalData(t);
                       }}
                     >
-                      <Logs />
+                      <Logs size={23} />
                     </button>
                   </td>
-                  <td className="px-4 py-2 border-b truncate">
+                  <td className="py-1 border-b truncate">
                     {t.Create_date_tm_resend
                       ? format(
                           new Date(t.Create_date_tm_resend),
@@ -364,7 +362,7 @@ export default function Resend() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold">
+              <h2 className="font-bold text-base">
                 ประวัติการแก้ไข (Edit Log)
                 {modalData &&
                   !Array.isArray(modalData) &&
