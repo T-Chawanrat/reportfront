@@ -175,8 +175,8 @@ export default function AppRemark() {
     setLoading(true);
     try {
       await ExportExcel({
-        url: "/export",
-        filename: "Remark_app.xlsx",
+        url: "/export01",
+        filename: "App_Remark.xlsx",
       });
     } catch (err) {
       alert((err as Error).message);
@@ -234,8 +234,8 @@ export default function AppRemark() {
             type="text"
             placeholder="ค้นหา Do หรือ Ref"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-1 h-9 w-85 md:w-lg"
+            onChange={(e) => setSearch(e.target.value.trim())}
+            className="border border-gray-300 rounded-lg px-3 py-1 h-9 w-85 md:w-lg focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
           />
 
           {/* <DatePicker
@@ -268,12 +268,14 @@ export default function AppRemark() {
               <th className="w-40 px-4 py-2 border-b text-left">หมายเหตุแอป</th>
               <th className="w-55 px-4 py-2 border-b text-left">หมายเหตุ</th>
               <th className="w-55 px-4 py-2 border-b text-left">เลขที่บิล</th>
-              <th className="w-50 px-4 py-2 border-b text-left">Reference</th>
+              <th className="w-50 px-4 py-2 border-b text-left">
+                เลขที่อ้างอิง
+              </th>
               <th className="w-60 px-4 py-2 border-b text-left">เจ้าของงาน</th>
               <th className="w-55 px-4 py-2 border-b text-left">
                 ชื่อผู้รับสินค้า
               </th>
-              <th className="w-35 px-4 py-2 border-b text-left">To DC</th>
+              <th className="w-35 px-4 py-2 border-b text-left">คลังปลายทาง</th>
               <th className="w-55 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
             </tr>
           </thead>
@@ -290,6 +292,10 @@ export default function AppRemark() {
                       className="inline-flex gap-1 px-1.5 py-1 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
                       onClick={async () => {
                         if (updateLoading) return;
+                        console.log(
+                          `Log opened:`,
+                          t.receive_code
+                        );
                         setIsModalOpen(true);
                         setModalData(t);
                       }}
@@ -388,7 +394,7 @@ export default function AppRemark() {
             <div className="flex gap-2 mb-2">
               <input
                 type="text"
-                className="border px-2 py-1 rounded-md w-full"
+                className="border px-2 py-1 h-9 rounded-md w-full focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
                 value={newRemark}
                 onChange={(e) => setNewRemark(e.target.value)}
                 placeholder="กรอกหมายเหตุใหม่"
@@ -399,6 +405,7 @@ export default function AppRemark() {
                 size="sm"
                 onClick={handleAddRemark}
                 disabled={updateLoading || !newRemark.trim()}
+                className="h-9 flex-shrink-0"
               >
                 {updateLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />

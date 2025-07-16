@@ -11,20 +11,22 @@ import Button from "../components/ui/button/Button";
 // import Input from "../components/form/input/InputField";
 import { ExportExcel } from "../utils/ExportExcel";
 import { FileDown, Loader2, Logs } from "lucide-react";
+import WarehouseDropdown from "../components/dropdown/WarehouseDropdown";
+import CustomerDropdown from "../components/dropdown/CustomerDropdown";
 
 export interface Transaction {
   id?: number | string;
-  Create_date_tm_resend?: string;
-  detail?: string;
-  remark?: string;
-  DATETIME?: string;
   receive_code?: string;
   customer_name?: string;
   recipient_name?: string;
   warehouse_name?: string;
   reference_no?: string;
-  Last_status_nameTH?: string;
   receive_business_id?: string;
+  to_warehouse_name?: string;
+  receive_date?: string;
+  delivery_date?: string;
+  resend_date?: string;
+  status_message?: string;
 }
 
 export interface LeditRow {
@@ -39,12 +41,15 @@ export interface LeditRow {
   user_type?: string;
 }
 
-export default function Page2() {
+export default function ProductWarehouse() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [search, setSearch] = useState<string>("");
-  // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  // const [sortBy, setSortBy] = useState<string>("Create_date___tm_resend");
-  // const [order, setOrder] = useState<"asc" | "desc">("desc");
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(
+    null
+  );
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(
+    null
+  );
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const limit = 17;
@@ -74,17 +79,15 @@ export default function Page2() {
     setError(null);
     try {
       // const dateFilter = selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
-
       const params = {
         search,
-        // sort_by: sortBy,
-        // order,
+        warehouse_id: selectedWarehouseId,
+        customer_id: selectedCustomerId,
         page,
         limit,
-        // date: dateFilter,
       };
 
-      const res = await AxiosInstance.get("/01", { params });
+      const res = await AxiosInstance.get("/02", { params });
       setTransactions(res.data.data || []);
       setTotal(res.data.total || 0);
     } catch (err) {
@@ -122,16 +125,6 @@ export default function Page2() {
     }
   };
 
-  // const handleSort = (key: string) => {
-  //   if (sortBy === key) {
-  //     setOrder(order === "asc" ? "desc" : "asc");
-  //   } else {
-  //     setSortBy(key);
-  //     setOrder("asc");
-  //   }
-  //   setPage(1);
-  // };
-
   const closeModal = () => {
     setIsModalOpen(false);
     setModalData(null);
@@ -143,9 +136,7 @@ export default function Page2() {
     } else {
       fetchTransactions();
     }
-    // eslint-disable-next-line
-    // }, [search, selectedDate, page, sortBy, order, pageCount]);
-  }, [search, page, pageCount]);
+  }, [search, page, pageCount, selectedWarehouseId, selectedCustomerId]);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -166,12 +157,17 @@ export default function Page2() {
     }
   }, [isModalOpen, modalData]);
 
+  // สำหรับ modal ใหม่ แสดง serial_no, customer_name, to_warehouse ตาม receive_code
+  // const modalSerialList = modalReceiveCode
+  //   ? transactions.filter((t) => t.receive_code === modalReceiveCode)
+  //   : [];
+
   const handleDownload = async () => {
     setLoading(true);
     try {
       await ExportExcel({
-        url: "/export",
-        filename: "Remark_app.xlsx",
+        url: "/export02",
+        filename: "Product_Warehouse_Remark.xlsx",
       });
     } catch (err) {
       alert((err as Error).message);
@@ -200,12 +196,11 @@ export default function Page2() {
       });
 
       setNewRemark("");
-      fetchLedit(String(modalData.receive_business_id)); // refresh log
+      fetchLedit(String(modalData.receive_business_id));
 
       setModalData((prev) =>
         prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev
       );
-
       setTransactions((txs) =>
         txs.map((tx) =>
           tx.receive_code === modalData.receive_code
@@ -221,31 +216,26 @@ export default function Page2() {
   };
 
   return (
-    <div
-      className={`font-thai  w-full mx-auto ${loading ? "cursor-wait" : ""}`}
-    >
-      <div className="flex items-center justify-between mb-2 gap-2 flex-nowrap">
-        <div>
+    <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
+      <div className="flex items-center justify-between mb-2 gap-2">
+        <div className="flex flex-wrap items-center gap-1 w-full">
           <input
             type="text"
             placeholder="ค้นหา Do หรือ Ref"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-1 h-10 w-85 md:w-lg"
+            onChange={(e) => setSearch(e.target.value.trim())}
+            className="border border-gray-300 rounded-lg px-3 py-1 h-9 w-85 md:w-lg focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
           />
-
-          {/* <DatePicker
-            selected={selectedDate}
-            onChange={(date: Date | null) => setSelectedDate(date)}
-            dateFormat="yyyy-MM-dd"
-            isClearable
-            placeholderText="-- เลือกวันที่ --"
-            className="border border-gray-300 rounded px-3 py-2"
-          /> */}
+          <WarehouseDropdown
+            onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)}
+          />
+          <CustomerDropdown
+            onChange={(customerId) => setSelectedCustomerId(customerId)}
+          />
         </div>
         <button
           onClick={handleDownload}
-          className="h-10 flex-shrink-0 inline-flex items-center gap-2 px-2 py-1 rounded-md bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="h-9 flex-shrink-0 inline-flex items-center gap-2 px-2 py-1 rounded-md bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <FileDown />
           <span className="hidden md:inline">Export Excel</span>
@@ -253,24 +243,29 @@ export default function Page2() {
       </div>
 
       {/* ตารางข้อมูล */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto w-full">
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <thead className="bg-gray-100">
             <tr>
-              <th className="w-18 px-4 py-2 border-b text-left">Log</th>
-              <th className="w-42 px-4 py-2 border-b text-left">
-                วันที่จากแอป
+              <th className="w-15 px-4 py-2 border-b text-left">Log</th>
+              <th className="w-40 px-4 py-2 border-b text-left">
+                คลังปัจจุบัน
               </th>
-              <th className="w-45 px-4 py-2 border-b text-left">หมายเหตุแอป</th>
-              <th className="w-55 px-4 py-2 border-b text-left">หมายเหตุ</th>
-              <th className="w-55 px-4 py-2 border-b text-left">เลขที่บิล</th>
-              <th className="w-55 px-4 py-2 border-b text-left">Reference</th>
               <th className="w-60 px-4 py-2 border-b text-left">เจ้าของงาน</th>
-              <th className="w-55 px-4 py-2 border-b text-left">
-                ชื่อผู้รับสินค้า
+              <th className="w-60 px-4 py-2 border-b text-left">ชื่อผู้ส่ง</th>
+              <th className="w-45 px-4 py-2 border-b text-left">วันที่บิล</th>
+              <th className="w-45 px-4 py-2 border-b text-left">
+                วันที่จัดส่ง
               </th>
-              <th className="w-35 px-4 py-2 border-b text-left">To DC</th>
-              <th className="w-55 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
+              <th className="w-45 px-4 py-2 border-b text-left">
+                วันที่จัดส่งใหม่
+              </th>
+              <th className="w-55 px-4 py-2 border-b text-left">เลขที่บิล</th>
+              <th className="w-50 px-4 py-2 border-b text-left">
+                เลขที่อ้างอิง
+              </th>
+              <th className="w-40 px-4 py-2 border-b text-left">คลังปลายทาง</th>
+              <th className="w-50 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
             </tr>
           </thead>
           <tbody>
@@ -293,37 +288,48 @@ export default function Page2() {
                       <Logs size={23} />
                     </button>
                   </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.warehouse_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.customer_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.recipient_name || "-"}
+                  </td>
+
                   <td className="py-1 border-b truncate">
-                    {t.Create_date_tm_resend
+                    {t.receive_date
                       ? format(
-                          new Date(t.Create_date_tm_resend),
+                          new Date(t.receive_date),
                           "yyyy-MM-dd | HH:mm:ss"
                         )
                       : "-"}
                   </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.detail || "-"}
+                  <td className="py-1 border-b truncate">
+                    {t.delivery_date
+                      ? format(
+                          new Date(t.delivery_date),
+                          "yyyy-MM-dd | HH:mm:ss"
+                        )
+                      : "-"}
                   </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.remark || "-"}
+                  <td className="py-1 border-b truncate">
+                    {t.resend_date
+                      ? format(new Date(t.resend_date), "yyyy-MM-dd | HH:mm:ss")
+                      : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate">
-                    {t.receive_code}
+                    {t.receive_code || "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate">
                     {t.reference_no || "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate">
-                    {t.customer_name || "-"}
+                    {t.to_warehouse_name}
                   </td>
                   <td className="px-4 py-2 border-b truncate">
-                    {t.recipient_name || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.warehouse_name || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.Last_status_nameTH || "-"}
+                    {t.status_message || "-"}
                   </td>
                 </tr>
               );
@@ -372,7 +378,7 @@ export default function Page2() {
             <div className="flex gap-2 mb-2">
               <input
                 type="text"
-                className="border px-2 py-1 rounded-md w-full"
+                className="border px-2 py-1 rounded-md w-full focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
                 value={newRemark}
                 onChange={(e) => setNewRemark(e.target.value)}
                 placeholder="กรอกหมายเหตุใหม่"
@@ -383,6 +389,7 @@ export default function Page2() {
                 size="sm"
                 onClick={handleAddRemark}
                 disabled={updateLoading || !newRemark.trim()}
+                className="h-9 flex-shrink-0"
               >
                 {updateLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />

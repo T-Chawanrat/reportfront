@@ -415,8 +415,8 @@ const navItems: NavItem[] = [
     icon: <GridIcon />,
     name: "Dashboard",
     subItems: [
-      { name: "หมายเหตุ (จาก App)", path: "/remark", pro: false },
-      { name: "รายงานหน้าที่2", path: "/page2", pro: false },
+      { name: "หมายเหตุ (จาก App)", path: "/appremark", pro: false },
+      { name: "สินค้าค้างบนคลัง", path: "/productwarehouse", pro: false },
     ],
   },
 ];

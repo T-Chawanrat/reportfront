@@ -234,7 +234,7 @@ export default function SignInForm() {
         localStorage.setItem("user", JSON.stringify(data.rows));
         localStorage.setItem("isLoggedIn", "true");
 
-        navigate("/remark", { replace: true });
+        navigate("/appremark", { replace: true });
       } else {
         setLoginError("Username or password incorrect");
       }
