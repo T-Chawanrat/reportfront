@@ -273,7 +273,7 @@ export default function AppRemark() {
               </th>
               <th className="w-60 px-4 py-2 border-b text-left">เจ้าของงาน</th>
               <th className="w-55 px-4 py-2 border-b text-left">
-                ชื่อผู้รับสินค้า
+                ชื่อผู้รับ
               </th>
               <th className="w-35 px-4 py-2 border-b text-left">คลังปลายทาง</th>
               <th className="w-55 px-4 py-2 border-b text-left">สถานะล่าสุด</th>

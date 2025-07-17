@@ -398,7 +398,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { LogOut } from "lucide-react";
+import { LogOut, Car, Package } from "lucide-react";
 import { ChevronDownIcon, GridIcon, HorizontaLDots } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
@@ -407,7 +407,11 @@ type NavItem = {
   name: string;
   icon: React.ReactNode;
   path?: string;
-  subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
+  subItems?: {
+    name: string;
+    path: string;
+    icon?: React.ReactNode;
+  }[];
 };
 
 const navItems: NavItem[] = [
@@ -415,8 +419,16 @@ const navItems: NavItem[] = [
     icon: <GridIcon />,
     name: "Dashboard",
     subItems: [
-      { name: "หมายเหตุ (จาก App)", path: "/appremark", pro: false },
-      { name: "สินค้าค้างบนคลัง", path: "/productwarehouse", pro: false },
+      {
+        name: "หมายเหตุ (จาก App)",
+        path: "/appremark",
+        icon: <Car size={20} />,
+      },
+      {
+        name: "สินค้าค้างบนคลัง",
+        path: "/productwarehouse",
+        icon: <Package size={20} />,
+      },
     ],
   },
 ];
@@ -495,41 +507,110 @@ const AppSidebar: React.FC = () => {
   const renderMenuItems = (items: NavItem[], menuType: "main" | "others") => (
     <ul className="flex flex-col gap-4">
       {items.map((nav, index) => (
-        <li key={nav.name}>
+        <li key={nav.name} className="relative">
           {nav.subItems ? (
-            <button
-              onClick={() => handleSubmenuToggle(index, menuType)}
-              className={`menu-item group ${
-                openSubmenu?.type === menuType && openSubmenu?.index === index
-                  ? "menu-item-active"
-                  : "menu-item-inactive"
-              } cursor-pointer ${
-                !isExpanded ? "lg:justify-center" : "lg:justify-start"
-              }`}
-            >
-              <span
-                className={`menu-item-icon-size  ${
+            <>
+              <button
+                onClick={() => handleSubmenuToggle(index, menuType)}
+                className={`menu-item group ${
                   openSubmenu?.type === menuType && openSubmenu?.index === index
-                    ? "menu-item-icon-active"
-                    : "menu-item-icon-inactive"
+                    ? "menu-item-active"
+                    : "menu-item-inactive"
+                } cursor-pointer ${
+                  !isExpanded ? "lg:justify-center" : "lg:justify-start"
                 }`}
               >
-                {nav.icon}
-              </span>
-              {(isExpanded || isMobileOpen) && (
-                <span className="menu-item-text">{nav.name}</span>
-              )}
-              {(isExpanded || isMobileOpen) && (
-                <ChevronDownIcon
-                  className={`ml-auto w-5 h-5 transition-transform duration-200 ${
+                <span
+                  className={`menu-item-icon-size  ${
                     openSubmenu?.type === menuType &&
                     openSubmenu?.index === index
-                      ? "rotate-180 text-brand-500"
-                      : ""
+                      ? "menu-item-icon-active"
+                      : "menu-item-icon-inactive"
                   }`}
-                />
+                >
+                  {nav.icon}
+                </span>
+                {(isExpanded || isMobileOpen) && (
+                  <span className="menu-item-text">{nav.name}</span>
+                )}
+                {(isExpanded || isMobileOpen) && (
+                  <ChevronDownIcon
+                    className={`ml-auto w-5 h-5 transition-transform duration-200 ${
+                      openSubmenu?.type === menuType &&
+                      openSubmenu?.index === index
+                        ? "rotate-180 text-brand-500"
+                        : ""
+                    }`}
+                  />
+                )}
+              </button>
+
+              {/* ← แสดง subItems เมื่อ sidebar ย่อ (แสดงเฉพาะไอคอน) */}
+              {nav.subItems &&
+                !isExpanded &&
+                !isMobileOpen &&
+                openSubmenu?.type === menuType &&
+                openSubmenu?.index === index && (
+                  <div className="mt-2 space-y-2 overflow-hidden transition-all duration-300">
+                    {nav.subItems.map((subItem) => (
+                      <Link
+                        key={subItem.name}
+                        to={subItem.path}
+                        className={`flex justify-center items-center w-full h-10 rounded-md transition-colors ${
+                          isActive(subItem.path)
+                            ? "bg-brand-50 text-brand-500"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                        title={subItem.name}
+                      >
+                        <span
+                          className={`${
+                            isActive(subItem.path)
+                              ? "text-brand-500"
+                              : "text-gray-600"
+                          }`}
+                        >
+                          {subItem.icon}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
+              {/* ← แสดง subItems เมื่อ sidebar ขยาย (แสดงเฉพาะชื่อ) - เหลือแค่ 1 บล็อคเท่านั้น */}
+              {nav.subItems && (isExpanded || isMobileOpen) && (
+                <div
+                  ref={(el) => {
+                    subMenuRefs.current[`${menuType}-${index}`] = el;
+                  }}
+                  className="overflow-hidden transition-all duration-300"
+                  style={{
+                    height:
+                      openSubmenu?.type === menuType &&
+                      openSubmenu?.index === index
+                        ? `${subMenuHeight[`${menuType}-${index}`]}px`
+                        : "0px",
+                  }}
+                >
+                  <ul className="mt-2 space-y-1 ml-9">
+                    {nav.subItems.map((subItem) => (
+                      <li key={subItem.name}>
+                        <Link
+                          to={subItem.path}
+                          className={`menu-dropdown-item ${
+                            isActive(subItem.path)
+                              ? "menu-dropdown-item-active"
+                              : "menu-dropdown-item-inactive"
+                          }`}
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
-            </button>
+            </>
           ) : (
             nav.path && (
               <Link
@@ -552,61 +633,6 @@ const AppSidebar: React.FC = () => {
                 )}
               </Link>
             )
-          )}
-          {nav.subItems && (isExpanded || isMobileOpen) && (
-            <div
-              ref={(el) => {
-                subMenuRefs.current[`${menuType}-${index}`] = el;
-              }}
-              className="overflow-hidden transition-all duration-300"
-              style={{
-                height:
-                  openSubmenu?.type === menuType && openSubmenu?.index === index
-                    ? `${subMenuHeight[`${menuType}-${index}`]}px`
-                    : "0px",
-              }}
-            >
-              <ul className="mt-2 space-y-1 ml-9">
-                {nav.subItems.map((subItem) => (
-                  <li key={subItem.name}>
-                    <Link
-                      to={subItem.path}
-                      className={`menu-dropdown-item ${
-                        isActive(subItem.path)
-                          ? "menu-dropdown-item-active"
-                          : "menu-dropdown-item-inactive"
-                      }`}
-                    >
-                      {subItem.name}
-                      <span className="flex items-center gap-1 ml-auto">
-                        {subItem.new && (
-                          <span
-                            className={`ml-auto ${
-                              isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
-                            } menu-dropdown-badge`}
-                          >
-                            new
-                          </span>
-                        )}
-                        {subItem.pro && (
-                          <span
-                            className={`ml-auto ${
-                              isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
-                            } menu-dropdown-badge`}
-                          >
-                            pro
-                          </span>
-                        )}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
           )}
         </li>
       ))}
@@ -678,20 +704,19 @@ const AppSidebar: React.FC = () => {
           </div>
         </nav>
 
-        <div className="mt-auto pb-8 flex flex-col items-center w-full">
-          {/* ปรับการทำงานของปุ่ม Logout */}
-          <button
-            onClick={handleLogout} // เรียกฟังก์ชัน handleLogout
-            className="menu-item group menu-item-inactive cursor-pointer w-full text-left hover:bg-brand-50 py-1"
-          >
-            <span className="menu-item-icon-size menu-item-icon-inactive">
-              <LogOut className="text-brand-500" size={20} />
-            </span>
-            {(isExpanded || isMobileOpen) && (
-              <span className="menu-item-text text-brand-500">Logout</span>
-            )}
-          </button>
-        </div>
+       <div className="mt-auto pb-8 flex flex-col items-center w-full">
+  <button
+    onClick={handleLogout}
+    className="menu-item group menu-item-inactive cursor-pointer w-full text-left hover:bg-brand-50 py-1"
+  >
+    <span className="w-5 h-5 flex items-center justify-center">
+      <LogOut className="text-brand-500" size={20} /> {/* ← ตอนนี้จะใหญ่ขึ้นแล้ว */}
+    </span>
+    {(isExpanded || isMobileOpen) && (
+      <span className="menu-item-text text-brand-500">Logout</span>
+    )}
+  </button>
+</div>
       </div>
     </aside>
   );

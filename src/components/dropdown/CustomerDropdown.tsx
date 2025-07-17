@@ -123,7 +123,7 @@ const CustomerDropdown: React.FC<CustomerDropdownProps> = ({ onChange }) => {
         </button>
       </div>
       {isDropdownOpen && (
-        <ul className="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-40 overflow-y-auto">
+        <ul className="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-40 overflow-y-auto w-95">
           {filteredCustomers.length > 0 ? (
             filteredCustomers.map((customer) => (
               <li

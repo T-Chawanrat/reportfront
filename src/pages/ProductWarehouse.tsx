@@ -29,17 +29,17 @@ export interface Transaction {
   status_message?: string;
 }
 
-export interface LeditRow {
-  pk_id: number | string;
-  create_date?: string;
-  value_new?: string;
-  column?: string;
-  people_first_name?: string;
-  people_last_name?: string;
-  employee_first_name?: string;
-  employee_last_name?: string;
-  user_type?: string;
-}
+// export interface LeditRow {
+//   pk_id: number | string;
+//   create_date?: string;
+//   value_new?: string;
+//   column?: string;
+//   people_first_name?: string;
+//   people_last_name?: string;
+//   employee_first_name?: string;
+//   employee_last_name?: string;
+//   user_type?: string;
+// }
 
 export default function ProductWarehouse() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -60,9 +60,9 @@ export default function ProductWarehouse() {
   const [modalData, setModalData] = useState<
     Transaction | Transaction[] | null
   >(null);
-  const [leditRows, setLeditRows] = useState<LeditRow[]>([]);
-  const [leditLoading, setLeditLoading] = useState(false);
-  const [leditError, setLeditError] = useState<string | null>(null);
+  // const [leditRows, setLeditRows] = useState<LeditRow[]>([]);
+  // const [leditLoading, setLeditLoading] = useState(false);
+  // const [leditError, setLeditError] = useState<string | null>(null);
 
   const [newRemark, setNewRemark] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -103,27 +103,27 @@ export default function ProductWarehouse() {
     }
   };
 
-  const fetchLedit = async (receive_id: string) => {
-    setLeditLoading(true);
-    setLeditError(null);
-    try {
-      const res = await AxiosInstance.get("/vledit", {
-        params: { receive_id },
-      });
-      setLeditRows(res.data.data || []);
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        setLeditError(err?.message || "เกิดข้อผิดพลาดในการโหลด log แก้ไข");
-      } else if (err instanceof Error) {
-        setLeditError(err.message);
-      } else {
-        setLeditError("เกิดข้อผิดพลาดในการโหลด log แก้ไข");
-      }
-      setLeditRows([]);
-    } finally {
-      setLeditLoading(false);
-    }
-  };
+  // const fetchLedit = async (receive_id: string) => {
+  //   setLeditLoading(true);
+  //   setLeditError(null);
+  //   try {
+  //     const res = await AxiosInstance.get("/vledit", {
+  //       params: { receive_id },
+  //     });
+  //     setLeditRows(res.data.data || []);
+  //   } catch (err) {
+  //     if (axios.isAxiosError(err)) {
+  //       setLeditError(err?.message || "เกิดข้อผิดพลาดในการโหลด log แก้ไข");
+  //     } else if (err instanceof Error) {
+  //       setLeditError(err.message);
+  //     } else {
+  //       setLeditError("เกิดข้อผิดพลาดในการโหลด log แก้ไข");
+  //     }
+  //     setLeditRows([]);
+  //   } finally {
+  //     setLeditLoading(false);
+  //   }
+  // };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -144,18 +144,18 @@ export default function ProductWarehouse() {
     }
   }, [isLoggedIn, navigate]);
 
-  useEffect(() => {
-    if (
-      isModalOpen &&
-      modalData &&
-      !Array.isArray(modalData) &&
-      modalData.receive_business_id
-    ) {
-      setLeditRows([]);
-      setLeditLoading(true);
-      fetchLedit(String(modalData.receive_business_id));
-    }
-  }, [isModalOpen, modalData]);
+  // useEffect(() => {
+  //   if (
+  //     isModalOpen &&
+  //     modalData &&
+  //     !Array.isArray(modalData) &&
+  //     modalData.receive_business_id
+  //   ) {
+  //     setLeditRows([]);
+  //     setLeditLoading(true);
+  //     fetchLedit(String(modalData.receive_business_id));
+  //   }
+  // }, [isModalOpen, modalData]);
 
   // สำหรับ modal ใหม่ แสดง serial_no, customer_name, to_warehouse ตาม receive_code
   // const modalSerialList = modalReceiveCode
@@ -196,7 +196,7 @@ export default function ProductWarehouse() {
       });
 
       setNewRemark("");
-      fetchLedit(String(modalData.receive_business_id));
+      // fetchLedit(String(modalData.receive_business_id));
 
       setModalData((prev) =>
         prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev
@@ -252,7 +252,7 @@ export default function ProductWarehouse() {
                 คลังปัจจุบัน
               </th>
               <th className="w-60 px-4 py-2 border-b text-left">เจ้าของงาน</th>
-              <th className="w-60 px-4 py-2 border-b text-left">ชื่อผู้ส่ง</th>
+              <th className="w-60 px-4 py-2 border-b text-left">ชื่อผู้รับ</th>
               <th className="w-45 px-4 py-2 border-b text-left">วันที่บิล</th>
               <th className="w-45 px-4 py-2 border-b text-left">
                 วันที่จัดส่ง
@@ -348,12 +348,12 @@ export default function ProductWarehouse() {
           }}
         >
           <div
-            className="bg-white p-6 rounded shadow-lg min-w-[320px] max-w-[90vw]"
+            className="bg-white p-6 rounded shadow-lg min-w-[600px] max-h-[90vh] "
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-bold text-base">
-                ประวัติการแก้ไข (Edit Log)
+                เพิ่มหมายเหตุ (Add Remark)
                 {modalData &&
                   !Array.isArray(modalData) &&
                   (modalData.receive_code || modalData.id) && (
@@ -408,7 +408,7 @@ export default function ProductWarehouse() {
             )}
 
             {/* ตารางข้อมูล log การแก้ไข */}
-            <div className="overflow-x-auto">
+            {/* <div className="overflow-x-auto">
               {leditLoading && (
                 <div className="text-brand-500 py-2">
                   กำลังโหลด log แก้ไข...
@@ -478,10 +478,10 @@ export default function ProductWarehouse() {
                     )}
                   </tbody>
                 </table>
-              </div>
-            </div>
+              </div>*/}
           </div>
         </div>
+        // </div>
       )}
 
       {loading && (

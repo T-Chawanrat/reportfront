@@ -34,7 +34,7 @@ const Pagination: React.FC<PaginationProps> = ({
         className={`px-2 py-1 rounded transition ${
           page === 1 || disabled
             ? "text-gray-400 bg-gray-100 cursor-not-allowed"
-            : "text-brand-800 hover:bg-brand-100"
+            : "text-brand-700 hover:bg-brand-100"
         }`}
         title="หน้าแรก"
         type="button"
@@ -47,7 +47,7 @@ const Pagination: React.FC<PaginationProps> = ({
         className={`px-2 py-1 rounded transition ${
           page === 1 || disabled
             ? "text-gray-400 bg-gray-100 cursor-not-allowed"
-            : "text-brand-800 hover:bg-brand-100"
+            : "text-brand-700 hover:bg-brand-100"
         }`}
         title="ก่อนหน้า"
         type="button"
@@ -66,8 +66,8 @@ const Pagination: React.FC<PaginationProps> = ({
           onClick={() => onPageChange(p)}
           className={`px-3 py-1 rounded font-semibold transition ${
             p === page
-              ? "bg-brand-600 text-white shadow"
-              : "text-brand-800 hover:bg-brand-100"
+              ? "bg-brand-500 text-white shadow"
+              : "text-brand-700 hover:bg-brand-100"
           }`}
           disabled={disabled}
           type="button"
