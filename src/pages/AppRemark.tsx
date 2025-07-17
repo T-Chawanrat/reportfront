@@ -291,11 +291,7 @@ export default function AppRemark() {
                     <button
                       className="inline-flex gap-1 px-1.5 py-1 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
                       onClick={async () => {
-                        if (updateLoading) return;
-                        console.log(
-                          `Log opened:`,
-                          t.receive_code
-                        );
+                        if (updateLoading) 
                         setIsModalOpen(true);
                         setModalData(t);
                       }}

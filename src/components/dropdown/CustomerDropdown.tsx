@@ -88,7 +88,6 @@ const CustomerDropdown: React.FC<CustomerDropdownProps> = ({ onChange }) => {
   };
 
   const handleSelectChange = (customerId: number, customerName: string) => {
-    console.log(`${customerId} ${customerName}`); 
     setSelectedCustomerId(customerId); // บันทึก customer_id ที่เลือก
     setSearchTerm(customerName); // แสดงชื่อ customer ใน input
     setIsDropdownOpen(false); // ปิด dropdown
