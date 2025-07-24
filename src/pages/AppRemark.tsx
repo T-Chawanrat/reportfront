@@ -43,7 +43,7 @@ export interface LeditRow {
 const headers = [
   "Log",
   "วันที่จากแอป",
-  "หมายเหตุแอ",
+  "หมายเหตุแอป",
   "หมายเหตุ",
   "เลขที่บิล",
   "เลขที่อ้างอิง",
@@ -71,9 +71,9 @@ export default function AppRemark() {
   const [leditLoading, setLeditLoading] = useState(false);
   const [leditError, setLeditError] = useState<string | null>(null);
 
-  const [columnWidths, setColumnWidths] = useState<number[]>(
-    new Array(headers.length).fill(150) // ความกว้างเริ่มต้นของแต่ละคอลัมน์
-  );
+  // const [columnWidths, setColumnWidths] = useState<number[]>(
+  //   new Array(headers.length).fill(150) // ความกว้างเริ่มต้นของแต่ละคอลัมน์
+  // );
 
   const [newRemark, setNewRemark] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -169,12 +169,7 @@ export default function AppRemark() {
   }, [isLoggedIn, navigate]);
 
   useEffect(() => {
-    if (
-      isModalOpen &&
-      modalData &&
-      !Array.isArray(modalData) &&
-      modalData.receive_business_id
-    ) {
+    if (isModalOpen && modalData && !Array.isArray(modalData) && modalData.receive_business_id) {
       setLeditRows([]);
       setLeditLoading(true);
       fetchLedit(String(modalData.receive_business_id));
@@ -203,12 +198,7 @@ export default function AppRemark() {
   const handleAddRemark = async () => {
     if (updateLoading) return;
     if (!newRemark.trim()) return;
-    if (
-      !modalData ||
-      Array.isArray(modalData) ||
-      !modalData.receive_business_id
-    )
-      return;
+    if (!modalData || Array.isArray(modalData) || !modalData.receive_business_id) return;
 
     setUpdateLoading(true);
     setUpdateError(null);
@@ -223,16 +213,10 @@ export default function AppRemark() {
       fetchLedit(String(modalData.receive_business_id)); // refresh log
 
       // อัปเดต remark ใน modalData ทันที (ไม่ต้อง fetch ใหม่ ไม่ต้องปิด-เปิด modal)
-      setModalData((prev) =>
-        prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev
-      );
+      setModalData((prev) => (prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev));
       // ถ้าอยากให้ remark ในตารางหลักอัปเดตทันที (โดยไม่ fetch ทั้ง table)
       setTransactions((txs) =>
-        txs.map((tx) =>
-          tx.receive_code === modalData.receive_code
-            ? { ...tx, remark: newRemark }
-            : tx
-        )
+        txs.map((tx) => (tx.receive_code === modalData.receive_code ? { ...tx, remark: newRemark } : tx))
       );
     } catch (err) {
       setUpdateError((err as Error).message);
@@ -260,7 +244,7 @@ export default function AppRemark() {
             isClearable
             placeholderText="-- เลือกวันที่ --"
             className="border border-gray-300 rounded px-3 py-2"
-          /> */}
+            /> */}
         </div>
         <button
           onClick={handleDownload}
@@ -276,34 +260,31 @@ export default function AppRemark() {
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <ResizableColumns
             headers={headers}
-            columnWidths={columnWidths}
-            setColumnWidths={setColumnWidths}
+            pageKey="AppRemark" // กำหนด unique key สำหรับ page นี้
           />
+
           {/* <thead className="bg-gray-100">
             <tr>
-              <th className="w-15 px-4 py-2 border-b text-left">Log</th>
-              <th className="w-40 px-4 py-2 border-b text-left">
-                วันที่จากแอป
-              </th>
-              <th className="w-40 px-4 py-2 border-b text-left">หมายเหตุแอป</th>
-              <th className="w-55 px-4 py-2 border-b text-left">หมายเหตุ</th>
-              <th className="w-55 px-4 py-2 border-b text-left">เลขที่บิล</th>
-              <th className="w-50 px-4 py-2 border-b text-left">
-                เลขที่อ้างอิง
-              </th>
-              <th className="w-60 px-4 py-2 border-b text-left">เจ้าของงาน</th>
-              <th className="w-55 px-4 py-2 border-b text-left">ชื่อผู้รับ</th>
-              <th className="w-35 px-4 py-2 border-b text-left">คลังปลายทาง</th>
-              <th className="w-55 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
+            <th className="w-15 px-4 py-2 border-b text-left">Log</th>
+            <th className="w-40 px-4 py-2 border-b text-left">
+            วันที่จากแอป
+            </th>
+            <th className="w-40 px-4 py-2 border-b text-left">หมายเหตุแอป</th>
+            <th className="w-55 px-4 py-2 border-b text-left">หมายเหตุ</th>
+            <th className="w-55 px-4 py-2 border-b text-left">เลขที่บิล</th>
+            <th className="w-50 px-4 py-2 border-b text-left">
+            เลขที่อ้างอิง
+            </th>
+            <th className="w-60 px-4 py-2 border-b text-left">เจ้าของงาน</th>
+            <th className="w-55 px-4 py-2 border-b text-left">ชื่อผู้รับ</th>
+            <th className="w-35 px-4 py-2 border-b text-left">คลังปลายทาง</th>
+            <th className="w-55 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
             </tr>
-          </thead> */}
+            </thead> */}
           <tbody>
             {transactions.map((t, i) => {
               return (
-                <tr
-                  key={t.id ?? i}
-                  className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                >
+                <tr key={t.id ?? i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   {/* log modal เดิม */}
                   <td className="px-3 py-1 border-b truncate">
                     <button
@@ -318,26 +299,13 @@ export default function AppRemark() {
                     </button>
                   </td>
                   <td className="py-1 border-b truncate">
-                    {t.Create_date_tm_resend
-                      ? format(
-                          new Date(t.Create_date_tm_resend),
-                          "yyyy-MM-dd | HH:mm:ss"
-                        )
-                      : "-"}
+                    {t.Create_date_tm_resend ? format(new Date(t.Create_date_tm_resend), "yyyy-MM-dd | HH:mm:ss") : "-"}
                   </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.detail || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.remark || "-"}
-                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.detail || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.remark || "-"}</td>
                   {/* ช่อง receive_code: เพิ่มปุ่ม modal ใหม่ เฉพาะแถวแรก */}
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.receive_code}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.reference_no || "-"}
-                  </td>
+                  <td className="px-4 py-2 border-b truncate">{t.receive_code}</td>
+                  <td className="px-4 py-2 border-b truncate">{t.reference_no || "-"}</td>
                   {/* <td className="px-4 py-2 border-b truncate">
                     <button
                       className="text-brand-500 hover:text-brand-600 underline"
@@ -349,18 +317,10 @@ export default function AppRemark() {
                       {t.receive_code}
                     </button>
                   </td> */}
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.customer_name || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.recipient_name || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.warehouse_name || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.Last_status_nameTH || "-"}
-                  </td>
+                  <td className="px-4 py-2 border-b truncate">{t.customer_name || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate">{t.recipient_name || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate">{t.warehouse_name || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate">{t.Last_status_nameTH || "-"}</td>
                 </tr>
               );
             })}
@@ -384,15 +344,11 @@ export default function AppRemark() {
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-bold text-base">
                 ประวัติการแก้ไข (Edit Log)
-                {modalData &&
-                  !Array.isArray(modalData) &&
-                  (modalData.receive_code || modalData.id) && (
-                    <span className="ml-2 text-base text-gray-600 font-normal">
-                      {modalData.receive_code ||
-                        modalData.receive_business_id ||
-                        modalData.id}
-                    </span>
-                  )}
+                {modalData && !Array.isArray(modalData) && (modalData.receive_code || modalData.id) && (
+                  <span className="ml-2 text-base text-gray-600 font-normal">
+                    {modalData.receive_code || modalData.receive_business_id || modalData.id}
+                  </span>
+                )}
               </h2>
               <button
                 className="text-gray-500 hover:text-gray-900"
@@ -421,32 +377,18 @@ export default function AppRemark() {
                 disabled={updateLoading || !newRemark.trim()}
                 className="h-9 flex-shrink-0"
               >
-                {updateLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                ) : (
-                  "เพิ่ม"
-                )}
+                {updateLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "เพิ่ม"}
               </Button>
             </div>
 
-            {updateLoading && (
-              <div className="text-brand-500 py-2">กำลังบันทึกหมายเหตุ...</div>
-            )}
+            {updateLoading && <div className="text-brand-500 py-2">กำลังบันทึกหมายเหตุ...</div>}
 
-            {updateError && (
-              <div className="text-red-500 text-sm">{updateError}</div>
-            )}
+            {updateError && <div className="text-red-500 text-sm">{updateError}</div>}
 
             {/* ตารางข้อมูล log การแก้ไข */}
             <div className="overflow-x-auto">
-              {leditLoading && (
-                <div className="text-brand-500 py-2">
-                  กำลังโหลด log แก้ไข...
-                </div>
-              )}
-              {leditError && (
-                <div className="text-red-500 py-2">{leditError}</div>
-              )}
+              {leditLoading && <div className="text-brand-500 py-2">กำลังโหลด log แก้ไข...</div>}
+              {leditError && <div className="text-red-500 py-2">{leditError}</div>}
               <div className="max-h-96 overflow-y-auto">
                 <table className="min-w-full border-collapse">
                   <thead>
@@ -466,42 +408,20 @@ export default function AppRemark() {
                       leditRows.map((i, idx) => (
                         <tr key={i.pk_id ?? idx}>
                           <td className="border px-2 py-1 truncate">
-                            {i.create_date
-                              ? format(
-                                  new Date(i.create_date),
-                                  "yyyy-MM-dd HH:mm:ss"
-                                )
-                              : "-"}
+                            {i.create_date ? format(new Date(i.create_date), "yyyy-MM-dd HH:mm:ss") : "-"}
                           </td>
-                          <td className="border px-2 py-1">
-                            {i.value_new || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.column || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.people_first_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.people_last_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.employee_first_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.employee_last_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.user_type || "-"}
-                          </td>
+                          <td className="border px-2 py-1">{i.value_new || "-"}</td>
+                          <td className="border px-2 py-1">{i.column || "-"}</td>
+                          <td className="border px-2 py-1">{i.people_first_name || "-"}</td>
+                          <td className="border px-2 py-1">{i.people_last_name || "-"}</td>
+                          <td className="border px-2 py-1">{i.employee_first_name || "-"}</td>
+                          <td className="border px-2 py-1">{i.employee_last_name || "-"}</td>
+                          <td className="border px-2 py-1">{i.user_type || "-"}</td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td
-                          className="border px-2 py-1 text-center"
-                          colSpan={8}
-                        >
+                        <td className="border px-2 py-1 text-center" colSpan={8}>
                           ไม่มีข้อมูลการแก้ไข
                         </td>
                       </tr>
@@ -583,12 +503,7 @@ export default function AppRemark() {
       )}
       {error && <div className="text-red-600 text-center mt-4">{error}</div>}
 
-      <Pagination
-        page={page}
-        pageCount={pageCount}
-        onPageChange={setPage}
-        disabled={loading}
-      />
+      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} disabled={loading} />
     </div>
   );
 }

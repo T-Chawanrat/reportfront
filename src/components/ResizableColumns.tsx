@@ -1,34 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+import { useColumnWidths } from "../context/ColumnWidths"; // ปรับ path ให้ถูกต้อง
 
 interface ResizableColumnsProps {
-  headers: string[]; // รายการชื่อหัวข้อคอลัมน์
-  columnWidths: number[]; // ความกว้างเริ่มต้นของแต่ละคอลัมน์
-  setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>; // ฟังก์ชันสำหรับอัปเดตความกว้างของคอลัมน์
+  headers: string[];
+  pageKey: string;
 }
 
 const ResizableColumns: React.FC<ResizableColumnsProps> = ({
   headers,
-  columnWidths,
-  setColumnWidths,
+  pageKey,
 }) => {
-  useEffect(() => {
-    localStorage.setItem("columnWidths", JSON.stringify(columnWidths));
-  }, [columnWidths]);
+  const { columnWidths, setColumnWidths, setPageKey } = useColumnWidths();
+  const isInitialized = useRef(false);
 
+  // เปลี่ยน page key เมื่อ component mount หรือ pageKey เปลี่ยน
   useEffect(() => {
-    const savedWidths = localStorage.getItem("columnWidths");
-    if (savedWidths) {
-      setColumnWidths(JSON.parse(savedWidths));
+    if (!isInitialized.current) {
+      setPageKey(pageKey);
+      isInitialized.current = true;
+    } else if (pageKey) {
+      setPageKey(pageKey);
     }
-  }, [setColumnWidths]);
+  }, [pageKey, setPageKey]);
 
   const handleMouseDown = (index: number, event: React.MouseEvent) => {
+    event.preventDefault();
+    
     const startX = event.clientX;
     const startWidth = columnWidths[index];
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const deltaX = moveEvent.clientX - startX;
-      const newWidth = Math.max(startWidth + deltaX, 50); // กำหนดความกว้างขั้นต่ำ 50px
+      const newWidth = Math.max(startWidth + deltaX, 50);
       setColumnWidths((prevWidths) =>
         prevWidths.map((width, i) => (i === index ? newWidth : width))
       );
@@ -49,7 +52,7 @@ const ResizableColumns: React.FC<ResizableColumnsProps> = ({
         {headers.map((header, index) => (
           <th
             key={index}
-            style={{ width: `${columnWidths[index]}px` }}
+            style={{ width: `${columnWidths[index] || 150}px` }}
             className="relative px-4 py-2 border-b text-left border-gray-200"
           >
             <div className="flex items-center justify-between">

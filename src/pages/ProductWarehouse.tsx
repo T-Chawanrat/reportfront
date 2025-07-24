@@ -13,6 +13,7 @@ import { ExportExcel } from "../utils/ExportExcel";
 import { FileDown, Loader2, Logs } from "lucide-react";
 import WarehouseDropdown from "../components/dropdown/WarehouseDropdown";
 import CustomerDropdown from "../components/dropdown/CustomerDropdown";
+import ResizableColumns from "../components/ResizableColumns";
 
 export interface Transaction {
   id?: number | string;
@@ -41,15 +42,26 @@ export interface Transaction {
 //   user_type?: string;
 // }
 
+const headers = [
+  "Log",
+  "คลังปัจจุบัน",
+  "เจ้าของงาน",
+  "ชื่อผู้รับ",
+  "วันที่บิล",
+  "วันที่จัดส่ง",
+  "วันที่จัดส่งใหม่",
+  "เลขที่บิล",
+  "เลขที่อ้างอิง",
+  "หมายเหตุ",
+  "คลังปลายทาง",
+  "สถานะล่าสุด",
+];
+
 export default function ProductWarehouse() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [search, setSearch] = useState<string>("");
-  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(
-    null
-  );
-  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(
-    null
-  );
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(null);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const limit = 17;
@@ -57,9 +69,7 @@ export default function ProductWarehouse() {
   const [error, setError] = useState<string | null>(null);
   const pageCount = Math.ceil(total / limit);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [modalData, setModalData] = useState<
-    Transaction | Transaction[] | null
-  >(null);
+  const [modalData, setModalData] = useState<Transaction | Transaction[] | null>(null);
   // const [leditRows, setLeditRows] = useState<LeditRow[]>([]);
   // const [leditLoading, setLeditLoading] = useState(false);
   // const [leditError, setLeditError] = useState<string | null>(null);
@@ -178,12 +188,7 @@ export default function ProductWarehouse() {
   const handleAddRemark = async () => {
     if (updateLoading) return;
     if (!newRemark.trim()) return;
-    if (
-      !modalData ||
-      Array.isArray(modalData) ||
-      !modalData.receive_business_id
-    )
-      return;
+    if (!modalData || Array.isArray(modalData) || !modalData.receive_business_id) return;
 
     setUpdateLoading(true);
     setUpdateError(null);
@@ -197,15 +202,9 @@ export default function ProductWarehouse() {
       setNewRemark("");
       // fetchLedit(String(modalData.receive_business_id));
 
-      setModalData((prev) =>
-        prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev
-      );
+      setModalData((prev) => (prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev));
       setTransactions((txs) =>
-        txs.map((tx) =>
-          tx.receive_code === modalData.receive_code
-            ? { ...tx, remark: newRemark }
-            : tx
-        )
+        txs.map((tx) => (tx.receive_code === modalData.receive_code ? { ...tx, remark: newRemark } : tx))
       );
     } catch (err) {
       setUpdateError((err as Error).message);
@@ -225,12 +224,8 @@ export default function ProductWarehouse() {
             onChange={(e) => setSearch(e.target.value.trim())}
             className="border border-gray-300 rounded-lg px-3 py-1 h-9 w-85 md:w-lg focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
           />
-          <WarehouseDropdown
-            onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)}
-          />
-          <CustomerDropdown
-            onChange={(customerId) => setSelectedCustomerId(customerId)}
-          />
+          <WarehouseDropdown onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)} />
+          <CustomerDropdown onChange={(customerId) => setSelectedCustomerId(customerId)} />
         </div>
         <button
           onClick={handleDownload}
@@ -244,7 +239,8 @@ export default function ProductWarehouse() {
       {/* ตารางข้อมูล */}
       <div className="overflow-x-auto w-full">
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
-          <thead className="bg-gray-100">
+          <ResizableColumns headers={headers} pageKey="ProductWarehouse" />
+          {/* <thead className="bg-gray-100">
             <tr>
               <th className="w-15 px-4 py-2 border-b text-left">Log</th>
               <th className="w-40 px-4 py-2 border-b text-left">
@@ -260,14 +256,11 @@ export default function ProductWarehouse() {
               <th className="w-40 px-4 py-2 border-b text-left">คลังปลายทาง</th>
               <th className="w-50 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
             </tr>
-          </thead>
+          </thead> */}
           <tbody>
             {transactions.map((t, i) => {
               return (
-                <tr
-                  key={t.id ?? i}
-                  className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                >
+                <tr key={t.id ?? i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   {/* log modal เดิม */}
                   <td className="px-3 py-1 border-b truncate">
                     <button
@@ -281,42 +274,22 @@ export default function ProductWarehouse() {
                       <Logs size={23} />
                     </button>
                   </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.warehouse_name || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.customer_name || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.recipient_name || "-"}
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.customer_name || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.recipient_name || "-"}</td>
+                  <td className="py-1 border-b truncate">
+                    {t.receive_date ? format(new Date(t.receive_date), "yyyy-MM-dd") : "-"}
                   </td>
                   <td className="py-1 border-b truncate">
-                    {t.receive_date
-                      ? format(new Date(t.receive_date), "yyyy-MM-dd")
-                      : "-"}
+                    {t.delivery_date ? format(new Date(t.delivery_date), "yyyy-MM-dd") : "-"}
                   </td>
                   <td className="py-1 border-b truncate">
-                    {t.delivery_date
-                      ? format(new Date(t.delivery_date), "yyyy-MM-dd")
-                      : "-"}
+                    {t.resend_date ? format(new Date(t.resend_date), "yyyy-MM-dd") : "-"}
                   </td>
-                  <td className="py-1 border-b truncate">
-                    {t.resend_date
-                      ? format(new Date(t.resend_date), "yyyy-MM-dd")
-                      : "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.receive_code || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.reference_no || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.to_warehouse_name}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.status_message || "-"}
-                  </td>
+                  <td className="px-4 py-2 border-b truncate">{t.receive_code || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate">{t.reference_no || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate">{t.to_warehouse_name}</td>
+                  <td className="px-4 py-2 border-b truncate">{t.status_message || "-"}</td>
                 </tr>
               );
             })}
@@ -340,15 +313,11 @@ export default function ProductWarehouse() {
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-bold text-base">
                 เพิ่มหมายเหตุ (Add Remark)
-                {modalData &&
-                  !Array.isArray(modalData) &&
-                  (modalData.receive_code || modalData.id) && (
-                    <span className="ml-2 text-base text-gray-600 font-normal">
-                      {modalData.receive_code ||
-                        modalData.receive_business_id ||
-                        modalData.id}
-                    </span>
-                  )}
+                {modalData && !Array.isArray(modalData) && (modalData.receive_code || modalData.id) && (
+                  <span className="ml-2 text-base text-gray-600 font-normal">
+                    {modalData.receive_code || modalData.receive_business_id || modalData.id}
+                  </span>
+                )}
               </h2>
               <button
                 className="text-gray-500 hover:text-gray-900"
@@ -377,21 +346,13 @@ export default function ProductWarehouse() {
                 disabled={updateLoading || !newRemark.trim()}
                 className="h-9 flex-shrink-0"
               >
-                {updateLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                ) : (
-                  "เพิ่ม"
-                )}
+                {updateLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "เพิ่ม"}
               </Button>
             </div>
 
-            {updateLoading && (
-              <div className="text-brand-500 py-2">กำลังบันทึกหมายเหตุ...</div>
-            )}
+            {updateLoading && <div className="text-brand-500 py-2">กำลังบันทึกหมายเหตุ...</div>}
 
-            {updateError && (
-              <div className="text-red-500 text-sm">{updateError}</div>
-            )}
+            {updateError && <div className="text-red-500 text-sm">{updateError}</div>}
 
             {/* ตารางข้อมูล log การแก้ไข */}
             {/* <div className="overflow-x-auto">
@@ -477,12 +438,7 @@ export default function ProductWarehouse() {
       )}
       {error && <div className="text-red-600 text-center mt-4">{error}</div>}
 
-      <Pagination
-        page={page}
-        pageCount={pageCount}
-        onPageChange={setPage}
-        disabled={loading}
-      />
+      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} disabled={loading} />
     </div>
   );
 }

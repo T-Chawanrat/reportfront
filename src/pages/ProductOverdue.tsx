@@ -65,15 +65,9 @@ export default function ProductOverdue() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [search, setSearch] = useState<string>("");
   const [remark, setRemark] = useState<string>("");
-  const [filterType, setFilterType] = useState<
-    "has_resend" | "no_resend" | "all"
-  >("all");
-  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(
-    null
-  );
-  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(
-    null
-  );
+  const [filterType, setFilterType] = useState<"has_resend" | "no_resend" | "all">("all");
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(null);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const limit = 17;
@@ -81,16 +75,14 @@ export default function ProductOverdue() {
   const [error, setError] = useState<string | null>(null);
   const pageCount = Math.ceil(total / limit);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [modalData, setModalData] = useState<
-    Transaction | Transaction[] | null
-  >(null);
+  const [modalData, setModalData] = useState<Transaction | Transaction[] | null>(null);
   const [leditRows, setLeditRows] = useState<LeditRow[]>([]);
   const [leditLoading, setLeditLoading] = useState(false);
   const [leditError, setLeditError] = useState<string | null>(null);
 
-  const [columnWidths, setColumnWidths] = useState<number[]>(
-    new Array(headers.length).fill(150) // ความกว้างเริ่มต้นของแต่ละคอลัมน์
-  );
+  // const [columnWidths, setColumnWidths] = useState<number[]>(
+  //   new Array(headers.length).fill(150) // ความกว้างเริ่มต้นของแต่ละคอลัมน์
+  // );
 
   const [newRemark, setNewRemark] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -164,15 +156,7 @@ export default function ProductOverdue() {
     } else {
       fetchTransactions();
     }
-  }, [
-    search,
-    remark,
-    filterType,
-    page,
-    pageCount,
-    selectedWarehouseId,
-    selectedCustomerId,
-  ]);
+  }, [search, remark, filterType, page, pageCount, selectedWarehouseId, selectedCustomerId]);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -181,12 +165,7 @@ export default function ProductOverdue() {
   }, [isLoggedIn, navigate]);
 
   useEffect(() => {
-    if (
-      isModalOpen &&
-      modalData &&
-      !Array.isArray(modalData) &&
-      modalData.receive_business_id
-    ) {
+    if (isModalOpen && modalData && !Array.isArray(modalData) && modalData.receive_business_id) {
       setLeditRows([]);
       setLeditLoading(true);
       fetchLedit(String(modalData.receive_business_id));
@@ -215,12 +194,7 @@ export default function ProductOverdue() {
   const handleAddRemark = async () => {
     if (updateLoading) return;
     if (!newRemark.trim()) return;
-    if (
-      !modalData ||
-      Array.isArray(modalData) ||
-      !modalData.receive_business_id
-    )
-      return;
+    if (!modalData || Array.isArray(modalData) || !modalData.receive_business_id) return;
 
     setUpdateLoading(true);
     setUpdateError(null);
@@ -234,15 +208,9 @@ export default function ProductOverdue() {
       setNewRemark("");
       // fetchLedit(String(modalData.receive_business_id));
 
-      setModalData((prev) =>
-        prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev
-      );
+      setModalData((prev) => (prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev));
       setTransactions((txs) =>
-        txs.map((tx) =>
-          tx.receive_code === modalData.receive_code
-            ? { ...tx, remark: newRemark }
-            : tx
-        )
+        txs.map((tx) => (tx.receive_code === modalData.receive_code ? { ...tx, remark: newRemark } : tx))
       );
     } catch (err) {
       setUpdateError((err as Error).message);
@@ -262,12 +230,8 @@ export default function ProductOverdue() {
             onChange={(e) => setSearch(e.target.value.trim())}
             className="border border-gray-300 rounded-lg px-3 py-1 h-9 w-50 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
           />
-          <WarehouseDropdown
-            onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)}
-          />
-          <CustomerDropdown
-            onChange={(customerId) => setSelectedCustomerId(customerId)}
-          />
+          <WarehouseDropdown onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)} />
+          <CustomerDropdown onChange={(customerId) => setSelectedCustomerId(customerId)} />
           <input
             type="text"
             placeholder="ค้นหาหมายเหตุ"
@@ -291,8 +255,7 @@ export default function ProductOverdue() {
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <ResizableColumns
             headers={headers}
-            columnWidths={columnWidths}
-            setColumnWidths={setColumnWidths}
+            pageKey="ProductOverdue"
           />
           {/* <thead className="bg-gray-100">
             <tr>
@@ -320,10 +283,7 @@ export default function ProductOverdue() {
           <tbody>
             {transactions.map((t, i) => {
               return (
-                <tr
-                  key={t.id ?? i}
-                  className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                >
+                <tr key={t.id ?? i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   {/* log modal เดิม */}
                   <td className="px-3 py-1 border-b truncate">
                     <button
@@ -337,50 +297,26 @@ export default function ProductOverdue() {
                       <Logs size={23} />
                     </button>
                   </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.remark || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.remark || "-"}
+                    {t.create_date ? format(new Date(t.create_date), "dd-MM-yyyy | HH:mm:ss") : "-"}
                   </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.create_date
-                      ? format(new Date(t.create_date), "dd-MM-yyyy | HH:mm:ss")
-                      : "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.warehouse_name || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.customer_name || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.recipient_name || "-"}
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.customer_name || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.recipient_name || "-"}</td>
+                  <td className="py-1 border-b truncate">
+                    {t.receive_date ? format(new Date(t.receive_date), "dd-MM-yyyy") : "-"}
                   </td>
                   <td className="py-1 border-b truncate">
-                    {t.receive_date
-                      ? format(new Date(t.receive_date), "dd-MM-yyyy")
-                      : "-"}
+                    {t.delivery_date ? format(new Date(t.delivery_date), "dd-MM-yyyy") : "-"}
                   </td>
                   <td className="py-1 border-b truncate">
-                    {t.delivery_date
-                      ? format(new Date(t.delivery_date), "dd-MM-yyyy")
-                      : "-"}
+                    {t.resend_date ? format(new Date(t.resend_date), "dd-MM-yyyy") : "-"}
                   </td>
-                  <td className="py-1 border-b truncate">
-                    {t.resend_date
-                      ? format(new Date(t.resend_date), "dd-MM-yyyy")
-                      : "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.receive_code || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.reference_no || "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.to_warehouse_name}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.status_message || "-"}
-                  </td>
+                  <td className="px-4 py-2 border-b truncate">{t.receive_code || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate">{t.reference_no || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate">{t.to_warehouse_name}</td>
+                  <td className="px-4 py-2 border-b truncate">{t.status_message || "-"}</td>
                 </tr>
               );
             })}
@@ -404,15 +340,11 @@ export default function ProductOverdue() {
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-bold text-base">
                 เพิ่มหมายเหตุ (Add Remark)
-                {modalData &&
-                  !Array.isArray(modalData) &&
-                  (modalData.receive_code || modalData.id) && (
-                    <span className="ml-2 text-base text-gray-600 font-normal">
-                      {modalData.receive_code ||
-                        modalData.receive_business_id ||
-                        modalData.id}
-                    </span>
-                  )}
+                {modalData && !Array.isArray(modalData) && (modalData.receive_code || modalData.id) && (
+                  <span className="ml-2 text-base text-gray-600 font-normal">
+                    {modalData.receive_code || modalData.receive_business_id || modalData.id}
+                  </span>
+                )}
               </h2>
               <button
                 className="text-gray-500 hover:text-gray-900"
@@ -441,32 +373,18 @@ export default function ProductOverdue() {
                 disabled={updateLoading || !newRemark.trim()}
                 className="h-9 flex-shrink-0"
               >
-                {updateLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                ) : (
-                  "เพิ่ม"
-                )}
+                {updateLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "เพิ่ม"}
               </Button>
             </div>
 
-            {updateLoading && (
-              <div className="text-brand-500 py-2">กำลังบันทึกหมายเหตุ...</div>
-            )}
+            {updateLoading && <div className="text-brand-500 py-2">กำลังบันทึกหมายเหตุ...</div>}
 
-            {updateError && (
-              <div className="text-red-500 text-sm">{updateError}</div>
-            )}
+            {updateError && <div className="text-red-500 text-sm">{updateError}</div>}
 
             {/* ตารางข้อมูล log การแก้ไข */}
             <div className="overflow-x-auto">
-              {leditLoading && (
-                <div className="text-brand-500 py-2">
-                  กำลังโหลด log แก้ไข...
-                </div>
-              )}
-              {leditError && (
-                <div className="text-red-500 py-2">{leditError}</div>
-              )}
+              {leditLoading && <div className="text-brand-500 py-2">กำลังโหลด log แก้ไข...</div>}
+              {leditError && <div className="text-red-500 py-2">{leditError}</div>}
               <div className="max-h-96 overflow-y-auto">
                 <table className="min-w-full border-collapse">
                   <thead>
@@ -486,42 +404,20 @@ export default function ProductOverdue() {
                       leditRows.map((i, idx) => (
                         <tr key={i.pk_id ?? idx}>
                           <td className="border px-2 py-1 truncate">
-                            {i.create_date
-                              ? format(
-                                  new Date(i.create_date),
-                                  "yyyy-MM-dd HH:mm:ss"
-                                )
-                              : "-"}
+                            {i.create_date ? format(new Date(i.create_date), "yyyy-MM-dd HH:mm:ss") : "-"}
                           </td>
-                          <td className="border px-2 py-1">
-                            {i.value_new || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.column || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.people_first_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.people_last_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.employee_first_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.employee_last_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.user_type || "-"}
-                          </td>
+                          <td className="border px-2 py-1">{i.value_new || "-"}</td>
+                          <td className="border px-2 py-1">{i.column || "-"}</td>
+                          <td className="border px-2 py-1">{i.people_first_name || "-"}</td>
+                          <td className="border px-2 py-1">{i.people_last_name || "-"}</td>
+                          <td className="border px-2 py-1">{i.employee_first_name || "-"}</td>
+                          <td className="border px-2 py-1">{i.employee_last_name || "-"}</td>
+                          <td className="border px-2 py-1">{i.user_type || "-"}</td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td
-                          className="border px-2 py-1 text-center"
-                          colSpan={8}
-                        >
+                        <td className="border px-2 py-1 text-center" colSpan={8}>
                           ไม่มีข้อมูลการแก้ไข
                         </td>
                       </tr>
@@ -542,12 +438,7 @@ export default function ProductOverdue() {
       )}
       {error && <div className="text-red-600 text-center mt-4">{error}</div>}
 
-      <Pagination
-        page={page}
-        pageCount={pageCount}
-        onPageChange={setPage}
-        disabled={loading}
-      />
+      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} disabled={loading} />
     </div>
   );
 }

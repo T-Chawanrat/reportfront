@@ -9,6 +9,7 @@ import AppRemark from "./pages/AppRemark";
 import { AuthProvider } from "./context/AuthContext";
 import ProductWarehouse from "./pages/ProductWarehouse";
 import ProductOverdue from "./pages/ProductOverdue";
+import { ColumnWidthsProvider } from "./context/ColumnWidths";
 // import UserProfiles from "./pages/UserProfiles";
 // import Videos from "./pages/UiElements/Videos";
 // import Images from "./pages/UiElements/Images";
@@ -27,6 +28,7 @@ import ProductOverdue from "./pages/ProductOverdue";
 export default function App() {
   return (
     <AuthProvider>
+      <ColumnWidthsProvider>
       <Router>
         <ScrollToTop />
         <Routes>
@@ -44,7 +46,7 @@ export default function App() {
                   <AppRemark />
                 </ProtectedRoute>
               }
-            />
+              />
             <Route
               path="/productwarehouse"
               element={
@@ -52,7 +54,7 @@ export default function App() {
                   <ProductWarehouse />
                 </ProtectedRoute>
               }
-            />
+              />
             <Route
               path="/productoverdue"
               element={
@@ -60,7 +62,7 @@ export default function App() {
                   <ProductOverdue />
                 </ProtectedRoute>
               }
-            />
+              />
 
             {/* Forms */}
             {/* <Route path="/form-elements" element={<FormElements />} /> */}
@@ -90,6 +92,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
+            </ColumnWidthsProvider>
     </AuthProvider>
   );
 }
