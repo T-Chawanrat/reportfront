@@ -67,7 +67,6 @@ export default function ProductWarehouse() {
   const [newRemark, setNewRemark] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
-
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
 
@@ -251,19 +250,13 @@ export default function ProductWarehouse() {
               <th className="w-40 px-4 py-2 border-b text-left">
                 คลังปัจจุบัน
               </th>
-              <th className="w-60 px-4 py-2 border-b text-left">เจ้าของงาน</th>
-              <th className="w-60 px-4 py-2 border-b text-left">ชื่อผู้รับ</th>
-              <th className="w-45 px-4 py-2 border-b text-left">วันที่บิล</th>
-              <th className="w-45 px-4 py-2 border-b text-left">
-                วันที่จัดส่ง
-              </th>
-              <th className="w-45 px-4 py-2 border-b text-left">
-                วันที่จัดส่งใหม่
-              </th>
+              <th className="w-65 px-4 py-2 border-b text-left">เจ้าของงาน</th>
+              <th className="w-70 px-4 py-2 border-b text-left">ชื่อผู้รับ</th>
+              <th className="w-30 py-2 border-b text-left">วันที่บิล</th>
+              <th className="w-30 py-2 border-b text-left">วันที่จัดส่ง</th>
+              <th className="w-30 py-2 border-b text-left">วันที่จัดส่งใหม่</th>
               <th className="w-55 px-4 py-2 border-b text-left">เลขที่บิล</th>
-              <th className="w-50 px-4 py-2 border-b text-left">
-                เลขที่อ้างอิง
-              </th>
+              <th className="w-50 px-4 py-2 border-b text-left">เลขที่อ้างอิง</th>
               <th className="w-40 px-4 py-2 border-b text-left">คลังปลายทาง</th>
               <th className="w-50 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
             </tr>
@@ -297,26 +290,19 @@ export default function ProductWarehouse() {
                   <td className="px-4 py-2 border-b truncate max-w-xs">
                     {t.recipient_name || "-"}
                   </td>
-
                   <td className="py-1 border-b truncate">
                     {t.receive_date
-                      ? format(
-                          new Date(t.receive_date),
-                          "yyyy-MM-dd | HH:mm:ss"
-                        )
+                      ? format(new Date(t.receive_date), "yyyy-MM-dd")
                       : "-"}
                   </td>
                   <td className="py-1 border-b truncate">
                     {t.delivery_date
-                      ? format(
-                          new Date(t.delivery_date),
-                          "yyyy-MM-dd | HH:mm:ss"
-                        )
+                      ? format(new Date(t.delivery_date), "yyyy-MM-dd")
                       : "-"}
                   </td>
                   <td className="py-1 border-b truncate">
                     {t.resend_date
-                      ? format(new Date(t.resend_date), "yyyy-MM-dd | HH:mm:ss")
+                      ? format(new Date(t.resend_date), "yyyy-MM-dd")
                       : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate">

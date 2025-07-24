@@ -398,7 +398,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { LogOut, Car, Package } from "lucide-react";
+import { LogOut, Warehouse, Smartphone, ClockAlert } from "lucide-react";
 import { ChevronDownIcon, GridIcon, HorizontaLDots } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
@@ -422,12 +422,17 @@ const navItems: NavItem[] = [
       {
         name: "หมายเหตุ (จาก App)",
         path: "/appremark",
-        icon: <Car size={20} />,
+        icon: <Smartphone size={20} />,
       },
       {
-        name: "สินค้าค้างบนคลัง",
+        name: "สินค้าบนคลัง (ไม่มีหมายเหตุ)",
         path: "/productwarehouse",
-        icon: <Package size={20} />,
+        icon: <Warehouse size={20} />,
+      },
+      {
+        name: "สินค้าค้างส่ง (มีหมายเหตุ)",
+        path: "/productoverdue",
+        icon: <ClockAlert size={20} />,
       },
     ],
   },
@@ -577,7 +582,6 @@ const AppSidebar: React.FC = () => {
                   </div>
                 )}
 
-              {/* ← แสดง subItems เมื่อ sidebar ขยาย (แสดงเฉพาะชื่อ) - เหลือแค่ 1 บล็อคเท่านั้น */}
               {nav.subItems && (isExpanded || isMobileOpen) && (
                 <div
                   ref={(el) => {
@@ -704,19 +708,19 @@ const AppSidebar: React.FC = () => {
           </div>
         </nav>
 
-       <div className="mt-auto pb-8 flex flex-col items-center w-full">
-  <button
-    onClick={handleLogout}
-    className="menu-item group menu-item-inactive cursor-pointer w-full text-left hover:bg-brand-50 py-1"
-  >
-    <span className="w-5 h-5 flex items-center justify-center">
-      <LogOut className="text-brand-500" size={20} /> {/* ← ตอนนี้จะใหญ่ขึ้นแล้ว */}
-    </span>
-    {(isExpanded || isMobileOpen) && (
-      <span className="menu-item-text text-brand-500">Logout</span>
-    )}
-  </button>
-</div>
+        <div className="mt-auto pb-8 flex flex-col items-center w-full">
+          <button
+            onClick={handleLogout}
+            className="menu-item group menu-item-inactive cursor-pointer w-full text-left hover:bg-brand-50 py-1"
+          >
+            <span className="w-5 h-5 flex items-center justify-center">
+              <LogOut className="text-brand-500" size={20} />
+            </span>
+            {(isExpanded || isMobileOpen) && (
+              <span className="menu-item-text text-brand-500">Logout</span>
+            )}
+          </button>
+        </div>
       </div>
     </aside>
   );

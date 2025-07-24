@@ -2,7 +2,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignIn from "./pages/AuthPages/SignIn";
 // import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
-
+import ProtectedRoute from "./context/ProtectedRoute";
+import AppLayout from "./layout/AppLayout";
+import { ScrollToTop } from "./components/common/ScrollToTop";
+import AppRemark from "./pages/AppRemark";
+import { AuthProvider } from "./context/AuthContext";
+import ProductWarehouse from "./pages/ProductWarehouse";
+import ProductOverdue from "./pages/ProductOverdue";
 // import UserProfiles from "./pages/UserProfiles";
 // import Videos from "./pages/UiElements/Videos";
 // import Images from "./pages/UiElements/Images";
@@ -16,15 +22,7 @@ import NotFound from "./pages/OtherPage/NotFound";
 // import BasicTables from "./pages/Tables/BasicTables";
 // import FormElements from "./pages/Forms/FormElements";
 // import Blank from "./pages/Blank";
-import ProtectedRoute from "./context/ProtectedRoute";
-import AppLayout from "./layout/AppLayout";
-import { ScrollToTop } from "./components/common/ScrollToTop";
 // import Home from "./pages/Dashboard/Home";
-// import DriverAppRemark from "./pages/DriverAppRemark";
-import AppRemark from "./pages/AppRemark";
-import { AuthProvider } from "./context/AuthContext";
-import ProductWarehouse from "./pages/ProductWarehouse";
-// import DriverApp from "./pages/DriverApp";
 
 export default function App() {
   return (
@@ -35,7 +33,6 @@ export default function App() {
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
             {/* <Route index path="/" element={<Home />} /> */}
-
             {/* Others Page */}
             {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
@@ -53,6 +50,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <ProductWarehouse />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/productoverdue"
+              element={
+                <ProtectedRoute>
+                  <ProductOverdue />
                 </ProtectedRoute>
               }
             />
