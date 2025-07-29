@@ -52,7 +52,6 @@ const headers = [
   "วันที่จัดส่งใหม่",
   "เลขที่บิล",
   "เลขที่อ้างอิง",
-  "หมายเหตุ",
   "คลังปลายทาง",
   "สถานะล่าสุด",
 ];
@@ -262,7 +261,7 @@ export default function ProductWarehouse() {
               return (
                 <tr key={t.id ?? i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   {/* log modal เดิม */}
-                  <td className="px-3 py-1 border-b truncate">
+                  <td className="px-4 py-1 border-b truncate">
                     <button
                       className="inline-flex gap-1 px-1.5 py-1 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
                       onClick={async () => {
@@ -277,13 +276,13 @@ export default function ProductWarehouse() {
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.customer_name || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.recipient_name || "-"}</td>
-                  <td className="py-1 border-b truncate">
+                  <td className="px-4 py-2 border-b truncate">
                     {t.receive_date ? format(new Date(t.receive_date), "yyyy-MM-dd") : "-"}
                   </td>
-                  <td className="py-1 border-b truncate">
+                  <td className="px-4 py-2  border-b truncate">
                     {t.delivery_date ? format(new Date(t.delivery_date), "yyyy-MM-dd") : "-"}
                   </td>
-                  <td className="py-1 border-b truncate">
+                  <td className="px-4 py-2  border-b truncate">
                     {t.resend_date ? format(new Date(t.resend_date), "yyyy-MM-dd") : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate">{t.receive_code || "-"}</td>
@@ -306,13 +305,17 @@ export default function ProductWarehouse() {
             closeModal();
           }}
         >
+          {/* <div
+            className="bg-white p-6 rounded shadow-lg min-w-[320px] max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          > */}
           <div
-            className="bg-white p-6 rounded shadow-lg min-w-[600px] max-h-[90vh] "
+            className="bg-white p-6 rounded shadow-lg w-full max-h-[90vh] lg:max-w-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-bold text-base">
-                เพิ่มหมายเหตุ (Add Remark)
+                เพิ่มหมายเหตุ
                 {modalData && !Array.isArray(modalData) && (modalData.receive_code || modalData.id) && (
                   <span className="ml-2 text-base text-gray-600 font-normal">
                     {modalData.receive_code || modalData.receive_business_id || modalData.id}

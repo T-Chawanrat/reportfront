@@ -79,6 +79,8 @@ export default function ProductOverdue() {
   const [leditRows, setLeditRows] = useState<LeditRow[]>([]);
   const [leditLoading, setLeditLoading] = useState(false);
   const [leditError, setLeditError] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<string>("create_date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   // const [columnWidths, setColumnWidths] = useState<number[]>(
   //   new Array(headers.length).fill(150) // ความกว้างเริ่มต้นของแต่ละคอลัมน์
@@ -105,6 +107,8 @@ export default function ProductOverdue() {
         customer_id: selectedCustomerId,
         page,
         limit,
+        sort_by: sortBy,
+        sort_order: sortOrder,
       };
 
       const res = await AxiosInstance.get("/03", { params });
@@ -156,7 +160,7 @@ export default function ProductOverdue() {
     } else {
       fetchTransactions();
     }
-  }, [search, remark, filterType, page, pageCount, selectedWarehouseId, selectedCustomerId]);
+  }, [search, remark, filterType, page, pageCount, selectedWarehouseId, selectedCustomerId, sortBy, sortOrder]);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -252,10 +256,20 @@ export default function ProductOverdue() {
 
       {/* ตารางข้อมูล */}
       <div className="overflow-x-auto w-full">
-        <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
+         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <ResizableColumns
             headers={headers}
             pageKey="ProductOverdue"
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSort={(headerKey) => {
+              if (sortBy === headerKey) {
+                setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+              } else {
+                setSortBy(headerKey);
+                setSortOrder("desc"); // default ทุกครั้งที่เปลี่ยน column
+              }
+            }}
           />
           {/* <thead className="bg-gray-100">
             <tr>
@@ -304,13 +318,13 @@ export default function ProductOverdue() {
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.customer_name || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.recipient_name || "-"}</td>
-                  <td className="py-1 border-b truncate">
+                  <td className="px-4 py-2 border-b truncate">
                     {t.receive_date ? format(new Date(t.receive_date), "dd-MM-yyyy") : "-"}
                   </td>
-                  <td className="py-1 border-b truncate">
+                  <td className="px-4 py-2 border-b truncate">
                     {t.delivery_date ? format(new Date(t.delivery_date), "dd-MM-yyyy") : "-"}
                   </td>
-                  <td className="py-1 border-b truncate">
+                  <td className="px-4 py-2 border-b truncate">
                     {t.resend_date ? format(new Date(t.resend_date), "dd-MM-yyyy") : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate">{t.receive_code || "-"}</td>
@@ -334,12 +348,12 @@ export default function ProductOverdue() {
           }}
         >
           <div
-            className="bg-white p-6 rounded shadow-lg min-w-[600px] max-h-[90vh] "
+            className="bg-white p-6 rounded shadow-lg min-w-[320px] max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-bold text-base">
-                เพิ่มหมายเหตุ (Add Remark)
+                ประวัติการแก้ไข
                 {modalData && !Array.isArray(modalData) && (modalData.receive_code || modalData.id) && (
                   <span className="ml-2 text-base text-gray-600 font-normal">
                     {modalData.receive_code || modalData.receive_business_id || modalData.id}
@@ -426,8 +440,7 @@ export default function ProductOverdue() {
                 </table>
               </div>
             </div>
-          </div>
-          //{" "}
+          </div>{" "}
         </div>
       )}
 

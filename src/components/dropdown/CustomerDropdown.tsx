@@ -103,7 +103,7 @@ const CustomerDropdown: React.FC<CustomerDropdownProps> = ({ onChange }) => {
   };
 
   return (
-    <div className="relative w-95" ref={dropdownRef}>
+    <div className="relative w-full max-w-xs" ref={dropdownRef}>
       <div className="flex items-center border border-gray-300 rounded-lg px-3 py-1 h-9">
         <input
           type="text"

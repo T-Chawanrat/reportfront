@@ -286,7 +286,7 @@ export default function AppRemark() {
               return (
                 <tr key={t.id ?? i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   {/* log modal เดิม */}
-                  <td className="px-3 py-1 border-b truncate">
+                  <td className="px-4 py-1 border-b truncate">
                     <button
                       className="inline-flex gap-1 px-1.5 py-1 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
                       onClick={async () => {
@@ -298,7 +298,7 @@ export default function AppRemark() {
                       <Logs size={23} />
                     </button>
                   </td>
-                  <td className="py-1 border-b truncate">
+                  <td className="px-4 py-2 border-b truncate">
                     {t.Create_date_tm_resend ? format(new Date(t.Create_date_tm_resend), "yyyy-MM-dd | HH:mm:ss") : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.detail || "-"}</td>
@@ -337,13 +337,10 @@ export default function AppRemark() {
             closeModal();
           }}
         >
-          <div
-            className="bg-white p-6 rounded shadow-lg min-w-[320px] max-w-[90vw]"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="bg-white p-6 rounded shadow-lg w-full lg:max-w-xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-bold text-base">
-                ประวัติการแก้ไข (Edit Log)
+                ประวัติการแก้ไข
                 {modalData && !Array.isArray(modalData) && (modalData.receive_code || modalData.id) && (
                   <span className="ml-2 text-base text-gray-600 font-normal">
                     {modalData.receive_code || modalData.receive_business_id || modalData.id}
