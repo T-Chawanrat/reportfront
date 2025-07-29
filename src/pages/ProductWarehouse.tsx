@@ -69,6 +69,9 @@ export default function ProductWarehouse() {
   const pageCount = Math.ceil(total / limit);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalData, setModalData] = useState<Transaction | Transaction[] | null>(null);
+  const [countWarehouse15, setCountWarehouse15] = useState<number>(0);
+  const [countWarehouseNot15, setCountWarehouseNot15] = useState<number>(0);
+
   // const [leditRows, setLeditRows] = useState<LeditRow[]>([]);
   // const [leditLoading, setLeditLoading] = useState(false);
   // const [leditError, setLeditError] = useState<string | null>(null);
@@ -96,8 +99,19 @@ export default function ProductWarehouse() {
       };
 
       const res = await AxiosInstance.get("/02", { params });
+      const data = res.data.data || [];
+
       setTransactions(res.data.data || []);
+      console.log(res.data.data, "res.data.data");
       setTotal(res.data.total || 0);
+
+      if (data.length > 0) {
+        setCountWarehouse15(data[0].count_warehouse_15 || 0);
+        setCountWarehouseNot15(data[0].count_warehouse_not_15 || 0);
+      } else {
+        setCountWarehouse15(0);
+        setCountWarehouseNot15(0);
+      }
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err?.message || "เกิดข้อผิดพลาดในการโหลดข้อมูล");
@@ -225,6 +239,14 @@ export default function ProductWarehouse() {
           />
           <WarehouseDropdown onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)} />
           <CustomerDropdown onChange={(customerId) => setSelectedCustomerId(customerId)} />
+          <div className="mb-2 flex gap-4">
+            <div>
+              กรุงเทพ <strong>{countWarehouse15}</strong>
+            </div>
+            <div>
+              ต่างจังหวัด <strong>{countWarehouseNot15}</strong>
+            </div>
+          </div>
         </div>
         <button
           onClick={handleDownload}
