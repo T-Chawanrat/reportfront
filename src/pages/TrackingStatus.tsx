@@ -161,6 +161,7 @@ export default function TrackingStatus() {
         </div>
 
         {/* Result */}
+        {(result || loading) && (
         <div className="mt-3 bg-white rounded-lg shadow p-2">
           {loading && <div className="text-center py-6 text-gray-500">กำลังค้นหา...</div>}
           {error && <div className="text-center py-6 text-red-500">{error}</div>}
@@ -219,7 +220,9 @@ export default function TrackingStatus() {
               </div>
             ))}
         </div>
+         )}
       </div>
+      
 
       {/* Modal for Enlarged Image */}
       {selectedImage && (

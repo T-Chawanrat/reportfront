@@ -417,8 +417,13 @@ type NavItem = {
 const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
-    name: "Dashboard",
+    name: "Menu",
     subItems: [
+        {
+        name: "แดชบอร์ด",
+        path: "/",
+        icon: <Smartphone size={20} />,
+      },
       {
         name: "หมายเหตุ (จาก App)",
         path: "/appremark",
