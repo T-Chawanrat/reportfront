@@ -75,7 +75,7 @@ export default function ProductWarehouse() {
   // const [leditRows, setLeditRows] = useState<LeditRow[]>([]);
   // const [leditLoading, setLeditLoading] = useState(false);
   // const [leditError, setLeditError] = useState<string | null>(null);
-
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [newRemark, setNewRemark] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
@@ -102,7 +102,6 @@ export default function ProductWarehouse() {
       const data = res.data.data || [];
 
       setTransactions(res.data.data || []);
-      console.log(res.data.data, "res.data.data");
       setTotal(res.data.total || 0);
 
       if (data.length > 0) {
@@ -165,6 +164,13 @@ export default function ProductWarehouse() {
       navigate("/signin", { replace: true });
     }
   }, [isLoggedIn, navigate]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // useEffect(() => {
   //   if (
@@ -239,13 +245,20 @@ export default function ProductWarehouse() {
           />
           <WarehouseDropdown onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)} />
           <CustomerDropdown onChange={(customerId) => setSelectedCustomerId(customerId)} />
-          <div className="mb-2 flex gap-4">
+          <div className="flex gap-3">
             <div>
               กรุงเทพ <strong>{countWarehouse15}</strong>
             </div>
             <div>
               ต่างจังหวัด <strong>{countWarehouseNot15}</strong>
             </div>
+            <span className="">
+              {currentTime.toLocaleString("th-TH", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })}
+            </span>
           </div>
         </div>
         <button
@@ -299,13 +312,13 @@ export default function ProductWarehouse() {
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.customer_name || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.recipient_name || "-"}</td>
                   <td className="px-4 py-2 border-b truncate">
-                    {t.receive_date ? format(new Date(t.receive_date), "yyyy-MM-dd") : "-"}
+                    {t.receive_date ? format(new Date(t.receive_date), "dd-MM-yyyy") : "-"}
                   </td>
                   <td className="px-4 py-2  border-b truncate">
-                    {t.delivery_date ? format(new Date(t.delivery_date), "yyyy-MM-dd") : "-"}
+                    {t.delivery_date ? format(new Date(t.delivery_date), "dd-MM-yyyy") : "-"}
                   </td>
                   <td className="px-4 py-2  border-b truncate">
-                    {t.resend_date ? format(new Date(t.resend_date), "yyyy-MM-dd") : "-"}
+                    {t.resend_date ? format(new Date(t.resend_date), "dd-MM-yyyy") : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate">{t.receive_code || "-"}</td>
                   <td className="px-4 py-2 border-b truncate">{t.reference_no || "-"}</td>

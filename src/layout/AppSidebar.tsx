@@ -398,7 +398,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { LogOut, Warehouse, Smartphone, ClockAlert } from "lucide-react";
+import { LogOut, Warehouse, Smartphone, ClockAlert, PackageCheck } from "lucide-react";
 import { ChevronDownIcon, GridIcon, HorizontaLDots } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
@@ -433,6 +433,11 @@ const navItems: NavItem[] = [
         name: "สินค้าค้างส่ง (มีหมายเหตุ)",
         path: "/productoverdue",
         icon: <ClockAlert size={20} />,
+      },
+      {
+        name: "สถานะสินค้า",
+        path: "/tracking",
+        icon: <PackageCheck size={20} />,
       },
     ],
   },

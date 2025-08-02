@@ -418,7 +418,7 @@ export default function ProductOverdue() {
                       leditRows.map((i, idx) => (
                         <tr key={i.pk_id ?? idx}>
                           <td className="border px-2 py-1 truncate">
-                            {i.create_date ? format(new Date(i.create_date), "yyyy-MM-dd HH:mm:ss") : "-"}
+                            {i.create_date ? format(new Date(i.create_date), "dd-MM-yyyy HH:mm:ss") : "-"}
                           </td>
                           <td className="border px-2 py-1">{i.value_new || "-"}</td>
                           <td className="border px-2 py-1">{i.column || "-"}</td>

@@ -299,7 +299,7 @@ export default function AppRemark() {
                     </button>
                   </td>
                   <td className="px-4 py-2 border-b truncate">
-                    {t.Create_date_tm_resend ? format(new Date(t.Create_date_tm_resend), "yyyy-MM-dd | HH:mm:ss") : "-"}
+                    {t.Create_date_tm_resend ? format(new Date(t.Create_date_tm_resend), "dd-MM-yyyy | HH:mm:ss") : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.detail || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.remark || "-"}</td>
@@ -405,7 +405,7 @@ export default function AppRemark() {
                       leditRows.map((i, idx) => (
                         <tr key={i.pk_id ?? idx}>
                           <td className="border px-2 py-1 truncate">
-                            {i.create_date ? format(new Date(i.create_date), "yyyy-MM-dd HH:mm:ss") : "-"}
+                            {i.create_date ? format(new Date(i.create_date), "dd-MM-yyyy HH:mm:ss") : "-"}
                           </td>
                           <td className="border px-2 py-1">{i.value_new || "-"}</td>
                           <td className="border px-2 py-1">{i.column || "-"}</td>

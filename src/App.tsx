@@ -23,7 +23,8 @@ import { ColumnWidthsProvider } from "./context/ColumnWidths";
 // import BasicTables from "./pages/Tables/BasicTables";
 // import FormElements from "./pages/Forms/FormElements";
 // import Blank from "./pages/Blank";
-// import Home from "./pages/Dashboard/Home";
+import Home from "./pages/Dashboard/Home";
+import TrackingStatus from "./pages/TrackingStatus";
 
 export default function App() {
   return (
@@ -34,7 +35,7 @@ export default function App() {
         <Routes>
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
-            {/* <Route index path="/" element={<Home />} /> */}
+            <Route index path="/" element={<Home />} />
             {/* Others Page */}
             {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
@@ -63,6 +64,10 @@ export default function App() {
                 </ProtectedRoute>
               }
               />
+            <Route
+              path="/tracking"
+              element={<TrackingStatus />}
+            />
 
             {/* Forms */}
             {/* <Route path="/form-elements" element={<FormElements />} /> */}
