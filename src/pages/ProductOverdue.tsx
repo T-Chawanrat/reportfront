@@ -256,7 +256,7 @@ export default function ProductOverdue() {
 
       {/* ตารางข้อมูล */}
       <div className="overflow-x-auto w-full">
-         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
+        <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <ResizableColumns
             headers={headers}
             pageKey="ProductOverdue"
@@ -271,29 +271,6 @@ export default function ProductOverdue() {
               }
             }}
           />
-          {/* <thead className="bg-gray-100">
-            <tr>
-              <th className="w-15 px-4 py-2 border-b text-left">Log</th>
-              <th className="w-70 px-4 py-2 border-b text-left">หมายเหตุ</th>
-              <th className="w-50 px-4 py-2 border-b text-left">
-                วันที่หมายเหตุล่าสุด
-              </th>
-              <th className="w-40 px-4 py-2 border-b text-left">
-                คลังปัจจุบัน
-              </th>
-              <th className="w-65 px-4 py-2 border-b text-left">เจ้าของงาน</th>
-              <th className="w-70 px-4 py-2 border-b text-left">ชื่อผู้รับ</th>
-              <th className="w-30 py-2 border-b text-left">วันที่บิล</th>
-              <th className="w-30 py-2 border-b text-left">วันที่จัดส่ง</th>
-              <th className="w-30 py-2 border-b text-left">วันที่จัดส่งใหม่</th>
-              <th className="w-55 px-4 py-2 border-b text-left">เลขที่บิล</th>
-              <th className="w-50 px-4 py-2 border-b text-left">
-                เลขที่อ้างอิง
-              </th>
-              <th className="w-40 px-4 py-2 border-b text-left">คลังปลายทาง</th>
-              <th className="w-50 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
-            </tr>
-          </thead> */}
           <tbody>
             {transactions.map((t, i) => {
               return (

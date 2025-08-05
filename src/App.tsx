@@ -23,8 +23,9 @@ import { ColumnWidthsProvider } from "./context/ColumnWidths";
 // import BasicTables from "./pages/Tables/BasicTables";
 // import FormElements from "./pages/Forms/FormElements";
 // import Blank from "./pages/Blank";
-import Home from "./pages/Dashboard/Home";
+// import Home from "./pages/Dashboard/Home";
 import TrackingStatus from "./pages/TrackingStatus";
+import HomeCopy from "./pages/Dashboard/Home copy";
 
 export default function App() {
   return (
@@ -35,7 +36,7 @@ export default function App() {
           <Routes>
             {/* Dashboard Layout */}
             <Route element={<AppLayout />}>
-              <Route index path="/" element={<Home />} />
+              <Route index path="/" element={<HomeCopy />} />
               {/* Others Page */}
               {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />

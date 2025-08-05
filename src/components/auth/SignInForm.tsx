@@ -198,7 +198,7 @@ import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Button from "../ui/button/Button";
 import { useAuth } from "../../context/AuthContext";
-import axios from "axios"; // นำเข้า axios
+import axios from "axios";
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -218,19 +218,13 @@ export default function SignInForm() {
     }
 
     try {
-      const response = await axios.post(
-        "https://api-admin.trantech.co.th/login/check",
-        { username, password }
-      );
+      const response = await axios.post("https://api-admin.trantech.co.th/login/check", { username, password });
 
       const data = response.data;
       if (data.ok && data.rows) {
-        // const warehouses = data.rows.warehouses || [];
-
         setIsLoggedIn(true);
         setUser(response.data.rows);
-        // localStorage.setItem("user_id", String(data.rows.user_id));
-        // localStorage.setItem("warehouses", JSON.stringify(warehouses));
+
         localStorage.setItem("user", JSON.stringify(data.rows));
         localStorage.setItem("isLoggedIn", "true");
 
@@ -240,10 +234,7 @@ export default function SignInForm() {
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        setLoginError(
-          error.response?.data?.message ||
-            "An error occurred. Please try again."
-        );
+        setLoginError(error.response?.data?.message || "An error occurred. Please try again.");
       } else {
         setLoginError("An unknown error occurred.");
       }
@@ -259,9 +250,7 @@ export default function SignInForm() {
             <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
               Sign In
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Enter your username and password to sign in!
-            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Enter your username and password to sign in!</p>
           </div>
           <form onSubmit={handleSignIn}>
             <div className="space-y-6">
@@ -298,9 +287,7 @@ export default function SignInForm() {
                   </span>
                 </div>
               </div>
-              {loginError && (
-                <div className="text-red-500 text-sm">{loginError}</div>
-              )}
+              {loginError && <div className="text-red-500 text-sm">{loginError}</div>}
               <div>
                 <Button className="w-full" size="sm">
                   Sign in
