@@ -1,10 +1,11 @@
 // import EcommerceMetrics from "../../components/ecommerce/EcommerceMetrics";
-import MonthlySalesChart from "../../components/ecommerce/MonthlySalesChart";
+// import MonthlySalesChart from "../../components/ecommerce/MonthlySalesChart";
 // import StatisticsChart from "../../components/ecommerce/StatisticsChart";
 // import MonthlyTarget from "../../components/ecommerce/MonthlyTarget";
 // import RecentOrders from "../../components/ecommerce/RecentOrders";
 // import DemographicCard from "../../components/ecommerce/DemographicCard";
 import PageMeta from "../../components/common/PageMeta";
+import ProductWarehouseChart from "../../components/charts/ProductWarehouseChart";
 
 export default function HomeCopy() {
   return (
@@ -17,7 +18,7 @@ export default function HomeCopy() {
         <div className="col-span-12 space-y-6 xl:col-span-7">
           {/* <EcommerceMetrics /> */}
 
-          <MonthlySalesChart />
+          <ProductWarehouseChart />
         </div>
 
         {/* <div className="col-span-12 xl:col-span-5">

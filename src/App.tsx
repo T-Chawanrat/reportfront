@@ -26,6 +26,8 @@ import { ColumnWidthsProvider } from "./context/ColumnWidths";
 // import Home from "./pages/Dashboard/Home";
 import TrackingStatus from "./pages/TrackingStatus";
 import HomeCopy from "./pages/Dashboard/Home copy";
+import Test from "./pages/Test";
+import Demo04 from "./pages/Demo04";
 
 export default function App() {
   return (
@@ -73,6 +75,23 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/component"
+                element={
+                  <ProtectedRoute>
+                    <Test />
+                  </ProtectedRoute>
+                }
+              />
+                <Route
+                path="/ontruck"
+                element={
+                  <ProtectedRoute>
+                    <Demo04 />
+                  </ProtectedRoute>
+                }
+              />
+              
 
               {/* Forms */}
               {/* <Route path="/form-elements" element={<FormElements />} /> */}

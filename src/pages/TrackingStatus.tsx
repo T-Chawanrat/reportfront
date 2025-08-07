@@ -37,7 +37,6 @@ interface ApiResponse {
 export default function TrackingStatus() {
   const [code, setCode] = useState("");
   const [trackingType, setTrackingType] = useState<TrackingType>("receiveCode");
-  //   const [status, setStatus] = useState<"all" | "success" | "fail">("all");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ApiResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -52,6 +51,7 @@ export default function TrackingStatus() {
     setShowNotFound(false);
 
     try {
+      // Step 1: เรียก API หลักเพื่อดึงข้อมูล `result`
       const res = await AxiosInstance.get<ApiResponse>(`${TRACKING_API}?type=${trackingType}&code=${code}`);
       if (res.data.rows.length === 0) {
         setShowNotFound(true);
@@ -78,7 +78,7 @@ export default function TrackingStatus() {
       <div className="p-2">
         {/* Search Form */}
         <div className="flex flex-col md:flex-row md:items-end gap-4">
-          <div className="w-1/4">
+          <div className="md:w-1/3">
             <input
               type="text"
               placeholder="ค้นหาสถานะสินค้า"
@@ -92,38 +92,7 @@ export default function TrackingStatus() {
               className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
             />
           </div>
-          {/* <div> */}
-          {/* <div className="text-xs font-medium mb-1">สถานะ</div> */}
-          {/* <div className="flex gap-4">
-              <label className="flex items-center space-x-1">
-                <input
-                  type="radio"
-                  className="accent-primary-500"
-                  checked={status === "all"}
-                  onChange={() => setStatus("all")}
-                />
-                <span>ทั้งหมด</span>
-              </label>
-              <label className="flex items-center space-x-1">
-                <input
-                  type="radio"
-                  className="accent-primary-500"
-                  checked={status === "success"}
-                  onChange={() => setStatus("success")}
-                />
-                <span>ส่งสำเร็จ</span>
-              </label>
-              <label className="flex items-center space-x-1">
-                <input
-                  type="radio"
-                  className="accent-primary-500"
-                  checked={status === "fail"}
-                  onChange={() => setStatus("fail")}
-                />
-                <span>ส่งไม่สำเร็จ</span>
-              </label>
-            </div> */}
-          {/* </div> */}
+
           <div>
             <div className="text-xs font-medium mb-1">ตัวกรอง</div>
             <div className="flex gap-4">
