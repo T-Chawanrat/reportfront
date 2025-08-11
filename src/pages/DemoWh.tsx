@@ -91,6 +91,7 @@ export default function DemoWh() {
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
       {/* ตารางข้อมูล */}
       <div className="overflow-x-auto w-full">
+      {/* <div className="overflow-x-auto w-full"> */}
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <ResizableColumns headers={headers} pageKey="Demo04" />
           <tbody>

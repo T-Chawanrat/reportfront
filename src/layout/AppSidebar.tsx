@@ -447,7 +447,7 @@ const navItems: NavItem[] = [
       {
         name: "สินค้าบนรถขนย้าย (6W)",
         path: "/ontruck",
-        icon: <Truck  size={20} />,
+        icon: <Truck size={20} />,
       },
     ],
   },

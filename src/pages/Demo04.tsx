@@ -1,4 +1,3 @@
-import React from 'react'
 import DemoStd from './DemoStd'
 import DemoInbound from './DemoInbound'
 import DemoOutbound from './DemoOutbound'

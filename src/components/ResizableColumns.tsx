@@ -48,6 +48,25 @@ const ResizableColumns: React.FC<ResizableColumnsProps> = ({ headers, pageKey, s
     document.addEventListener("mouseup", handleMouseUp);
   };
 
+//   const handleTouchStart = (index: number, event: React.TouchEvent) => {
+//   const startX = event.touches[0].clientX;
+//   const startWidth = columnWidths[index];
+
+//   const handleTouchMove = (moveEvent: TouchEvent) => {
+//     const deltaX = moveEvent.touches[0].clientX - startX;
+//     const newWidth = Math.max(startWidth + deltaX, 50);
+//     setColumnWidths((prevWidths) => prevWidths.map((width, i) => (i === index ? newWidth : width)));
+//   };
+
+//   const handleTouchEnd = () => {
+//     document.removeEventListener("touchmove", handleTouchMove);
+//     document.removeEventListener("touchend", handleTouchEnd);
+//   };
+
+//   document.addEventListener("touchmove", handleTouchMove);
+//   document.addEventListener("touchend", handleTouchEnd);
+// };
+
   return (
     <thead className="bg-gray-100">
       <tr>
@@ -78,6 +97,7 @@ const ResizableColumns: React.FC<ResizableColumnsProps> = ({ headers, pageKey, s
                 <span
                   className="absolute right-0 top-0 h-full w-1 bg-transparent cursor-col-resize border-r-1 border-gray-300"
                   onMouseDown={(e) => handleMouseDown(index, e)}
+                  // onTouchStart={(e) => handleTouchStart(index, e)}
                 />
               </div>
             </th>
