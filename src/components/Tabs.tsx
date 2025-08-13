@@ -72,9 +72,11 @@ const Tabs: React.FC = () => {
       </div>
 
       {/* Tab Content */}
-      <div className="p-4 border border-gray-200 bg-white">
+      <div className="p-2 border border-gray-200 bg-white">
         {tabs.find((tab) => tab.id === activeTabId)?.content || "No active tab"}
       </div>
+
+    
     </div>
   );
 };

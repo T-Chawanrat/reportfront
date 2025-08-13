@@ -440,14 +440,14 @@ const navItems: NavItem[] = [
         icon: <ClockAlert size={20} />,
       },
       {
-        name: "สถานะสินค้า",
-        path: "/tracking",
-        icon: <PackageCheck size={20} />,
-      },
-      {
         name: "สินค้าบนรถขนย้าย (6W)",
         path: "/ontruck",
         icon: <Truck size={20} />,
+      },
+      {
+        name: "สถานะสินค้า",
+        path: "/tracking",
+        icon: <PackageCheck size={20} />,
       },
     ],
   },

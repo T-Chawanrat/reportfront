@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
 import AxiosInstance from "../utils/AxiosInstance";
 import ResizableColumns from "../components/ResizableColumns";
+import StatusFilter from "../components/dropdown/StatusFilter";
 
 export interface Transaction {
   id?: number;
@@ -21,6 +22,16 @@ export interface Transaction {
   status_message_web?: string;
   time_remaining_text?: string;
   serial_no?: string;
+  truck_load_id?: string;
+  datetime?: string;
+}
+
+export interface Detail {
+  truck_load_id?: string;
+  receive_code?: string;
+  serial_no?: string;
+  datetime?: string;
+  status_message?: string;
 }
 
 const headers = [
@@ -32,15 +43,15 @@ const headers = [
   "เวลาปล่อยรถ",
   "สถานะ",
   "กำหนดเวลา",
-  "เลขที่เอกสาร",
-  "หมายเลขกล่อง",
-  "สถานะสินค้า",
 ];
 
 export default function DemoStd() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [selectedTruckId, setSelectedTruckId] = useState<string | null>(null);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
+  const [statusFilter, setStatusFilter] = useState<string>("");
+  const [selectedDetails, setSelectedDetails] = useState<Detail[]>([]);
   const limit = 18;
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,11 +66,13 @@ export default function DemoStd() {
       const params = {
         page,
         limit,
+        statusFilter,
       };
 
       const res = await AxiosInstance.get("/04std", { params });
-      setTransactions(res.data.data2 || []);
-      setTotal(res.data.total2 || 0);
+
+      setTransactions(res.data.data || []);
+      setTotal(res.data.total || 0);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err?.message || "เกิดข้อผิดพลาดในการโหลดข้อมูล");
@@ -73,13 +86,35 @@ export default function DemoStd() {
     }
   };
 
-  useEffect(() => {
-    if (page > pageCount && pageCount > 0) {
-      setPage(pageCount);
-    } else {
-      fetchTransactions();
+  const fetchDetails = async (truck_load_id: string) => {
+    setSelectedTruckId(truck_load_id);
+    try {
+      const res = await AxiosInstance.get(`/04detail/${truck_load_id}`);
+
+      setSelectedDetails(res.data.data || []);
+    } catch (err) {
+      console.error("Error fetching details:", err);
+      setSelectedDetails([]);
     }
-  }, [page, pageCount]);
+  };
+
+  const handleRowClick = (truck_load_id: string | undefined) => {
+    if (!truck_load_id) return;
+
+    // console.log("Clicked truck_load_id:", truck_load_id);
+
+    fetchDetails(truck_load_id);
+  };
+
+  const resetSelection = () => {
+    setSelectedDetails([]);
+    setSelectedTruckId(null);
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+    resetSelection();
+  }, [page, statusFilter]);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -89,44 +124,96 @@ export default function DemoStd() {
 
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
-      {/* ตารางข้อมูล */}
-      <div className="overflow-x-auto w-full">
-        <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
-          <ResizableColumns headers={headers} pageKey="Demo04" />
-          <tbody>
-            {transactions.map((t, i) => {
-              return (
-                <tr key={t.id ?? i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.to_warehouse_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.license_plate || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.truck_code || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.close_datetime ? format(new Date(t.close_datetime), "dd-MM-yyyy | HH:mm") : "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">
-                    {t.go_datetime ? format(new Date(t.go_datetime), "dd-MM-yyyy | HH:mm") : "-"}
-                  </td>
-                  <td className="px-4 py-2 border-b truncate">{t.status_message_web || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate">{t.time_remaining_text || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate">{t.receive_code}</td>
-                  <td className="px-4 py-2 border-b truncate">{t.serial_no || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate">{t.status_message || "-"}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="grid grid-cols-10 gap-4">
+        {/* ฝั่ง 80% */}
+        <div className="col-span-8">
+          <StatusFilter
+            value={statusFilter}
+            onChange={(newFilter) => {
+              setStatusFilter(newFilter);
+              setPage(1);
+              resetSelection();
+            }}
+          />
+
+          <div className="overflow-x-auto w-full">
+            <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
+              <ResizableColumns headers={headers} pageKey="Demo04" />
+              <tbody>
+                {transactions.map((t, i) => (
+                  <tr
+                    key={t.id ?? i}
+                    className={`cursor-pointer hover:bg-blue-100 transition-colors ${
+                      selectedTruckId === t.truck_load_id
+                        ? "bg-brand-100 border-l-4 border-brand-500"
+                        : i % 2 === 0
+                        ? "bg-white"
+                        : "bg-gray-50"
+                    }`}
+                    onClick={() => handleRowClick(t.truck_load_id)}
+                  >
+                    <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
+                    <td className="px-4 py-2 border-b truncate max-w-xs">{t.to_warehouse_name || "-"}</td>
+                    <td className="px-4 py-2 border-b truncate max-w-xs">{t.license_plate || "-"}</td>
+                    <td className="px-4 py-2 border-b truncate max-w-xs">{t.truck_code || "-"}</td>
+                    <td className="px-4 py-2 border-b truncate">
+                      {t.close_datetime ? format(new Date(t.close_datetime), "dd-MM-yyyy | HH:mm") : "-"}
+                    </td>
+                    <td className="px-4 py-2 border-b truncate">
+                      {t.go_datetime ? format(new Date(t.go_datetime), "dd-MM-yyyy | HH:mm") : "-"}
+                    </td>
+                    <td className="px-4 py-2 border-b truncate">{t.status_message_web || "-"}</td>
+                    <td className="px-4 py-2 border-b truncate">{t.time_remaining_text || "-"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Pagination
+              page={page}
+              pageCount={pageCount}
+              onPageChange={(newPage) => {
+                setPage(newPage);
+                resetSelection();
+              }}
+              disabled={loading}
+            />
+          </div>
+        </div>
+
+        {/* ฝั่ง 20% */}
+        <div className="col-span-2 rounded bg-gray-50">
+          {selectedDetails && selectedDetails.length > 0 ? (
+            <ul className="space-y-1 h-[calc(100vh-10rem)] overflow-y-auto">
+              {selectedDetails.map((t, i) => (
+                <li key={t.serial_no ?? i} className="p-3 border border-gray-200 rounded bg-white shadow-sm">
+                  <p className="text-sm">
+                    <span className="font-medium">{t.receive_code || "-"}</span>
+                  </p>
+                  <p className="text-sm font-semibold text-brand-600">SN: {t.serial_no || "-"}</p>
+                  <p className="text-sm">
+                     <span className="font-medium">{t.status_message || "-"}</span>
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {t.datetime ? format(new Date(t.datetime), "dd-MM-yyyy | HH:mm") : "-"}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-gray-500">คลิกแถวเพื่อดู Serial Numbers</p>
+            </div>
+          )}
+        </div>
       </div>
 
+      {/* แสดง Loader และ Error Message */}
       {loading && (
         <div className="flex justify-center mt-4">
           <div className="loader"></div>
         </div>
       )}
       {error && <div className="text-red-600 text-center mt-4">{error}</div>}
-
-      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} disabled={loading} />
     </div>
   );
 }
