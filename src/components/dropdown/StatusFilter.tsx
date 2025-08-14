@@ -11,7 +11,7 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ value, onChange }) => {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="border border-gray-300 rounded px-2 py-1 text-sm"
+        className="border border-gray-300 rounded px-2 py-1 text-sm "
       >
         <option value="">ทั้งหมด</option>
         <option value="overtime">เกินเวลา</option>

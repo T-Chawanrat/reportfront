@@ -11,19 +11,15 @@ import StatusFilter from "../components/dropdown/StatusFilter";
 
 export interface Transaction {
   id?: number;
-  receive_code?: string;
   warehouse_name?: string;
   to_warehouse_name?: string;
-  status_message?: string;
   close_datetime?: string;
   go_datetime?: string;
   license_plate?: string;
   truck_code?: string;
   status_message_web?: string;
   time_remaining_text?: string;
-  serial_no?: string;
   truck_load_id?: string;
-  datetime?: string;
 }
 
 export interface Detail {
@@ -89,7 +85,7 @@ export default function DemoStd() {
   const fetchDetails = async (truck_load_id: string) => {
     setSelectedTruckId(truck_load_id);
     try {
-      const res = await AxiosInstance.get(`/04detail/${truck_load_id}`);
+      const res = await AxiosInstance.get(`/std/${truck_load_id}`);
 
       setSelectedDetails(res.data.data || []);
     } catch (err) {
@@ -138,17 +134,15 @@ export default function DemoStd() {
 
           <div className="overflow-x-auto w-full">
             <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
-              <ResizableColumns headers={headers} pageKey="Demo04" />
+              <ResizableColumns headers={headers} pageKey="Std" />
               <tbody>
-                {transactions.map((t, i) => (
+                {transactions.map((t) => (
                   <tr
-                    key={t.id ?? i}
+                    key={crypto.randomUUID()}
                     className={`cursor-pointer hover:bg-blue-100 transition-colors ${
                       selectedTruckId === t.truck_load_id
                         ? "bg-brand-100 border-l-4 border-brand-500"
-                        : i % 2 === 0
-                        ? "bg-white"
-                        : "bg-gray-50"
+                        : "even:bg-white odd:bg-gray-50"
                     }`}
                     onClick={() => handleRowClick(t.truck_load_id)}
                   >
@@ -184,14 +178,14 @@ export default function DemoStd() {
         <div className="col-span-2 rounded bg-gray-50">
           {selectedDetails && selectedDetails.length > 0 ? (
             <ul className="space-y-1 h-[calc(100vh-10rem)] overflow-y-auto">
-              {selectedDetails.map((t, i) => (
-                <li key={t.serial_no ?? i} className="p-3 border border-gray-200 rounded bg-white shadow-sm">
+              {selectedDetails.map((t) => (
+                <li key={crypto.randomUUID()} className="p-3 border border-gray-200 rounded bg-white shadow-sm">
                   <p className="text-sm">
                     <span className="font-medium">{t.receive_code || "-"}</span>
                   </p>
                   <p className="text-sm font-semibold text-brand-600">SN: {t.serial_no || "-"}</p>
                   <p className="text-sm">
-                     <span className="font-medium">{t.status_message || "-"}</span>
+                    <span className="font-medium">{t.status_message || "-"}</span>
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
                     {t.datetime ? format(new Date(t.datetime), "dd-MM-yyyy | HH:mm") : "-"}
