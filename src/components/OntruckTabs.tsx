@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import DemoStd from "../pages/DemoStd";
-import DemoOutbound from "../pages/DemoOutbound";
-import DemoInbound from "../pages/DemoInbound";
-import DemoWh from "../pages/DemoWh";
+import DemoStd from "../pages/OntruckStd";
+import DemoOutbound from "../pages/OntruckOutbound";
+import DemoInbound from "../pages/OntruckInbound";
+import DemoWh from "../pages/OntruckWh";
 
-interface Tab {
+interface OntruckTabs {
   id: number;
   title: string;
   content: React.ReactNode;
 }
 
-const Tabs: React.FC = () => {
-  const [tabs] = useState<Tab[]>([
+const OntruckTabs: React.FC = () => {
+  const [tabs] = useState<OntruckTabs[]>([
     { id: 1, title: "ทั้งหมด", content: <DemoStd /> },
     { id: 2, title: "กทม. - ตจว.", content: <DemoOutbound /> },
     { id: 3, title: "ตจว. - กทม.", content: <DemoInbound /> },
@@ -81,4 +81,4 @@ const Tabs: React.FC = () => {
   );
 };
 
-export default Tabs;
+export default OntruckTabs;

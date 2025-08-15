@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-// import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { useAuth } from "../context/AuthContext";
@@ -8,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
 import AxiosInstance from "../utils/AxiosInstance";
 import Button from "../components/ui/button/Button";
-// import Input from "../components/form/input/InputField";
 import { ExportExcel } from "../utils/ExportExcel";
 import { FileDown, Loader2, Logs } from "lucide-react";
 import ResizableColumns from "../components/ResizableColumns";
@@ -56,9 +54,6 @@ const headers = [
 export default function AppRemark() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [search, setSearch] = useState<string>("");
-  // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  // const [sortBy, setSortBy] = useState<string>("Create_date___tm_resend");
-  // const [order, setOrder] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const limit = 17;
@@ -70,33 +65,20 @@ export default function AppRemark() {
   const [leditRows, setLeditRows] = useState<LeditRow[]>([]);
   const [leditLoading, setLeditLoading] = useState(false);
   const [leditError, setLeditError] = useState<string | null>(null);
-
-  // const [columnWidths, setColumnWidths] = useState<number[]>(
-  //   new Array(headers.length).fill(150) // ความกว้างเริ่มต้นของแต่ละคอลัมน์
-  // );
-
   const [newRemark, setNewRemark] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
 
-  // const [isReceiveCodeModalOpen, setIsReceiveCodeModalOpen] = useState(false);
-  // const [modalReceiveCode, setModalReceiveCode] = useState<string | null>(null);
-
   const fetchTransactions = async () => {
     setLoading(true);
     setError(null);
     try {
-      // const dateFilter = selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
-
       const params = {
         search,
-        // sort_by: sortBy,
-        // order,
         page,
         limit,
-        // date: dateFilter,
       };
 
       const res = await AxiosInstance.get("/01", { params });
@@ -137,16 +119,6 @@ export default function AppRemark() {
     }
   };
 
-  // const handleSort = (key: string) => {
-  //   if (sortBy === key) {
-  //     setOrder(order === "asc" ? "desc" : "asc");
-  //   } else {
-  //     setSortBy(key);
-  //     setOrder("asc");
-  //   }
-  //   setPage(1);
-  // };
-
   const closeModal = () => {
     setIsModalOpen(false);
     setModalData(null);
@@ -158,8 +130,6 @@ export default function AppRemark() {
     } else {
       fetchTransactions();
     }
-    // eslint-disable-next-line
-    // }, [search, selectedDate, page, sortBy, order, pageCount]);
   }, [search, page, pageCount]);
 
   useEffect(() => {
@@ -175,11 +145,6 @@ export default function AppRemark() {
       fetchLedit(String(modalData.receive_business_id));
     }
   }, [isModalOpen, modalData]);
-
-  // สำหรับ modal ใหม่ แสดง serial_no, customer_name, to_warehouse ตาม receive_code
-  // const modalSerialList = modalReceiveCode
-  //   ? transactions.filter((t) => t.receive_code === modalReceiveCode)
-  //   : [];
 
   const handleDownload = async () => {
     setLoading(true);
@@ -210,11 +175,10 @@ export default function AppRemark() {
       });
 
       setNewRemark("");
-      fetchLedit(String(modalData.receive_business_id)); // refresh log
+      fetchLedit(String(modalData.receive_business_id));
 
-      // อัปเดต remark ใน modalData ทันที (ไม่ต้อง fetch ใหม่ ไม่ต้องปิด-เปิด modal)
       setModalData((prev) => (prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev));
-      // ถ้าอยากให้ remark ในตารางหลักอัปเดตทันที (โดยไม่ fetch ทั้ง table)
+
       setTransactions((txs) =>
         txs.map((tx) => (tx.receive_code === modalData.receive_code ? { ...tx, remark: newRemark } : tx))
       );
@@ -236,15 +200,6 @@ export default function AppRemark() {
             onChange={(e) => setSearch(e.target.value.trim())}
             className="border border-gray-300 rounded-lg px-3 py-1 h-9 w-85 md:w-lg focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
           />
-
-          {/* <DatePicker
-            selected={selectedDate}
-            onChange={(date: Date | null) => setSelectedDate(date)}
-            dateFormat="yyyy-MM-dd"
-            isClearable
-            placeholderText="-- เลือกวันที่ --"
-            className="border border-gray-300 rounded px-3 py-2"
-            /> */}
         </div>
         <button
           onClick={handleDownload}
@@ -258,34 +213,12 @@ export default function AppRemark() {
       {/* ตารางข้อมูล */}
       <div className="overflow-x-auto w-full">
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
-          <ResizableColumns
-            headers={headers}
-            pageKey="AppRemark" // กำหนด unique key สำหรับ page นี้
-          />
+          <ResizableColumns headers={headers} pageKey="AppRemark" />
 
-          {/* <thead className="bg-gray-100">
-            <tr>
-            <th className="w-15 px-4 py-2 border-b text-left">Log</th>
-            <th className="w-40 px-4 py-2 border-b text-left">
-            วันที่จากแอป
-            </th>
-            <th className="w-40 px-4 py-2 border-b text-left">หมายเหตุแอป</th>
-            <th className="w-55 px-4 py-2 border-b text-left">หมายเหตุ</th>
-            <th className="w-55 px-4 py-2 border-b text-left">เลขที่บิล</th>
-            <th className="w-50 px-4 py-2 border-b text-left">
-            เลขที่อ้างอิง
-            </th>
-            <th className="w-60 px-4 py-2 border-b text-left">เจ้าของงาน</th>
-            <th className="w-55 px-4 py-2 border-b text-left">ชื่อผู้รับ</th>
-            <th className="w-35 px-4 py-2 border-b text-left">คลังปลายทาง</th>
-            <th className="w-55 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
-            </tr>
-            </thead> */}
           <tbody>
             {transactions.map((t, i) => {
               return (
                 <tr key={t.id ?? i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  {/* log modal เดิม */}
                   <td className="px-4 py-1 border-b truncate">
                     <button
                       className="inline-flex gap-1 px-1.5 py-1 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -303,20 +236,8 @@ export default function AppRemark() {
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.detail || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.remark || "-"}</td>
-                  {/* ช่อง receive_code: เพิ่มปุ่ม modal ใหม่ เฉพาะแถวแรก */}
                   <td className="px-4 py-2 border-b truncate">{t.receive_code}</td>
                   <td className="px-4 py-2 border-b truncate">{t.reference_no || "-"}</td>
-                  {/* <td className="px-4 py-2 border-b truncate">
-                    <button
-                      className="text-brand-500 hover:text-brand-600 underline"
-                      onClick={() => {
-                        setModalReceiveCode(t.receive_code ?? null);
-                        setIsReceiveCodeModalOpen(true);
-                      }}
-                    >
-                      {t.receive_code}
-                    </button>
-                  </td> */}
                   <td className="px-4 py-2 border-b truncate">{t.customer_name || "-"}</td>
                   <td className="px-4 py-2 border-b truncate">{t.recipient_name || "-"}</td>
                   <td className="px-4 py-2 border-b truncate">{t.warehouse_name || "-"}</td>
@@ -328,7 +249,7 @@ export default function AppRemark() {
         </table>
       </div>
 
-      {/* modal log เดิม */}
+      {/* modal log */}
       {isModalOpen && (
         <div
           className="fixed inset-0 z-100000 flex items-center justify-center bg-white/30 backdrop-blur-sm"
@@ -430,68 +351,6 @@ export default function AppRemark() {
           </div>
         </div>
       )}
-
-      {/* modal ใหม่สำหรับ receive_code */}
-      {/* {isReceiveCodeModalOpen && modalReceiveCode && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm"
-          onClick={() => {
-            setIsReceiveCodeModalOpen(false);
-            setModalReceiveCode(null);
-          }}
-        >
-          <div
-            className="bg-white p-6 rounded shadow-lg min-w-[320px] max-w-[90vw]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold">
-                รายการใน receive_code:{" "}
-                <span className="ml-2 text-base text-gray-600 font-normal">
-                  {modalReceiveCode}
-                </span>
-              </h2>
-              <button
-                className="text-gray-500 hover:text-gray-900 text-xl ml-3"
-                onClick={() => {
-                  setIsReceiveCodeModalOpen(false);
-                  setModalReceiveCode(null);
-                }}
-              >
-                ×
-              </button>
-            </div>
-            <table className="min-w-full border-collapse border">
-              <thead>
-                <tr>
-                  <th className="border px-2 py-1">serial_no</th>
-                  <th className="border px-2 py-1">package_name</th>
-                </tr>
-              </thead>
-              <tbody>
-                {modalSerialList.length > 0 ? (
-                  modalSerialList.map((item, idx) => (
-                    <tr key={item.serial_no ?? idx}>
-                      <td className="border px-2 py-1">
-                        {item.serial_no || "-"}
-                      </td>
-                      <td className="border px-2 py-1">
-                        {item.package_name || "-"}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td className="border px-2 py-1 text-center" colSpan={3}>
-                      ไม่มีข้อมูล
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )} */}
 
       {loading && (
         <div className="flex justify-center mt-4">

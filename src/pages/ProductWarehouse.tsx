@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-// import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { useAuth } from "../context/AuthContext";
@@ -8,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
 import AxiosInstance from "../utils/AxiosInstance";
 import Button from "../components/ui/button/Button";
-// import Input from "../components/form/input/InputField";
 import { ExportExcel } from "../utils/ExportExcel";
 import { FileDown, Loader2, Logs } from "lucide-react";
 import WarehouseDropdown from "../components/dropdown/WarehouseDropdown";
@@ -29,18 +27,6 @@ export interface Transaction {
   resend_date?: string;
   status_message?: string;
 }
-
-// export interface LeditRow {
-//   pk_id: number | string;
-//   create_date?: string;
-//   value_new?: string;
-//   column?: string;
-//   people_first_name?: string;
-//   people_last_name?: string;
-//   employee_first_name?: string;
-//   employee_last_name?: string;
-//   user_type?: string;
-// }
 
 const headers = [
   "Log",
@@ -71,10 +57,6 @@ export default function ProductWarehouse() {
   const [modalData, setModalData] = useState<Transaction | Transaction[] | null>(null);
   const [countWarehouse15, setCountWarehouse15] = useState<number>(0);
   const [countWarehouseNot15, setCountWarehouseNot15] = useState<number>(0);
-
-  // const [leditRows, setLeditRows] = useState<LeditRow[]>([]);
-  // const [leditLoading, setLeditLoading] = useState(false);
-  // const [leditError, setLeditError] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [newRemark, setNewRemark] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -82,14 +64,10 @@ export default function ProductWarehouse() {
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
 
-  // const [isReceiveCodeModalOpen, setIsReceiveCodeModalOpen] = useState(false);
-  // const [modalReceiveCode, setModalReceiveCode] = useState<string | null>(null);
-
   const fetchTransactions = async () => {
     setLoading(true);
     setError(null);
     try {
-      // const dateFilter = selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
       const params = {
         search,
         warehouse_id: selectedWarehouseId,
@@ -124,28 +102,6 @@ export default function ProductWarehouse() {
     }
   };
 
-  // const fetchLedit = async (receive_id: string) => {
-  //   setLeditLoading(true);
-  //   setLeditError(null);
-  //   try {
-  //     const res = await AxiosInstance.get("/vledit", {
-  //       params: { receive_id },
-  //     });
-  //     setLeditRows(res.data.data || []);
-  //   } catch (err) {
-  //     if (axios.isAxiosError(err)) {
-  //       setLeditError(err?.message || "เกิดข้อผิดพลาดในการโหลด log แก้ไข");
-  //     } else if (err instanceof Error) {
-  //       setLeditError(err.message);
-  //     } else {
-  //       setLeditError("เกิดข้อผิดพลาดในการโหลด log แก้ไข");
-  //     }
-  //     setLeditRows([]);
-  //   } finally {
-  //     setLeditLoading(false);
-  //   }
-  // };
-
   const closeModal = () => {
     setIsModalOpen(false);
     setModalData(null);
@@ -171,24 +127,6 @@ export default function ProductWarehouse() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
-
-  // useEffect(() => {
-  //   if (
-  //     isModalOpen &&
-  //     modalData &&
-  //     !Array.isArray(modalData) &&
-  //     modalData.receive_business_id
-  //   ) {
-  //     setLeditRows([]);
-  //     setLeditLoading(true);
-  //     fetchLedit(String(modalData.receive_business_id));
-  //   }
-  // }, [isModalOpen, modalData]);
-
-  // สำหรับ modal ใหม่ แสดง serial_no, customer_name, to_warehouse ตาม receive_code
-  // const modalSerialList = modalReceiveCode
-  //   ? transactions.filter((t) => t.receive_code === modalReceiveCode)
-  //   : [];
 
   const handleDownload = async () => {
     setLoading(true);
@@ -219,7 +157,6 @@ export default function ProductWarehouse() {
       });
 
       setNewRemark("");
-      // fetchLedit(String(modalData.receive_business_id));
 
       setModalData((prev) => (prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev));
       setTransactions((txs) =>
@@ -274,23 +211,6 @@ export default function ProductWarehouse() {
       <div className="overflow-x-auto w-full">
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <ResizableColumns headers={headers} pageKey="ProductWarehouse" />
-          {/* <thead className="bg-gray-100">
-            <tr>
-              <th className="w-15 px-4 py-2 border-b text-left">Log</th>
-              <th className="w-40 px-4 py-2 border-b text-left">
-                คลังปัจจุบัน
-              </th>
-              <th className="w-65 px-4 py-2 border-b text-left">เจ้าของงาน</th>
-              <th className="w-70 px-4 py-2 border-b text-left">ชื่อผู้รับ</th>
-              <th className="w-30 py-2 border-b text-left">วันที่บิล</th>
-              <th className="w-30 py-2 border-b text-left">วันที่จัดส่ง</th>
-              <th className="w-30 py-2 border-b text-left">วันที่จัดส่งใหม่</th>
-              <th className="w-55 px-4 py-2 border-b text-left">เลขที่บิล</th>
-              <th className="w-50 px-4 py-2 border-b text-left">เลขที่อ้างอิง</th>
-              <th className="w-40 px-4 py-2 border-b text-left">คลังปลายทาง</th>
-              <th className="w-50 px-4 py-2 border-b text-left">สถานะล่าสุด</th>
-            </tr>
-          </thead> */}
           <tbody>
             {transactions.map((t, i) => {
               return (
@@ -331,7 +251,7 @@ export default function ProductWarehouse() {
         </table>
       </div>
 
-      {/* modal log เดิม */}
+      {/* modal log */}
       {isModalOpen && (
         <div
           className="fixed inset-0 z-100000 flex items-center justify-center bg-white/30 backdrop-blur-sm"
@@ -340,10 +260,6 @@ export default function ProductWarehouse() {
             closeModal();
           }}
         >
-          {/* <div
-            className="bg-white p-6 rounded shadow-lg min-w-[320px] max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
-          > */}
           <div
             className="bg-white p-6 rounded shadow-lg w-full max-h-[90vh] lg:max-w-xl"
             onClick={(e) => e.stopPropagation()}
@@ -389,81 +305,7 @@ export default function ProductWarehouse() {
             </div>
 
             {updateLoading && <div className="text-brand-500 py-2">กำลังบันทึกหมายเหตุ...</div>}
-
             {updateError && <div className="text-red-500 text-sm">{updateError}</div>}
-
-            {/* ตารางข้อมูล log การแก้ไข */}
-            {/* <div className="overflow-x-auto">
-              {leditLoading && (
-                <div className="text-brand-500 py-2">
-                  กำลังโหลด log แก้ไข...
-                </div>
-              )}
-              {leditError && (
-                <div className="text-red-500 py-2">{leditError}</div>
-              )}
-              <div className="max-h-96 overflow-y-auto">
-                <table className="min-w-full border-collapse">
-                  <thead>
-                    <tr>
-                      <th className="border px-2 py-1">วันที่หมายเหตุ</th>
-                      <th className="border px-2 py-1">หมายเหตุ</th>
-                      <th className="border px-2 py-1">ช่องทางหมายเหตุ</th>
-                      <th className="border px-2 py-1">ชื่อ</th>
-                      <th className="border px-2 py-1">นามสกุล</th>
-                      <th className="border px-2 py-1">ชื่อ</th>
-                      <th className="border px-2 py-1">นามสกุล</th>
-                      <th className="border px-2 py-1">ประเภทผู้ใช้</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Array.isArray(leditRows) && leditRows.length > 0 ? (
-                      leditRows.map((i, idx) => (
-                        <tr key={i.pk_id ?? idx}>
-                          <td className="border px-2 py-1 truncate">
-                            {i.create_date
-                              ? format(
-                                  new Date(i.create_date),
-                                  "yyyy-MM-dd HH:mm:ss"
-                                )
-                              : "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.value_new || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.column || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.people_first_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.people_last_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.employee_first_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.employee_last_name || "-"}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {i.user_type || "-"}
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          className="border px-2 py-1 text-center"
-                          colSpan={8}
-                        >
-                          ไม่มีข้อมูลการแก้ไข
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>*/}
           </div>
         </div>
         // </div>

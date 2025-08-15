@@ -41,7 +41,7 @@ const headers = [
   "กำหนดเวลา",
 ];
 
-export default function DemoOutbound() {
+export default function OntruckInbound() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [selectedTruckId, setSelectedTruckId] = useState<string | null>(null);
   const [page, setPage] = useState<number>(1);
@@ -118,11 +118,25 @@ export default function DemoOutbound() {
     }
   }, [isLoggedIn, navigate]);
 
+  useEffect(() => {
+    if (page > pageCount && pageCount > 0) {
+      setPage(pageCount);
+    } else {
+      fetchTransactions();
+    }
+  }, [page, pageCount]);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/signin", { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
+
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
-      <div className="grid grid-cols-10 gap-4">
+      <div className="flex flex-col lg:grid lg:grid-cols-10 gap-4">
         {/* ฝั่ง 80% */}
-        <div className="col-span-8">
+        <div className="lg:col-span-8">
           <StatusFilter
             value={statusFilter}
             onChange={(newFilter) => {
@@ -134,7 +148,7 @@ export default function DemoOutbound() {
 
           <div className="overflow-x-auto w-full">
             <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
-              <ResizableColumns headers={headers} pageKey="Outbound" />
+              <ResizableColumns headers={headers} pageKey="Inbound" />
               <tbody>
                 {transactions.map((t) => (
                   <tr
@@ -175,9 +189,9 @@ export default function DemoOutbound() {
         </div>
 
         {/* ฝั่ง 20% */}
-        <div className="col-span-2 rounded bg-gray-50">
+        <div className="lg:col-span-2 rounded bg-gray-50">
           {selectedDetails && selectedDetails.length > 0 ? (
-            <ul className="space-y-1 h-[calc(100vh-10rem)] overflow-y-auto">
+            <ul className="space-y-1 h-64 lg:h-[calc(100vh-10rem)] overflow-y-auto">
               {selectedDetails.map((t) => (
                 <li key={crypto.randomUUID()} className="p-3 border border-gray-200 rounded bg-white shadow-sm">
                   <p className="text-sm">
@@ -195,7 +209,7 @@ export default function DemoOutbound() {
             </ul>
           ) : (
             <div className="text-center py-8">
-              <p className="text-gray-500">คลิกแถวเพื่อดู Serial Numbers</p>
+              <p className="text-gray-500">คลิกแถวเพื่อดูรายละเอียด</p>
             </div>
           )}
         </div>
@@ -207,8 +221,6 @@ export default function DemoOutbound() {
         </div>
       )}
       {error && <div className="text-red-600 text-center mt-4">{error}</div>}
-
-      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} disabled={loading} />
     </div>
   );
 }

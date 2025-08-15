@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-// import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { useAuth } from "../context/AuthContext";
@@ -8,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
 import AxiosInstance from "../utils/AxiosInstance";
 import Button from "../components/ui/button/Button";
-// import Input from "../components/form/input/InputField";
 import { ExportExcel } from "../utils/ExportExcel";
 import { FileDown, Loader2, Logs } from "lucide-react";
 import WarehouseDropdown from "../components/dropdown/WarehouseDropdown";
@@ -81,19 +79,11 @@ export default function ProductOverdue() {
   const [leditError, setLeditError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<string>("create_date");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-
-  // const [columnWidths, setColumnWidths] = useState<number[]>(
-  //   new Array(headers.length).fill(150) // ความกว้างเริ่มต้นของแต่ละคอลัมน์
-  // );
-
   const [newRemark, setNewRemark] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
-
-  // const [isReceiveCodeModalOpen, setIsReceiveCodeModalOpen] = useState(false);
-  // const [modalReceiveCode, setModalReceiveCode] = useState<string | null>(null);
 
   const fetchTransactions = async () => {
     setLoading(true);
@@ -176,11 +166,6 @@ export default function ProductOverdue() {
     }
   }, [isModalOpen, modalData]);
 
-  // สำหรับ modal ใหม่ แสดง serial_no, customer_name, to_warehouse ตาม receive_code
-  // const modalSerialList = modalReceiveCode
-  //   ? transactions.filter((t) => t.receive_code === modalReceiveCode)
-  //   : [];
-
   const handleDownload = async () => {
     setLoading(true);
     try {
@@ -210,7 +195,6 @@ export default function ProductOverdue() {
       });
 
       setNewRemark("");
-      // fetchLedit(String(modalData.receive_business_id));
 
       setModalData((prev) => (prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev));
       setTransactions((txs) =>
@@ -275,7 +259,7 @@ export default function ProductOverdue() {
             {transactions.map((t, i) => {
               return (
                 <tr key={t.id ?? i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  {/* log modal เดิม */}
+                  {/* log modal */}
                   <td className="px-3 py-1 border-b truncate">
                     <button
                       className="inline-flex gap-1 px-1.5 py-1 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
