@@ -430,12 +430,12 @@ const navItems: NavItem[] = [
         icon: <Smartphone size={20} />,
       },
       {
-        name: "สินค้าบนคลัง (ไม่มีหมายเหตุ)",
+        name: "สินค้าในคลัง (ไม่มีหมายเหตุ)",
         path: "/productwarehouse",
         icon: <Warehouse size={20} />,
       },
       {
-        name: "สินค้าค้างส่ง (มีหมายเหตุ)",
+        name: "สินค้าในคลัง (มีหมายเหตุ)",
         path: "/productoverdue",
         icon: <ClockAlert size={20} />,
       },

@@ -5,30 +5,29 @@ import { useState, useEffect } from "react";
 import AxiosInstance from "../../utils/AxiosInstance";
 
 interface ApiResponse {
-  data: WarehouseData[];
+  data: RouteData[];
 }
 
-interface WarehouseData {
-  count_warehouse_15: number;
-  count_warehouse_not_15: number;
+interface RouteData {
+  route_type: string;
+  total_overdue: number;
 }
 
-export default function ProductWarehouseChart() {
+export default function OntruckChart() {
   const [windowWidth, setWindowWidth] = useState(0);
   const [series, setSeries] = useState<{ name: string; data: number[] }[]>([
     {
-      name: "Count",
+      name: "เกินกำหนด",
       data: [],
     },
   ]);
   const [isOpen, setIsOpen] = useState(false);
 
-  // เช็คขนาดหน้าจอ
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
-    handleResize(); // เรียกครั้งแรก
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const options: ApexOptions = {
@@ -61,12 +60,12 @@ export default function ProductWarehouseChart() {
       colors: ["transparent"],
     },
     xaxis: {
-      categories: ["กทม.", "ตจว."],
+      categories: ["กทม → ตจว", "ตจว → กทม"],
       axisBorder: { show: false },
       axisTicks: { show: false },
       labels: {
-        style: { 
-          fontSize: windowWidth < 768 ? "13px" : "13px" 
+        style: {
+          fontSize: windowWidth < 768 ? "13px" : "13px",
         },
       },
     },
@@ -80,8 +79,8 @@ export default function ProductWarehouseChart() {
     yaxis: {
       title: { text: undefined },
       labels: {
-        style: { 
-          fontSize: windowWidth < 768 ? "10px" : "10px" 
+        style: {
+          fontSize: windowWidth < 768 ? "10px" : "10px",
         },
       },
     },
@@ -91,20 +90,23 @@ export default function ProductWarehouseChart() {
     fill: { opacity: 1 },
     tooltip: {
       x: { show: false },
-      y: { formatter: (val: number) => `${val}` },
+      y: { formatter: (val: number) => `${val} รายการ` },
     },
   };
 
   const fetchData = async () => {
     try {
-      const { data }: { data: ApiResponse } = await AxiosInstance.get("/02");
-      const countWarehouse15 = data.data[0]?.count_warehouse_15 || 0;
-      const countWarehouseNot15 = data.data[0]?.count_warehouse_not_15 || 0;
+      const { data }: { data: ApiResponse } = await AxiosInstance.get("/dashboard04");
+
+      const categories = data.data.map((item) => item.route_type);
+      const values = data.data.map((item) => item.total_overdue);
+
+      options.xaxis!.categories = categories;
 
       setSeries([
         {
-          name: "Count",
-          data: [countWarehouse15, countWarehouseNot15],
+          name: "เกินกำหนด",
+          data: values,
         },
       ]);
     } catch (error) {
@@ -123,7 +125,7 @@ export default function ProductWarehouseChart() {
   return (
     <div className="font-thai overflow-hidden rounded-2xl border border-gray-200 bg-white px-3 pt-3 sm:px-5 sm:pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
       <div className="flex items-center justify-between mb-2 sm:mb-0">
-        <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white/90">สินค้าในคลัง (ไม่มีหมายเหตุ)</h3>
+        <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white/90">สินค้าบนรถขนย้าย</h3>
         <div className="relative inline-block">
           <button className="dropdown-toggle" onClick={toggleDropdown}>
             <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-5 sm:size-6" />

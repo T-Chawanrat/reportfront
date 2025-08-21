@@ -65,7 +65,7 @@ export default function OntruckInbound() {
         statusFilter,
       };
 
-      const res = await AxiosInstance.get("/04std", { params });
+      const res = await AxiosInstance.get("/04inbound", { params });
 
       setTransactions(res.data.data || []);
       setTotal(res.data.total || 0);
@@ -85,7 +85,7 @@ export default function OntruckInbound() {
   const fetchDetails = async (truck_load_id: string) => {
     setSelectedTruckId(truck_load_id);
     try {
-      const res = await AxiosInstance.get(`/std/${truck_load_id}`);
+      const res = await AxiosInstance.get(`/inbound/${truck_load_id}`);
 
       setSelectedDetails(res.data.data || []);
     } catch (err) {
