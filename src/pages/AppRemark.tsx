@@ -304,7 +304,7 @@ export default function AppRemark() {
             {updateError && <div className="text-red-500 text-sm">{updateError}</div>}
 
             {/* ตารางข้อมูล log การแก้ไข */}
-            <div className="overflow-x-auto">
+            <div className="">
               {leditLoading && <div className="text-brand-500 py-2">กำลังโหลด log แก้ไข...</div>}
               {leditError && <div className="text-red-500 py-2">{leditError}</div>}
               <div className="max-h-96 overflow-y-auto">
@@ -325,7 +325,7 @@ export default function AppRemark() {
                     {Array.isArray(leditRows) && leditRows.length > 0 ? (
                       leditRows.map((i, idx) => (
                         <tr key={i.pk_id ?? idx}>
-                          <td className="border px-2 py-1 truncate">
+                          <td className="border px-2 py-1">
                             {i.create_date ? format(new Date(i.create_date), "dd-MM-yyyy HH:mm:ss") : "-"}
                           </td>
                           <td className="border px-2 py-1">{i.value_new || "-"}</td>

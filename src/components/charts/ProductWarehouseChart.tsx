@@ -103,7 +103,7 @@ export default function ProductWarehouseChart() {
 
       setSeries([
         {
-          name: "Count",
+          name: "จำนวน",
           data: [countWarehouse15, countWarehouseNot15],
         },
       ]);
