@@ -27,7 +27,7 @@ import { ColumnWidthsProvider } from "./context/ColumnWidths";
 import TrackingStatus from "./pages/TrackingStatus";
 import HomeCopy from "./pages/Dashboard/Home copy";
 import Ontruck from "./pages/Ontruck";
-import OntruckV05 from "./pages/OntruckV05";
+import Layout05 from "./pages/Layout05";
 
 export default function App() {
   return (
@@ -84,10 +84,10 @@ export default function App() {
                 }
               />
               <Route
-                path="/05"
+                path="/over4w"
                 element={
                   <ProtectedRoute>
-                    <OntruckV05 />
+                    <Layout05 />
                   </ProtectedRoute>
                 }
               />

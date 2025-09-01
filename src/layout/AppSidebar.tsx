@@ -398,7 +398,16 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { LogOut, Warehouse, Smartphone, ClockAlert, PackageCheck, LayoutDashboard, Truck, File } from "lucide-react";
+import {
+  LogOut,
+  Warehouse,
+  Smartphone,
+  ClockAlert,
+  PackageCheck,
+  LayoutDashboard,
+  Truck,
+  TruckElectric,
+} from "lucide-react";
 import { ChevronDownIcon, GridIcon, HorizontaLDots } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
@@ -445,9 +454,9 @@ const navItems: NavItem[] = [
         icon: <Truck size={20} />,
       },
       {
-        name: "สินค้าบนรถกระจาย (DEMO)",
-        path: "/05",
-        icon: <File size={20} />,
+        name: "สินค้าบนรถกระจาย (เกินเวลา)",
+        path: "/over4w",
+        icon: <TruckElectric size={20} />,
       },
       {
         name: "สถานะสินค้า",
