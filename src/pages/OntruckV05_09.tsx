@@ -99,14 +99,16 @@ export default function OntruckV05_09({ selectedWarehouseId }: OntruckV05_09Prop
                 <td className="px-4 py-2 border-b truncate">{t.warehouse_name || "-"}</td>
                 <td className="px-4 py-2 border-b truncate">{t.license_plate || "-"}</td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">
-                  {" "}
                   {t.tm_product_trucks_created_date
                     ? format(new Date(t.tm_product_trucks_created_date), "dd-MM-yyyy | HH:mm")
                     : "-"}
                 </td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.receive_code || "-"}</td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.serial_no || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.deadline_time || "-"}</td>
+                <td className="px-4 py-2 border-b truncate max-w-xs">
+                  {" "}
+                  {t.deadline_time ? format(new Date(t.deadline_time), "dd-MM-yyyy | HH:mm") : "-"}
+                </td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.time_remaining_text || "-"}</td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.status_message || "-"}</td>
               </tr>

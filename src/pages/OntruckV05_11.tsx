@@ -88,7 +88,7 @@ export default function OntruckV05_11({ selectedWarehouseId }: OntruckV05_11Prop
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
       <div className="overflow-x-auto w-full">
-         <h2 className="text-xl font-semibold mt-10">ไม่คืนคลัง</h2>
+        <h2 className="text-xl font-semibold mt-10">ไม่คืนคลัง</h2>
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <ResizableColumns headers={headers} pageKey="v05_11" />
           <tbody>
@@ -104,7 +104,10 @@ export default function OntruckV05_11({ selectedWarehouseId }: OntruckV05_11Prop
                 </td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.receive_code || "-"}</td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.serial_no || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.deadline_time || "-"}</td>
+                <td className="px-4 py-2 border-b truncate max-w-xs">
+                  {" "}
+                  {t.deadline_time ? format(new Date(t.deadline_time), "dd-MM-yyyy | HH:mm") : "-"}
+                </td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.time_remaining_text || "-"}</td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.status_message || "-"}</td>
               </tr>

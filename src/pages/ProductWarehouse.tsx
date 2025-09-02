@@ -308,7 +308,6 @@ export default function ProductWarehouse() {
             {updateError && <div className="text-red-500 text-sm">{updateError}</div>}
           </div>
         </div>
-        // </div>
       )}
 
       {loading && (
