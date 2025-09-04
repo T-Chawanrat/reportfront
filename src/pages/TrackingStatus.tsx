@@ -51,7 +51,6 @@ export default function TrackingStatus() {
     setShowNotFound(false);
 
     try {
-      // Step 1: เรียก API หลักเพื่อดึงข้อมูล `result`
       const res = await AxiosInstance.get<ApiResponse>(`${TRACKING_API}?type=${trackingType}&code=${code}`);
       if (res.data.rows.length === 0) {
         setShowNotFound(true);

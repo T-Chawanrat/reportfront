@@ -11,12 +11,12 @@ import ResizableColumns from "../components/ResizableColumns";
 export interface Transaction {
   warehouse_name: string;
   license_plate: string;
-  tm_product_trucks_created_date: string;
+  datetime: string;
+  truck_code: string;
   receive_code: string;
   serial_no: string;
-  deadline_time: string;
-  time_remaining_text: string;
   status_message: string;
+  time_remaining_text: string;
 }
 
 interface OntruckV05_11Props {
@@ -26,13 +26,10 @@ interface OntruckV05_11Props {
 const headers = [
   "คลังปัจจุบัน",
   "ทะเบียนรถ",
-  "วันที่บิล",
-  "ชื่อผู้รับ",
+  "วันที่ล่าสุด",
+  "ใบปิดบรรทุก",
   "เลขที่บิล",
   "หมายเลขกล่อง",
-  "ตำบล",
-  "อำเภอ",
-  "เวลาคืนคลัง",
   "เกินเวลา",
   "สถานะ",
 ];
@@ -98,16 +95,12 @@ export default function OntruckV05_11({ selectedWarehouseId }: OntruckV05_11Prop
                 <td className="px-4 py-2 border-b truncate">{t.license_plate || "-"}</td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">
                   {" "}
-                  {t.tm_product_trucks_created_date
-                    ? format(new Date(t.tm_product_trucks_created_date), "dd-MM-yyyy | HH:mm")
-                    : "-"}
+                  {t.datetime ? format(new Date(t.datetime), "dd-MM-yyyy | HH:mm") : "-"}
                 </td>
+                <td className="px-4 py-2 border-b truncate max-w-xs">{t.truck_code || "-"}</td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.receive_code || "-"}</td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.serial_no || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">
-                  {" "}
-                  {t.deadline_time ? format(new Date(t.deadline_time), "dd-MM-yyyy | HH:mm") : "-"}
-                </td>
+
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.time_remaining_text || "-"}</td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">{t.status_message || "-"}</td>
               </tr>

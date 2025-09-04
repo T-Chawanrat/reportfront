@@ -12,7 +12,7 @@ layer(base);
   --font-*: initial;
   --font-outfit: Outfit, sans-serif;
   --font-thai: Sarabun , sans-serif;
-
+  
   --breakpoint-*: initial;
   --breakpoint-2xsm: 375px;
   --breakpoint-xsm: 425px;
