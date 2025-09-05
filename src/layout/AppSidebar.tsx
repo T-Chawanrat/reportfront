@@ -459,6 +459,11 @@ const navItems: NavItem[] = [
         icon: <TruckElectric size={20} />,
       },
       {
+        name: "สินค้ากำลังนำส่ง",
+        path: "/intransit",
+        icon: <PackageCheck size={20} />,
+      },
+           {
         name: "สถานะสินค้า",
         path: "/tracking",
         icon: <PackageCheck size={20} />,

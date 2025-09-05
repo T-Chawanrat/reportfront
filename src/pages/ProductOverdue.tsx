@@ -171,7 +171,7 @@ export default function ProductOverdue() {
     try {
       await ExportExcel({
         url: "/export03",
-        filename: "Over_Delivery_Remark.xlsx",
+        filename: "Overdue.xlsx",
       });
     } catch (err) {
       alert((err as Error).message);
@@ -251,7 +251,7 @@ export default function ProductOverdue() {
                 setSortOrder(sortOrder === "asc" ? "desc" : "asc");
               } else {
                 setSortBy(headerKey);
-                setSortOrder("desc"); // default ทุกครั้งที่เปลี่ยน column
+                setSortOrder("desc");
               }
             }}
           />

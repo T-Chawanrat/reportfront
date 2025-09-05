@@ -85,7 +85,7 @@ export default function OntruckV05_09({ selectedWarehouseId }: OntruckV05_09Prop
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
       <div className="overflow-x-auto w-full">
-        <h2 className="text-xl font-semibold mt-4">กำลังนำจ่าย</h2>
+        <h2 className="text-xl font-semibold mt-2">กำลังนำจ่าย (เกินเวลาเข้าตำบลนั้นๆ)</h2>
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <ResizableColumns headers={headers} pageKey="v05_09" />
           <tbody>

@@ -97,8 +97,6 @@ export default function OntruckOutbound() {
   const handleRowClick = (truck_load_id: string | undefined) => {
     if (!truck_load_id) return;
 
-    // console.log("Clicked truck_load_id:", truck_load_id);
-
     fetchDetails(truck_load_id);
   };
 

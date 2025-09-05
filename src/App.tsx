@@ -28,6 +28,7 @@ import TrackingStatus from "./pages/TrackingStatus";
 import HomeCopy from "./pages/Dashboard/Home copy";
 import Ontruck from "./pages/Ontruck";
 import Layout05 from "./pages/Layout05";
+import OntruckV05std from "./pages/OntruckV05std";
 
 export default function App() {
   return (
@@ -68,14 +69,6 @@ export default function App() {
                 }
               />
               <Route
-                path="/tracking"
-                element={
-                  <ProtectedRoute>
-                    <TrackingStatus />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
                 path="/ontruck"
                 element={
                   <ProtectedRoute>
@@ -88,6 +81,22 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <Layout05 />
+                  </ProtectedRoute>
+                }
+              />
+                 <Route
+                path="/intransit"
+                element={
+                  <ProtectedRoute>
+                    <OntruckV05std  />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/tracking"
+                element={
+                  <ProtectedRoute>
+                    <TrackingStatus />
                   </ProtectedRoute>
                 }
               />

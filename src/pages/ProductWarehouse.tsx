@@ -133,7 +133,7 @@ export default function ProductWarehouse() {
     try {
       await ExportExcel({
         url: "/export02",
-        filename: "Product_Warehouse_Remark.xlsx",
+        filename: "Product_Warehouse.xlsx",
       });
     } catch (err) {
       alert((err as Error).message);
