@@ -463,9 +463,14 @@ const navItems: NavItem[] = [
         path: "/intransit",
         icon: <PackageCheck size={20} />,
       },
-           {
+      {
         name: "สถานะสินค้า",
         path: "/tracking",
+        icon: <PackageCheck size={20} />,
+      },
+      {
+        name: "ตาราง SLA",
+        path: "/sla",
         icon: <PackageCheck size={20} />,
       },
     ],

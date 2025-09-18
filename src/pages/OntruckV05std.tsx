@@ -110,7 +110,7 @@ export default function OntruckV05std() {
 
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
-      <div className="flex items-center justify-between mb-2 gap-2">
+      <div className="flex items-center justify-between mb-2">
         <WarehouseV05 selectedWarehouseId={selectedWarehouseId} setSelectedWarehouseId={setSelectedWarehouseId} />
         <OverStatusRadio onChange={setSelectedOverStatus} />
         <button
@@ -125,10 +125,10 @@ export default function OntruckV05std() {
       <div className="overflow-x-auto w-full">
         <h2 className="text-xl font-semibold mt-2">กำลังนำจ่าย (เรียงตามเวลาส่งตำบล)</h2>
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
-          <ResizableColumns headers={headers} pageKey="V05_n09n11" />
+          <ResizableColumns headers={headers} pageKey="intransit" />
           <tbody>
-            {transactions.map((t) => (
-              <tr key={crypto.randomUUID()}>
+            {transactions.map((t, i) => (
+              <tr key={crypto.randomUUID()} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                 <td className="px-4 py-2 border-b truncate">{t.warehouse_name || "-"}</td>
                 <td className="px-4 py-2 border-b truncate">{t.license_plate || "-"}</td>
                 <td className="px-4 py-2 border-b truncate">{t.tambon_name || "-"}</td>

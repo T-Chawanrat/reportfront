@@ -93,7 +93,7 @@ const WarehouseV05: React.FC<WarehouseV05Props> = ({
   };
 
   return (
-    <div className="relative w-50" ref={dropdownRef}>
+    <div className="relative w-50 font-thai" ref={dropdownRef}>
       <div className="flex items-center border border-gray-300 rounded-lg px-3 py-1 h-9">
         <input
           type="text"
@@ -104,7 +104,7 @@ const WarehouseV05: React.FC<WarehouseV05Props> = ({
           className="flex-grow focus:outline-none"
         />
         <button type="button" onClick={toggleDropdown} className="ml-2 focus:outline-none">
-          <ChevronDownIcon className="h-5 text-gray-500 -ml-10" />
+          <ChevronDownIcon className="h-5 text-gray-500 -ml-5" />
         </button>
       </div>
       {isDropdownOpen && (

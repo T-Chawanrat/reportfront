@@ -89,8 +89,8 @@ export default function OntruckV05_11({ selectedWarehouseId }: OntruckV05_11Prop
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <ResizableColumns headers={headers} pageKey="v05_11" />
           <tbody>
-            {transactions.map((t) => (
-              <tr key={crypto.randomUUID()}>
+            {transactions.map((t, i) => (
+              <tr key={crypto.randomUUID()} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                 <td className="px-4 py-2 border-b truncate">{t.warehouse_name || "-"}</td>
                 <td className="px-4 py-2 border-b truncate">{t.license_plate || "-"}</td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">

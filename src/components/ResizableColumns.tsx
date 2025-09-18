@@ -49,7 +49,7 @@ const ResizableColumns: React.FC<ResizableColumnsProps> = ({ headers, pageKey, s
 
   const handleTouchStart = (index: number, event: React.TouchEvent) => {
     const startX = event.touches[0].clientX;
-    const startWidth = columnWidths[index];
+    const startWidth = columnWidths[index] ?? 150;
 
     const handleTouchMove = (moveEvent: TouchEvent) => {
       const deltaX = moveEvent.touches[0].clientX - startX;
@@ -76,7 +76,7 @@ const ResizableColumns: React.FC<ResizableColumnsProps> = ({ headers, pageKey, s
           return (
             <th
               key={index}
-              style={{ width: `${columnWidths[index] || 120}px` }}
+              style={{ width: `${columnWidths[index] || 150}px` }}
               className="relative px-4 py-2 border-b text-left border-gray-200 select-none"
             >
               <div className="flex items-center justify-between">

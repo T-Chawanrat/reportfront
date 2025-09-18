@@ -43,7 +43,7 @@ const OntruckTabs: React.FC = () => {
   }, [activeTabId]);
 
   return (
-    <div className="w-full font-sans">
+    <div className="w-full font-thai">
       {/* Tab Headers */}
       <div className="relative" ref={tabsContainerRef}>
         <div className="flex border-b border-gray-200 bg-gray-50">
