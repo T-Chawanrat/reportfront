@@ -37,7 +37,6 @@ const headers = [
   "อำเภอ",
   "จังหวัด",
   "คลัง",
-  "พื้นที่รับผิดชอบ",
   "วันจันทร์",
   "วันอังคาร",
   "วันพุธ",
@@ -47,6 +46,7 @@ const headers = [
   "วันอาทิตย์",
   "รหัสสายรถ",
   "ชื่อสายรถ",
+  "พื้นที่รับผิดชอบ",
   "อัปเดตล่าสุด",
 ];
 
@@ -121,13 +121,13 @@ export default function Sla() {
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
       <div className="overflow-x-auto w-full">
         <div className="flex justify-between gap-1">
-          <div className="flex gap-1 mb-2">
+          <div className="flex gap-1 mb-2 mt-1">
             <input
               type="text"
               placeholder="ค้นหาตำบล"
               value={searchTambon}
               onChange={(e) => setSearchTambon(e.target.value.trim())}
-              className="border border-gray-300 rounded-lg px-3 py-1 h-9 w-full md:w-85 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
+              className="border border-gray-300 rounded-lg ml-1 px-3 py-1 h-9 w-full md:w-85 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
             />
             <input
               type="text"
@@ -155,35 +155,37 @@ export default function Sla() {
             </button>
           </div>
         </div>
-        <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
-          <ResizableColumns headers={headers} pageKey="sla" />
-          <tbody>
-            {transactions.map((t, i) => (
-              <tr key={crypto.randomUUID()} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.tambon_id || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.zip_code || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.tambon || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.ampur || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.province || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.DC_Mapping || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.Monday || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.Tuesday || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.Wednesday || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.Thursday || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.Friday || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.Saturday || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.Sunday || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.route_code || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.route_name || "-"}</td>
-                <td className="px-4 py-2 border-b w-2xl">
-                  {" "}
-                  {t.lastupdate ? format(new Date(t.lastupdate), "dd-MM-yyyy | HH:mm") : "-"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto w-full">
+          <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
+            <ResizableColumns headers={headers} pageKey="sla" />
+            <tbody>
+              {transactions.map((t, i) => (
+                <tr key={crypto.randomUUID()} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.tambon_id || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.zip_code || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.tambon || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.ampur || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.province || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Monday || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Tuesday || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Wednesday || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Thursday || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Friday || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Saturday || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Sunday || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.route_code || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.route_name || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.DC_Mapping || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {" "}
+                    {t.lastupdate ? format(new Date(t.lastupdate), "dd-MM-yyyy | HH:mm") : "-"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <Pagination
           page={page}
           pageCount={pageCount}

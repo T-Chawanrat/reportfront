@@ -101,7 +101,7 @@ const WarehouseV05: React.FC<WarehouseV05Props> = ({
           value={searchTerm}
           onChange={handleInputChange}
           onFocus={() => setIsDropdownOpen(true)}
-          className="flex-grow focus:outline-none"
+          className="flex-grow focus:outline-none "
         />
         <button type="button" onClick={toggleDropdown} className="ml-2 focus:outline-none">
           <ChevronDownIcon className="h-5 text-gray-500 -ml-5" />

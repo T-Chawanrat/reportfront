@@ -407,6 +407,7 @@ import {
   LayoutDashboard,
   Truck,
   TruckElectric,
+  File,
 } from "lucide-react";
 import { ChevronDownIcon, GridIcon, HorizontaLDots } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
@@ -464,14 +465,14 @@ const navItems: NavItem[] = [
         icon: <PackageCheck size={20} />,
       },
       {
-        name: "สถานะสินค้า",
-        path: "/tracking",
-        icon: <PackageCheck size={20} />,
-      },
-      {
         name: "ตาราง SLA",
         path: "/sla",
-        icon: <PackageCheck size={20} />,
+        icon: <File size={20} />,
+      },
+      {
+        name: "สถานะสินค้า",
+        path: "/tracking",
+        icon: <File size={20} />,
       },
     ],
   },

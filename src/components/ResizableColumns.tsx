@@ -76,7 +76,7 @@ const ResizableColumns: React.FC<ResizableColumnsProps> = ({ headers, pageKey, s
           return (
             <th
               key={index}
-              style={{ width: `${columnWidths[index] || 150}px` }}
+              style={{ width: `${columnWidths[index] || 120}px` }}
               className="relative px-4 py-2 border-b text-left border-gray-200 select-none"
             >
               <div className="flex items-center justify-between">
