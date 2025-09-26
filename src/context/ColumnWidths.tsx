@@ -9,7 +9,7 @@ interface ColumnWidthsType {
 const ColumnWidths = createContext<ColumnWidthsType | undefined>(undefined);
 
 export const ColumnWidthsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [columnWidths, setColumnWidths] = useState<number[]>(new Array(15).fill(150));
+  const [columnWidths, setColumnWidths] = useState<number[]>(new Array(25).fill(150));
   const [currentPageKey, setCurrentPageKey] = useState<string>("default");
 
   const setPageKey = useCallback(
@@ -25,10 +25,10 @@ export const ColumnWidthsProvider: React.FC<{ children: React.ReactNode }> = ({ 
             return JSON.parse(savedWidths);
           } catch (error) {
             console.error("Error parsing saved column widths:", error);
-            return new Array(15).fill(150);
+            return new Array(25).fill(150);
           }
         }
-        return new Array(15).fill(150);
+        return new Array(25).fill(150);
       });
 
       setCurrentPageKey(pageKey);

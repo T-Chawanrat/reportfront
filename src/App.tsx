@@ -30,6 +30,9 @@ import Ontruck from "./pages/Ontruck";
 import Layout05 from "./pages/Layout05";
 import OntruckV05std from "./pages/OntruckV05std";
 import Sla from "./pages/Sla";
+import Vtg7d from "./pages/Vtg7d";
+import VtgToday from "./pages/VtgToday";
+
 
 export default function App() {
   return (
@@ -106,6 +109,22 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <Sla />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/vtgtoday"
+                element={
+                  <ProtectedRoute>
+                    <Vtg7d />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/vtg7d"
+                element={
+                  <ProtectedRoute>
+                    <VtgToday />
                   </ProtectedRoute>
                 }
               />
