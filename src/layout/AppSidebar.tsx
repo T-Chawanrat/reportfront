@@ -474,6 +474,12 @@ const navItems: NavItem[] = [
         path: "/tracking",
         icon: <File size={20} />,
       },
+         {
+        name: "Bookings",
+        path: "/bookings",
+        icon: <File size={20} />,
+      },
+  
     ],
   },
 ];
