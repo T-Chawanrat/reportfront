@@ -470,16 +470,15 @@ const navItems: NavItem[] = [
         icon: <File size={20} />,
       },
       {
+        name: "ใบจองรถ",
+        path: "/bookings",
+        icon: <File size={20} />,
+      },
+      {
         name: "สถานะสินค้า",
         path: "/tracking",
         icon: <File size={20} />,
       },
-         {
-        name: "Bookings",
-        path: "/bookings",
-        icon: <File size={20} />,
-      },
-  
     ],
   },
 ];

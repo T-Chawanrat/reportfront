@@ -16,12 +16,10 @@ export interface Bookings {
   book_code: string;
   book_date: string;
   book_time: string;
-  book_status: string;
   book_status_th: string;
   customer_name: string;
   receive_code: string;
   serial_count: number;
-  serial_Group: string;
   shipper_name: string;
   recipient_name: string;
   address: string;
@@ -31,8 +29,6 @@ export interface Bookings {
   zip_code: string;
   tel: string;
   remark: string;
-  truck_id: number | null;
-  truck_number: string | null;
   license_plate: string | null;
   status_message: string;
   last_status_at: string;
@@ -41,31 +37,27 @@ export interface Bookings {
 }
 
 const headers = [
-  "create_date",
-  "book_code",
-  "book_date",
-  "book_time",
-  "book_status",
-  "book_status_th",
-  "customer_name",
-  "receive_code",
-  "serial_count",
-  "serial_Group",
-  "shipper_name",
-  "recipient_name",
-  "address",
-  "tambon_name",
-  "ampur_name",
-  "province_name",
-  "zip_code",
-  "tel",
-  "remark",
-  "truck_id",
-  "truck_number",
-  "license_plate",
-  "status_message",
-  "last_status_at",
-  "warehouse_name",
+  "วันที่สร้าง",
+  "เลขที่ใบจองรถ",
+  "วันที่จองรถ",
+  "เวลาที่จองรถ",
+  "สถานะการจองรถ",
+  "เจ้าของงาน",
+  "เลขที่เอกสาร",
+  "จำนวนสินค้า",
+  "ชื่อผู้ส่ง",
+  "ชื่อผู้รับ",
+  "ที่อยู่",
+  "ตำบล",
+  "อำเภอ",
+  "จังหวัด",
+  "รหัสไปรษณีย์",
+  "เบอร์โทร",
+  "หมายเหตุ",
+  "ทะเบียนรถ",
+  "สถานะสินค้า",
+  "เวลาสถานะล่าสุด",
+  "คลังต้นทาง",
 ];
 
 export default function Bookings() {
@@ -174,12 +166,11 @@ export default function Bookings() {
                     {t.book_date ? format(new Date(t.book_date), "dd-MM-yyyy") : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.book_time || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.book_status || "-"}</td>
+
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.book_status_th || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.customer_name || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.receive_code || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.serial_count || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.serial_Group || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.shipper_name || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.recipient_name || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.address || "-"}</td>
@@ -189,8 +180,6 @@ export default function Bookings() {
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.zip_code || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.tel || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.remark || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.truck_id || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.truck_number || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.license_plate || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">{t.status_message || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
