@@ -120,8 +120,8 @@ export default function Sla() {
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
       <div className="overflow-x-auto w-full">
-        <div className="flex justify-between gap-1">
-          <div className="flex gap-1 mb-2 mt-1">
+        <div className="flex justify-between gap-1 mt-1">
+          <div className="flex gap-1 mb-2 ">
             <input
               type="text"
               placeholder="ค้นหาตำบล"
@@ -160,26 +160,62 @@ export default function Sla() {
             <ResizableColumns headers={headers} pageKey="sla" />
             <tbody>
               {transactions.map((t, i) => (
-                <tr key={crypto.randomUUID()} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.tambon_id || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.zip_code || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.tambon || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.ampur || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.province || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Monday || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Tuesday || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Wednesday || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Thursday || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Friday || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Saturday || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.Sunday || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.route_code || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.route_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.DC_Mapping || "-"}</td>
+                <tr
+                  key={crypto.randomUUID()}
+                  className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                >
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {" "}
-                    {t.lastupdate ? format(new Date(t.lastupdate), "dd-MM-yyyy | HH:mm") : "-"}
+                    {t.tambon_id || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.zip_code || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.tambon || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.ampur || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.province || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.warehouse_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.Monday || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.Tuesday || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.Wednesday || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.Thursday || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.Friday || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.Saturday || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.Sunday || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.route_code || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.route_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.DC_Mapping || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.lastupdate
+                      ? format(new Date(t.lastupdate), "dd-MM-yyyy | HH:mm")
+                      : "-"}
                   </td>
                 </tr>
               ))}

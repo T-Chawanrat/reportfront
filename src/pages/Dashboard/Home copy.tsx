@@ -27,8 +27,8 @@ export default function HomeCopy() {
           day: "numeric",
           month: "numeric",
           year: "numeric",
-        })}{" "}
-        &nbsp;&nbsp;&nbsp;{" "}
+        })}
+        &nbsp;&nbsp;&nbsp;
         {currentTime.toLocaleString("th-TH", {
           hour: "2-digit",
           minute: "2-digit",

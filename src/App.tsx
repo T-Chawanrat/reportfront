@@ -31,6 +31,7 @@ import Layout05 from "./pages/Layout05";
 import OntruckV05std from "./pages/OntruckV05std";
 import Sla from "./pages/Sla";
 import Bookings from "./pages/Bookings";
+import Vgt from "./pages/Vgt";
 
 export default function App() {
   return (
@@ -118,6 +119,7 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/vgt" element={<Vgt />} />
 
               {/* Forms */}
               {/* <Route path="/form-elements" element={<FormElements />} /> */}

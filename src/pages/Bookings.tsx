@@ -37,12 +37,13 @@ export interface Bookings {
 }
 
 const headers = [
+  "คลังต้นทาง",
+  "เจ้าของงาน",
   "วันที่สร้าง",
   "เลขที่ใบจองรถ",
   "วันที่จองรถ",
   "เวลาที่จองรถ",
   "สถานะการจองรถ",
-  "เจ้าของงาน",
   "เลขที่เอกสาร",
   "จำนวนสินค้า",
   "ชื่อผู้ส่ง",
@@ -57,13 +58,14 @@ const headers = [
   "ทะเบียนรถ",
   "สถานะสินค้า",
   "เวลาสถานะล่าสุด",
-  "คลังต้นทาง",
 ];
 
 export default function Bookings() {
-  const [vtgBookings, setVtgBookings] = useState<Bookings[]>([]);
+  const [bookings, setBookings] = useState<Bookings[]>([]);
   const [search, setSearch] = useState<string>("");
-  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(null);
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(
+    null
+  );
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const limit = 20;
@@ -86,7 +88,7 @@ export default function Bookings() {
 
       const res = await AxiosInstance.get("/bookings", { params });
 
-      setVtgBookings(res.data.data || []);
+      setBookings(res.data.data || []);
       setTotal(res.data.total || 0);
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -128,9 +130,11 @@ export default function Bookings() {
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
       <div className="overflow-x-auto w-full">
-        <div className="flex justify-between gap-1">
-          <div className="flex gap-1 mb-2 mt-1">
-            <WarehouseDropdown onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)} />
+        <div className="flex justify-between gap-1 mt-1">
+          <div className="flex gap-1 mb-2">
+            <WarehouseDropdown
+              onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)}
+            />
             <input
               type="text"
               placeholder="ค้นหา DO"
@@ -154,39 +158,80 @@ export default function Bookings() {
           <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
             <ResizableColumns headers={headers} pageKey="bookings" />
             <tbody>
-              {vtgBookings.map((t, i) => (
-                <tr key={crypto.randomUUID()} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+              {bookings.map((t, i) => (
+                <tr
+                  key={crypto.randomUUID()}
+                  className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                >
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {" "}
-                    {t.create_date ? format(new Date(t.create_date), "dd-MM-yyyy | HH:mm") : "-"}
+                    {t.warehouse_name || "-"}
                   </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.book_code || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {" "}
-                    {t.book_date ? format(new Date(t.book_date), "dd-MM-yyyy") : "-"}
+                    {t.customer_name || "-"}
                   </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.book_time || "-"}</td>
-
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.book_status_th || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.customer_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.receive_code || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.serial_count || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.shipper_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.recipient_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.address || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.tambon_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.ampur_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.province_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.zip_code || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.tel || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.remark || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.license_plate || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.status_message || "-"}</td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {" "}
-                    {t.last_status_at ? format(new Date(t.last_status_at), "dd-MM-yyyy | HH:mm") : "-"}
+                    {t.create_date
+                      ? format(new Date(t.create_date), "dd-MM-yyyy | HH:mm")
+                      : "-"}
                   </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.book_code || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.book_date
+                      ? format(new Date(t.book_date), "dd-MM-yyyy")
+                      : "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.book_time || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.book_status_th || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.receive_code || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.serial_count || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.shipper_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.recipient_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.address || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.tambon_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.ampur_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.province_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.zip_code || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.tel || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.remark || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.license_plate || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.status_message || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.last_status_at
+                      ? format(new Date(t.last_status_at), "dd-MM-yyyy | HH:mm")
+                      : "-"}
+                  </td>
                 </tr>
               ))}
             </tbody>

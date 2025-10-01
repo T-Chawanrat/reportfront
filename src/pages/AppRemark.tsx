@@ -191,7 +191,7 @@ export default function AppRemark() {
 
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
-      <div className="flex items-center justify-between mb-2 gap-2">
+      <div className="flex justify-between mb-1">
         <div>
           <input
             type="text"

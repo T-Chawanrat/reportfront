@@ -401,7 +401,7 @@ export default function ProductOverdue() {
                 </table>
               </div>
             </div>
-          </div>{" "}
+          </div>
         </div>
       )}
 
