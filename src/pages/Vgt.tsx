@@ -9,11 +9,11 @@ import { ChevronDownIcon, FileDown } from "lucide-react";
 import { ExportExcel } from "../utils/ExportExcel";
 
 export interface Vgt {
-  row_count: number;
+  row_no: number;
   vgt_reference: string;
-  do_tt: string;
-  box: string;
-  booking_no: string;
+  DO_TT: string;
+  BOX: string;
+  BOOKING_NO: string;
   sender_name: string;
   from_dc: string;
   from_province: string;
@@ -34,7 +34,7 @@ export interface Vgt {
 }
 
 const headers = [
-  "row_count",
+  "ลำดับ",
   "อ้างอิง VGT",
   "DO TT",
   "Box",
@@ -52,10 +52,10 @@ const headers = [
   "สถานะ",
   "วันที่สถานะ",
   "เวลาสถานะ",
-  "Date Time Report",
-  "Books Is Deleted Text",
-  "Receives Is Deleted Text",
-  "Book Status (TH)",
+  "วันที่รายงาน",
+  "ใบจองรถ",
+  "ใบส่งสินค้า",
+  "สถานะใบจองรถ",
 ];
 
 export default function Vgt() {
@@ -195,62 +195,63 @@ export default function Vgt() {
                   className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
                 >
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.row_count ?? "-"}
+                    {t.row_no ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.vgt_reference || "-"}
+                    {t.vgt_reference ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.do_tt || "-"}
+                    {t.DO_TT ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.box || "-"}
+                    {t.BOX ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.booking_no || "-"}
+                    {t.BOOKING_NO ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.sender_name || "-"}
+                    {t.sender_name ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.from_dc || "-"}
+                    {t.from_dc ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.from_province || "-"}
+                    {t.from_province ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.recipient_name || "-"}
+                    {t.recipient_name ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.recipient_province || "-"}
+                    {t.recipient_province ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.to_dc || "-"}
+                    {t.to_dc ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.license_plate || "-"}
+                    {t.license_plate ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.pickup_staff_first_name || "-"}
+                    {t.pickup_staff_first_name ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.pickup_staff_last_name || "-"}
+                    {t.pickup_staff_last_name ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.phone_number || "-"}
+                    {t.phone_number ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.status_message || "-"}
+                    {t.status_message ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
                     {t.tt_status_date
-                      ? format(new Date(t.tt_status_date), "dd-MM-yyyy")
+                      ? format(new Date(t.tt_status_date), "dd-MM-yyyy | HH:mm")
                       : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.tt_status_time || "-"}
+                    {t.tt_status_time ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {" "}
                     {t.date_time_report
                       ? format(
                           new Date(t.date_time_report),
@@ -259,13 +260,13 @@ export default function Vgt() {
                       : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.books_is_deleted_text || "-"}
+                    {t.books_is_deleted_text ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.receives_is_deleted_text || "-"}
+                    {t.receives_is_deleted_text ?? "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
-                    {t.book_status_th || "-"}
+                    {t.book_status_th ?? "-"}
                   </td>
                 </tr>
               ))}

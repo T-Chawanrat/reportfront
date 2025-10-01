@@ -757,19 +757,21 @@ const AppSidebar: React.FC = () => {
           </div>
         </nav>
 
-        <div className="mt-auto pb-8 flex flex-col items-center w-full">
-          <button
-            onClick={handleLogout}
-            className="menu-item group menu-item-inactive cursor-pointer w-full text-left hover:bg-brand-50 py-1"
-          >
-            <span className="w-5 h-5 flex items-center justify-center">
-              <LogOut className="text-brand-500" size={20} />
-            </span>
-            {(isExpanded || isMobileOpen) && (
-              <span className="menu-item-text text-brand-500">Logout</span>
-            )}
-          </button>
-        </div>
+        {user && (
+          <div className="mt-auto pb-8 flex flex-col items-center w-full">
+            <button
+              onClick={handleLogout}
+              className="menu-item group menu-item-inactive cursor-pointer w-full text-left hover:bg-brand-50 py-1"
+            >
+              <span className="w-5 h-5 flex items-center justify-center">
+                <LogOut className="text-brand-500" size={20} />
+              </span>
+              {(isExpanded || isMobileOpen) && (
+                <span className="menu-item-text text-brand-500">Logout</span>
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </aside>
   );

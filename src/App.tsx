@@ -42,7 +42,7 @@ export default function App() {
           <Routes>
             {/* Dashboard Layout */}
             <Route element={<AppLayout />}>
-              <Route index path="/" element={<HomeCopy />} />
+              <Route index path="/" element={ <ProtectedRoute><HomeCopy /></ProtectedRoute>} />
               {/* Others Page */}
               {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
