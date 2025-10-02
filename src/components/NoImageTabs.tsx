@@ -10,8 +10,8 @@ interface NoImageTabs {
 
 const NoImageTabs: React.FC = () => {
   const [tabs] = useState<NoImageTabs[]>([
-    { id: 1, title: "ไม่มีรูป", content: <ReceiveNoImage /> },
-    { id: 2, title: "กทม. - ตจว.", content: <OntruckOutbound /> },
+    { id: 1, title: "ไม่มีรูป 1 วัน", content: <ReceiveNoImage /> },
+    { id: 2, title: "ไม่มีรูป 15 วัน", content: <OntruckOutbound /> },
   ]);
   const [activeTabId, setActiveTabId] = useState<number>(1);
   const [underlineStyle, setUnderlineStyle] = useState({
