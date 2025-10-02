@@ -115,7 +115,7 @@ export default function Vgt() {
     setLoading(true);
     try {
       await ExportExcel({
-        url: "/exportVgt",
+        url: "/export-vgt",
         filename: "Vgt.xlsx",
       });
     } catch (err) {

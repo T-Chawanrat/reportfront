@@ -7,9 +7,9 @@ import Pagination from "../components/Pagination";
 import AxiosInstance from "../utils/AxiosInstance";
 import ResizableColumns from "../components/ResizableColumns";
 import { format } from "date-fns";
-import { FileDown } from "lucide-react";
-import { ExportExcel } from "../utils/ExportExcel";
 import WarehouseDropdown from "../components/dropdown/WarehouseDropdown";
+import ExportExcelButton from "../components/ExportExcelButton";
+import SearchInput from "../components/SearchInput";
 
 export interface Bookings {
   create_date: string;
@@ -103,20 +103,6 @@ export default function Bookings() {
     }
   };
 
-  const handleDownload = async () => {
-    setLoading(true);
-    try {
-      await ExportExcel({
-        url: "/exportBookings",
-        filename: "Bookings.xlsx",
-      });
-    } catch (err) {
-      alert((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchTransactions();
   }, [page, search, selectedWarehouseId]);
@@ -130,28 +116,23 @@ export default function Bookings() {
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
       <div className="overflow-x-auto w-full">
-        <div className="flex justify-between gap-1 mt-1">
-          <div className="flex gap-1 mb-2">
+        <div className="flex justify-between mt-1 mb-1">
+          <div className="flex mb-1 gap-1">
             <WarehouseDropdown
               onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)}
             />
-            <input
-              type="text"
-              placeholder="ค้นหา DO"
+            <SearchInput
               value={search}
-              onChange={(e) => setSearch(e.target.value.trim())}
-              className="border border-gray-300 rounded-lg ml-1 px-3 py-1 h-9 w-full md:w-85 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
+              onChange={setSearch}
+              placeholder="ค้นหา Do"
             />
           </div>
           <div>
-            <button
-              onClick={handleDownload}
-              className="h-9 flex-shrink-0 inline-flex items-center gap-2 px-2 py-1 rounded-md bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={loading}
-            >
-              <FileDown />
-              <span className="hidden md:inline">Export Excel</span>
-            </button>
+            <ExportExcelButton
+              url="/export-bookings"
+              filename="Bookings.xlsx"
+              label="Export Excel"
+            />
           </div>
         </div>
         <div className="overflow-x-auto w-full">

@@ -475,6 +475,11 @@ const navItems: NavItem[] = [
         icon: <File size={20} />,
       },
       {
+        name: "ไม่มีรูป",
+        path: "/noimage",
+        icon: <File size={20} />,
+      },
+      {
         name: "สถานะสินค้า",
         path: "/tracking",
         icon: <File size={20} />,
@@ -705,33 +710,33 @@ const AppSidebar: React.FC = () => {
           !isExpanded ? "lg:justify-center" : "justify-start"
         }`}
       >
-        <Link to="/">
-          {isExpanded || isMobileOpen ? (
-            <>
-              <img
-                className="dark:hidden"
-                src="/images/logo/logo.png"
-                alt="Logo"
-                width={130}
-                height={40}
-              />
-              <img
-                className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
-                alt="Logo"
-                width={130}
-                height={40}
-              />
-            </>
-          ) : (
+        {/* <Link to="/"> */}
+        {isExpanded || isMobileOpen ? (
+          <>
             <img
-              src="/images/logo/logo-icon.png"
+              className="dark:hidden"
+              src="/images/logo/logo.png"
               alt="Logo"
-              width={32}
-              height={32}
+              width={130}
+              height={40}
             />
-          )}
-        </Link>
+            <img
+              className="hidden dark:block"
+              src="/images/logo/logo-dark.svg"
+              alt="Logo"
+              width={130}
+              height={40}
+            />
+          </>
+        ) : (
+          <img
+            src="/images/logo/logo-icon.png"
+            alt="Logo"
+            width={32}
+            height={32}
+          />
+        )}
+        {/* </Link> */}
       </div>
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar flex-1">
         <nav className="mb-6">

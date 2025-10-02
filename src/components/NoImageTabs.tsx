@@ -1,21 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import OntruckStd from "../pages/Ontruck/OntruckStd";
+import ReceiveNoImage from "../pages/NoImage/ReceiveNoImage";
 import OntruckOutbound from "../pages/Ontruck/OntruckOutbound";
-import OntruckInbound from "../pages/Ontruck/OntruckInbound";
-import OntruckWh from "../pages/Ontruck/OntruckWh";
 
-interface OntruckTabs {
+interface NoImageTabs {
   id: number;
   title: string;
   content: React.ReactNode;
 }
 
-const OntruckTabs: React.FC = () => {
-  const [tabs] = useState<OntruckTabs[]>([
-    { id: 1, title: "ทั้งหมด", content: <OntruckStd /> },
+const NoImageTabs: React.FC = () => {
+  const [tabs] = useState<NoImageTabs[]>([
+    { id: 1, title: "ไม่มีรูป", content: <ReceiveNoImage /> },
     { id: 2, title: "กทม. - ตจว.", content: <OntruckOutbound /> },
-    { id: 3, title: "ตจว. - กทม.", content: <OntruckInbound /> },
-    { id: 4, title: "ตจว. - ตจว.", content: <OntruckWh /> },
   ]);
   const [activeTabId, setActiveTabId] = useState<number>(1);
   const [underlineStyle, setUnderlineStyle] = useState({
@@ -32,7 +28,9 @@ const OntruckTabs: React.FC = () => {
     // Update underline position and width based on the active tab
     const tabsContainer = tabsContainerRef.current;
     if (tabsContainer) {
-      const activeTab = tabsContainer.querySelector<HTMLDivElement>(`[data-id="${activeTabId}"]`);
+      const activeTab = tabsContainer.querySelector<HTMLDivElement>(
+        `[data-id="${activeTabId}"]`
+      );
       if (activeTab) {
         setUnderlineStyle({
           left: `${activeTab.offsetLeft}px`,
@@ -52,7 +50,9 @@ const OntruckTabs: React.FC = () => {
               key={tab.id}
               data-id={tab.id}
               className={`px-4 py-2 cursor-pointer text-sm font-medium ${
-                activeTabId === tab.id ? "text-brand-600" : "text-gray-600 hover:text-brand-600"
+                activeTabId === tab.id
+                  ? "text-brand-600"
+                  : "text-gray-600 hover:text-brand-600"
               }`}
               onClick={() => selectTab(tab.id)}
             >
@@ -75,10 +75,8 @@ const OntruckTabs: React.FC = () => {
       <div className="p-2 border border-gray-200 bg-white">
         {tabs.find((tab) => tab.id === activeTabId)?.content || "No active tab"}
       </div>
-
-    
     </div>
   );
 };
 
-export default OntruckTabs;
+export default NoImageTabs;

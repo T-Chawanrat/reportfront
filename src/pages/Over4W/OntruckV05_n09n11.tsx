@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import Pagination from "../components/Pagination";
-import AxiosInstance from "../utils/AxiosInstance";
-import ResizableColumns from "../components/ResizableColumns";
+import Pagination from "../../components/Pagination";
+import AxiosInstance from "../../utils/AxiosInstance";
+import ResizableColumns from "../../components/ResizableColumns";
 
 export interface Transaction {
   warehouse_name: string;

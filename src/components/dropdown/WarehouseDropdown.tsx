@@ -104,7 +104,7 @@ const WarehouseDropdown: React.FC<WarehouseDropdownProps> = ({ onChange }) => {
   };
 
   return (
-    <div className="relative w-45" ref={dropdownRef}>
+    <div className="relative max-w-xs" ref={dropdownRef}>
       <div className="flex items-center border border-gray-300 rounded-lg px-3 py-1 h-9">
         <input
           type="text"
@@ -117,13 +117,13 @@ const WarehouseDropdown: React.FC<WarehouseDropdownProps> = ({ onChange }) => {
         <button
           type="button"
           onClick={toggleDropdown} // เปิด dropdown เมื่อคลิกลูกศร
-          className="ml-2 focus:outline-none"
+          className=" focus:outline-none"
         >
           <ChevronDownIcon className="h-5 text-gray-500 -ml-5" />
         </button>
       </div>
       {isDropdownOpen && (
-        <ul className="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-40 overflow-y-auto w-45">
+        <ul className="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-40 overflow-y-auto w-full">
           {filteredWarehouses.length > 0 ? (
             filteredWarehouses.map((warehouse) => (
               <li

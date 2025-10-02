@@ -2,24 +2,24 @@ import React, { useState, useEffect, useRef } from "react";
 import AxiosInstance from "../../utils/AxiosInstance";
 import { ChevronDownIcon } from "lucide-react";
 
-export interface Warehouse {
+export interface WarehouseOver4W {
   warehouse_id: number;
   warehouse_name: string;
   warehouse_code: string | null;
 }
 
-interface WarehouseV05Props {
+interface WarehouseOver4WProps {
   selectedWarehouseId: number | null; // รับ selectedWarehouseId จาก parent
   setSelectedWarehouseId: (id: number | null) => void; // รับ setSelectedWarehouseId จาก parent
 }
 
-const WarehouseV05: React.FC<WarehouseV05Props> = ({
+const WarehouseOver4W: React.FC<WarehouseOver4WProps> = ({
   selectedWarehouseId,
   setSelectedWarehouseId,
 }) => {
-  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+  const [warehouses, setWarehouses] = useState<WarehouseOver4W[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>(""); // คำค้นหาใน input
-  const [filteredWarehouses, setFilteredWarehouses] = useState<Warehouse[]>([]);
+  const [filteredWarehouses, setFilteredWarehouses] = useState<WarehouseOver4W[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false); // สถานะ dropdown เปิด/ปิด
   const dropdownRef = useRef<HTMLDivElement>(null); // ใช้ตรวจจับการคลิกภายนอก dropdown
 
@@ -93,11 +93,11 @@ const WarehouseV05: React.FC<WarehouseV05Props> = ({
   };
 
   return (
-    <div className="relative w-50 font-thai" ref={dropdownRef}>
+    <div className="relative max-w-xs font-thai" ref={dropdownRef}>
       <div className="flex items-center border border-gray-300 rounded-lg px-3 py-1 h-9">
         <input
           type="text"
-          placeholder="ค้นหาคลังสินค้า (ทั้งหมด)"
+          placeholder="ค้นหาคลังสินค้า"
           value={searchTerm}
           onChange={handleInputChange}
           onFocus={() => setIsDropdownOpen(true)}
@@ -108,7 +108,7 @@ const WarehouseV05: React.FC<WarehouseV05Props> = ({
         </button>
       </div>
       {isDropdownOpen && (
-        <ul className="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-40 overflow-y-auto w-50">
+        <ul className="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-40 overflow-y-auto w-full">
           {filteredWarehouses.length > 0 ? (
             filteredWarehouses.map((warehouse) => (
               <li
@@ -130,4 +130,4 @@ const WarehouseV05: React.FC<WarehouseV05Props> = ({
   );
 };
 
-export default WarehouseV05;
+export default WarehouseOver4W;

@@ -27,7 +27,8 @@ import { ColumnWidthsProvider } from "./context/ColumnWidths";
 import TrackingStatus from "./pages/TrackingStatus";
 import HomeCopy from "./pages/Dashboard/Home copy";
 import Ontruck from "./pages/Ontruck";
-import Layout05 from "./pages/Layout05";
+import LayoutOver4w from "./pages/Over4W/LayoutOver4w";
+import LayoutNoImage from "./pages/NoImage/LayoutNoImage";
 import OntruckV05std from "./pages/OntruckV05std";
 import Sla from "./pages/Sla";
 import Bookings from "./pages/Bookings";
@@ -42,7 +43,15 @@ export default function App() {
           <Routes>
             {/* Dashboard Layout */}
             <Route element={<AppLayout />}>
-              <Route index path="/" element={ <ProtectedRoute><HomeCopy /></ProtectedRoute>} />
+              <Route
+                index
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <HomeCopy />
+                  </ProtectedRoute>
+                }
+              />
               {/* Others Page */}
               {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
@@ -83,7 +92,7 @@ export default function App() {
                 path="/over4w"
                 element={
                   <ProtectedRoute>
-                    <Layout05 />
+                    <LayoutOver4w />
                   </ProtectedRoute>
                 }
               />
@@ -116,6 +125,14 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <Bookings />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/noimage"
+                element={
+                  <ProtectedRoute>
+                    <LayoutNoImage />
                   </ProtectedRoute>
                 }
               />

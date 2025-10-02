@@ -7,11 +7,12 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
 import AxiosInstance from "../utils/AxiosInstance";
 import Button from "../components/ui/button/Button";
-import { ExportExcel } from "../utils/ExportExcel";
-import { FileDown, Loader2, Logs } from "lucide-react";
+import { Loader2, Logs } from "lucide-react";
 import WarehouseDropdown from "../components/dropdown/WarehouseDropdown";
 import CustomerDropdown from "../components/dropdown/CustomerDropdown";
 import ResizableColumns from "../components/ResizableColumns";
+import ExportExcelButton from "../components/ExportExcelButton";
+import SearchInput from "../components/SearchInput";
 
 export interface Transaction {
   id?: number | string;
@@ -45,8 +46,12 @@ const headers = [
 export default function ProductWarehouse() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [search, setSearch] = useState<string>("");
-  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(null);
-  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(
+    null
+  );
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(
+    null
+  );
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const limit = 17;
@@ -54,7 +59,9 @@ export default function ProductWarehouse() {
   const [error, setError] = useState<string | null>(null);
   const pageCount = Math.ceil(total / limit);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [modalData, setModalData] = useState<Transaction | Transaction[] | null>(null);
+  const [modalData, setModalData] = useState<
+    Transaction | Transaction[] | null
+  >(null);
   const [countWarehouse15, setCountWarehouse15] = useState<number>(0);
   const [countWarehouseNot15, setCountWarehouseNot15] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -128,24 +135,15 @@ export default function ProductWarehouse() {
     return () => clearInterval(timer);
   }, []);
 
-  const handleDownload = async () => {
-    setLoading(true);
-    try {
-      await ExportExcel({
-        url: "/export02",
-        filename: "Product_Warehouse.xlsx",
-      });
-    } catch (err) {
-      alert((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleAddRemark = async () => {
     if (updateLoading) return;
     if (!newRemark.trim()) return;
-    if (!modalData || Array.isArray(modalData) || !modalData.receive_business_id) return;
+    if (
+      !modalData ||
+      Array.isArray(modalData) ||
+      !modalData.receive_business_id
+    )
+      return;
 
     setUpdateLoading(true);
     setUpdateError(null);
@@ -158,9 +156,15 @@ export default function ProductWarehouse() {
 
       setNewRemark("");
 
-      setModalData((prev) => (prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev));
+      setModalData((prev) =>
+        prev && !Array.isArray(prev) ? { ...prev, remark: newRemark } : prev
+      );
       setTransactions((txs) =>
-        txs.map((tx) => (tx.receive_code === modalData.receive_code ? { ...tx, remark: newRemark } : tx))
+        txs.map((tx) =>
+          tx.receive_code === modalData.receive_code
+            ? { ...tx, remark: newRemark }
+            : tx
+        )
       );
     } catch (err) {
       setUpdateError((err as Error).message);
@@ -171,17 +175,19 @@ export default function ProductWarehouse() {
 
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
-      <div className="flex items-center justify-between mb-2 gap-2">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex flex-wrap items-center gap-1 w-full">
-          <input
-            type="text"
-            placeholder="ค้นหา Do หรือ Ref"
+          <SearchInput
             value={search}
-            onChange={(e) => setSearch(e.target.value.trim())}
-            className="border border-gray-300 rounded-lg px-3 py-1 h-9 w-85 md:w-lg focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
+            onChange={setSearch}
+            placeholder="ค้นหา Do หรือ Ref"
           />
-          <WarehouseDropdown onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)} />
-          <CustomerDropdown onChange={(customerId) => setSelectedCustomerId(customerId)} />
+          <WarehouseDropdown
+            onChange={(warehouseId) => setSelectedWarehouseId(warehouseId)}
+          />
+          <CustomerDropdown
+            onChange={(customerId) => setSelectedCustomerId(customerId)}
+          />
           <div className="flex gap-3">
             <div>
               กรุงเทพ <strong>{countWarehouse15}</strong>
@@ -198,13 +204,11 @@ export default function ProductWarehouse() {
             </span>
           </div>
         </div>
-        <button
-          onClick={handleDownload}
-          className="h-9 flex-shrink-0 inline-flex items-center gap-2 px-2 py-1 rounded-md bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <FileDown />
-          <span className="hidden md:inline">Export Excel</span>
-        </button>
+        <ExportExcelButton
+          url="/export02"
+          filename="Product_Warehouse.xlsx"
+          label="Export Excel"
+        />
       </div>
 
       {/* ตารางข้อมูล */}
@@ -214,7 +218,10 @@ export default function ProductWarehouse() {
           <tbody>
             {transactions.map((t, i) => {
               return (
-                <tr key={t.id ?? i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                <tr
+                  key={t.id ?? i}
+                  className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                >
                   {/* log modal เดิม */}
                   <td className="px-4 py-1 border-b truncate">
                     <button
@@ -228,22 +235,42 @@ export default function ProductWarehouse() {
                       <Logs size={23} />
                     </button>
                   </td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.customer_name || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate max-w-xs">{t.recipient_name || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.warehouse_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.customer_name || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate max-w-xs">
+                    {t.recipient_name || "-"}
+                  </td>
                   <td className="px-4 py-2 border-b truncate">
-                    {t.receive_date ? format(new Date(t.receive_date), "dd-MM-yyyy") : "-"}
+                    {t.receive_date
+                      ? format(new Date(t.receive_date), "dd-MM-yyyy")
+                      : "-"}
                   </td>
                   <td className="px-4 py-2  border-b truncate">
-                    {t.delivery_date ? format(new Date(t.delivery_date), "dd-MM-yyyy") : "-"}
+                    {t.delivery_date
+                      ? format(new Date(t.delivery_date), "dd-MM-yyyy")
+                      : "-"}
                   </td>
                   <td className="px-4 py-2  border-b truncate">
-                    {t.resend_date ? format(new Date(t.resend_date), "dd-MM-yyyy") : "-"}
+                    {t.resend_date
+                      ? format(new Date(t.resend_date), "dd-MM-yyyy")
+                      : "-"}
                   </td>
-                  <td className="px-4 py-2 border-b truncate">{t.receive_code || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate">{t.reference_no || "-"}</td>
-                  <td className="px-4 py-2 border-b truncate">{t.to_warehouse_name}</td>
-                  <td className="px-4 py-2 border-b truncate">{t.status_message || "-"}</td>
+                  <td className="px-4 py-2 border-b truncate">
+                    {t.receive_code || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate">
+                    {t.reference_no || "-"}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate">
+                    {t.to_warehouse_name}
+                  </td>
+                  <td className="px-4 py-2 border-b truncate">
+                    {t.status_message || "-"}
+                  </td>
                 </tr>
               );
             })}
@@ -267,11 +294,15 @@ export default function ProductWarehouse() {
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-bold text-base">
                 เพิ่มหมายเหตุ
-                {modalData && !Array.isArray(modalData) && (modalData.receive_code || modalData.id) && (
-                  <span className="ml-2 text-base text-gray-600 font-normal">
-                    {modalData.receive_code || modalData.receive_business_id || modalData.id}
-                  </span>
-                )}
+                {modalData &&
+                  !Array.isArray(modalData) &&
+                  (modalData.receive_code || modalData.id) && (
+                    <span className="ml-2 text-base text-gray-600 font-normal">
+                      {modalData.receive_code ||
+                        modalData.receive_business_id ||
+                        modalData.id}
+                    </span>
+                  )}
               </h2>
               <button
                 className="text-gray-500 hover:text-gray-900"
@@ -300,12 +331,20 @@ export default function ProductWarehouse() {
                 disabled={updateLoading || !newRemark.trim()}
                 className="h-9 flex-shrink-0"
               >
-                {updateLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "เพิ่ม"}
+                {updateLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                ) : (
+                  "เพิ่ม"
+                )}
               </Button>
             </div>
 
-            {updateLoading && <div className="text-brand-500 py-2">กำลังบันทึกหมายเหตุ...</div>}
-            {updateError && <div className="text-red-500 text-sm">{updateError}</div>}
+            {updateLoading && (
+              <div className="text-brand-500 py-2">กำลังบันทึกหมายเหตุ...</div>
+            )}
+            {updateError && (
+              <div className="text-red-500 text-sm">{updateError}</div>
+            )}
           </div>
         </div>
       )}
@@ -317,7 +356,12 @@ export default function ProductWarehouse() {
       )}
       {error && <div className="text-red-600 text-center mt-4">{error}</div>}
 
-      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} disabled={loading} />
+      <Pagination
+        page={page}
+        pageCount={pageCount}
+        onPageChange={setPage}
+        disabled={loading}
+      />
     </div>
   );
 }

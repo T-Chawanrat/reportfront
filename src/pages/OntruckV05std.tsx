@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
 import AxiosInstance from "../utils/AxiosInstance";
 import ResizableColumns from "../components/ResizableColumns";
-import WarehouseV05 from "../components/dropdown/WarehouseV05";
+import WarehouseOver4W from "../components/dropdown/WarehouseOver4W";
 import { FileDown } from "lucide-react";
 import { ExportExcel } from "../utils/ExportExcel";
 import OverStatusRadio from "../components/dropdown/OverStatusRadio";
@@ -110,8 +110,8 @@ export default function OntruckV05std() {
 
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
-      <div className="flex items-center justify-between mb-2">
-        <WarehouseV05 selectedWarehouseId={selectedWarehouseId} setSelectedWarehouseId={setSelectedWarehouseId} />
+      <div className="flex flex-wrap items-center justify-between mb-2">
+        <WarehouseOver4W selectedWarehouseId={selectedWarehouseId} setSelectedWarehouseId={setSelectedWarehouseId} />
         <OverStatusRadio onChange={setSelectedOverStatus} />
         <button
           onClick={handleDownload}
