@@ -10,7 +10,6 @@ import { AuthProvider } from "./context/AuthContext";
 import ProductWarehouse from "./pages/ProductWarehouse";
 import ProductOverdue from "./pages/ProductOverdue";
 import { ColumnWidthsProvider } from "./context/ColumnWidths";
-// import UserProfiles from "./pages/UserProfiles";
 // import Videos from "./pages/UiElements/Videos";
 // import Images from "./pages/UiElements/Images";
 // import Alerts from "./pages/UiElements/Alerts";
@@ -19,20 +18,19 @@ import { ColumnWidthsProvider } from "./context/ColumnWidths";
 // import Buttons from "./pages/UiElements/Buttons";
 // import LineChart from "./pages/Charts/LineChart";
 // import BarChart from "./pages/Charts/BarChart";
-// import Calendar from "./pages/Calendar";
 // import BasicTables from "./pages/Tables/BasicTables";
 // import FormElements from "./pages/Forms/FormElements";
-// import Blank from "./pages/Blank";
 // import Home from "./pages/Dashboard/Home";
 import TrackingStatus from "./pages/TrackingStatus";
 import HomeCopy from "./pages/Dashboard/Home copy";
-import Ontruck from "./pages/Ontruck";
 import LayoutOver4w from "./pages/Over4W/LayoutOver4w";
-import LayoutNoImage from "./pages/NoImage/LayoutNoImage";
-import OntruckV05std from "./pages/OntruckV05std";
+// import ReceiveNoImage from "./pages/NoImage/ReceiveNoImage";
+import Intransit from "./pages/Intransit";
 import Sla from "./pages/Sla";
 import Bookings from "./pages/Bookings";
 import Vgt from "./pages/Vgt";
+import LayoutONtruck from "./pages/Ontruck/LayoutOntruck";
+import LayoutNoImage from "./pages/NoImage/LayoutNoImage";
 
 export default function App() {
   return (
@@ -52,10 +50,6 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
-              {/* Others Page */}
-              {/* <Route path="/profile" element={<UserProfiles />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/blank" element={<Blank />} /> */}
               <Route
                 path="/appremark"
                 element={
@@ -84,7 +78,7 @@ export default function App() {
                 path="/ontruck"
                 element={
                   <ProtectedRoute>
-                    <Ontruck />
+                    <LayoutONtruck />
                   </ProtectedRoute>
                 }
               />
@@ -100,7 +94,7 @@ export default function App() {
                 path="/intransit"
                 element={
                   <ProtectedRoute>
-                    <OntruckV05std />
+                    <Intransit />
                   </ProtectedRoute>
                 }
               />

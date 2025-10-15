@@ -11,26 +11,30 @@ import SearchInput from "../../components/SearchInput";
 import WarehouseDropdown from "../../components/dropdown/WarehouseDropdown";
 import ExportExcelButton from "../../components/ExportExcelButton";
 
-export interface ReceiveNoImage {
-  warehouse_name: string;
+export interface MissingV2 {
+  to_warehouse_name: string;
+  license_plate: string;
+  datetime: string;
   customer_name: string;
+  shipper_name: string;
   recipient_name: string;
-  bill_date: string;
   receive_code: string;
   serial_no: string;
 }
 
 const headers = [
   "คลังปลายทาง",
+  "ทะเบียนรถ",
+  "วันที่ปิดระบบ",
   "เจ้าของงาน",
+  "ชื่อผู้ส่ง",
   "ชื่อผู้รับ",
-  "วันที่",
-  "เลขที่เอกสาร",
+  "วันที่ปิดระบบ",
   "เลขที่กล่อง",
 ];
 
-export default function ReceiveNoImage() {
-  const [ReceiveNoImage, setReceiveNoImage] = useState<ReceiveNoImage[]>([]);
+export default function MissingV2() {
+  const [ReceiveNoImage, setReceiveNoImage] = useState<MissingV2[]>([]);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(
@@ -38,6 +42,8 @@ export default function ReceiveNoImage() {
   );
   const [searchCustomer, setSearchCustomer] = useState<string>("");
   const [searchRecipient, setSearchRecipient] = useState<string>("");
+  const [searchLicensePlate, setSearchLicensePlate] = useState<string>("");
+  const [searchShipper, setSearchShipper] = useState<string>("");
   const limit = 18;
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,10 +60,12 @@ export default function ReceiveNoImage() {
         limit,
         searchCustomer,
         searchRecipient,
+        searchLicensePlate,
+        searchShipper,
         to_warehouse_id: selectedWarehouseId,
       };
 
-      const res = await AxiosInstance.get("/noimage", { params });
+      const res = await AxiosInstance.get("/missingv2", { params });
 
       setReceiveNoImage(res.data.data || []);
       setTotal(res.data.total || 0);
@@ -76,7 +84,14 @@ export default function ReceiveNoImage() {
 
   useEffect(() => {
     fetchReceiveNoImage();
-  }, [page, searchCustomer, searchRecipient, selectedWarehouseId]);
+  }, [
+    page,
+    searchCustomer,
+    searchRecipient,
+    searchLicensePlate,
+    searchShipper,
+    selectedWarehouseId,
+  ]);
 
   useEffect(() => {
     if (page > pageCount && pageCount > 0) {
@@ -100,9 +115,19 @@ export default function ReceiveNoImage() {
             }
           />
           <SearchInput
+            value={searchLicensePlate}
+            onChange={setSearchLicensePlate}
+            placeholder="ค้นหาทะเบียนรถ"
+          />
+          <SearchInput
             value={searchCustomer}
             onChange={setSearchCustomer}
             placeholder="ค้นหาเจ้าของงาน"
+          />
+          <SearchInput
+            value={searchShipper}
+            onChange={setSearchShipper}
+            placeholder="ค้นหาชื่อผู้ส่ง"
           />
           <SearchInput
             value={searchRecipient}
@@ -125,18 +150,24 @@ export default function ReceiveNoImage() {
             {ReceiveNoImage.map((t) => (
               <tr key={crypto.randomUUID()}>
                 <td className="px-4 py-2 border-b truncate max-w-xs">
-                  {t.warehouse_name || "-"}
+                  {t.to_warehouse_name || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate max-w-xs">
+                  {t.license_plate || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate max-w-xs">
+                  {t.datetime
+                    ? format(new Date(t.datetime), "dd-MM-yyyy | HH:mm:ss")
+                    : "-"}
                 </td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">
                   {t.customer_name || "-"}
                 </td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">
-                  {t.recipient_name || "-"}
+                  {t.shipper_name || "-"}
                 </td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">
-                  {t.bill_date
-                    ? format(new Date(t.bill_date), "dd-MM-yyyy")
-                    : "-"}
+                  {t.recipient_name || "-"}
                 </td>
                 <td className="px-4 py-2 border-b truncate max-w-xs">
                   {t.receive_code || "-"}

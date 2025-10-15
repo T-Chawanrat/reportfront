@@ -1,4 +1,4 @@
-import OntruckTabs from "../components/OntruckTabs";
+import OntruckTabs from "../../components/OntruckTabs";
 
 export default function Ontruck() {
   return (

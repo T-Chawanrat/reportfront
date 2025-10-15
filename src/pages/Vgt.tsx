@@ -244,7 +244,7 @@ export default function Vgt() {
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">
                     {t.tt_status_date
-                      ? format(new Date(t.tt_status_date), "dd-MM-yyyy | HH:mm")
+                      ? format(new Date(t.tt_status_date), "dd-MM-yyyy")
                       : "-"}
                   </td>
                   <td className="px-4 py-2 border-b truncate max-w-xs">

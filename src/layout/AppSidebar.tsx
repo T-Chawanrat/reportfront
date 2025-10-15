@@ -475,7 +475,7 @@ const navItems: NavItem[] = [
         icon: <File size={20} />,
       },
       {
-        name: "ไม่มีรูป",
+        name: "ไม่มีรูป (Demo)",
         path: "/noimage",
         icon: <File size={20} />,
       },
