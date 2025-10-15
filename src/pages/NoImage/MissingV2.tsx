@@ -29,7 +29,7 @@ const headers = [
   "เจ้าของงาน",
   "ชื่อผู้ส่ง",
   "ชื่อผู้รับ",
-  "วันที่ปิดระบบ",
+  "เลขที่เอกสาร",
   "เลขที่กล่อง",
 ];
 
@@ -137,15 +137,15 @@ export default function MissingV2() {
         </div>
         <div>
           <ExportExcelButton
-            url="/export-noimage"
-            filename="ReceiveNoImage.xlsx"
+            url="/export-missingv2"
+            filename="MissingV2.xlsx"
             label="Export Excel"
           />
         </div>
       </div>
       <div className="overflow-x-auto w-full">
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
-          <ResizableColumns headers={headers} pageKey="Inbound" />
+          <ResizableColumns headers={headers} pageKey="MissingV2" />
           <tbody>
             {ReceiveNoImage.map((t) => (
               <tr key={crypto.randomUUID()}>

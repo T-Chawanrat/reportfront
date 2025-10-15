@@ -17,7 +17,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
       placeholder={placeholder}
       value={value}
       onChange={(e) => onChange(e.target.value.trim())}
-      className="border border-gray-300 rounded-lg px-3 py-1 h-9 w-full lg:w-auto focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
+      className="border border-gray-300 rounded-lg px-3 py-1 h-9 w-full lg:w-60 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400"
     />
   );
 };

@@ -187,7 +187,7 @@ export default function Vgt() {
         </div>
         <div className="overflow-x-auto w-full">
           <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
-            <ResizableColumns headers={headers} pageKey="vtg" />
+            <ResizableColumns headers={headers} pageKey="vgt" />
             <tbody>
               {vtg.map((t, i) => (
                 <tr

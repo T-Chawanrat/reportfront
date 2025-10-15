@@ -120,7 +120,7 @@ export default function ReceiveNoImage() {
       </div>
       <div className="overflow-x-auto w-full">
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
-          <ResizableColumns headers={headers} pageKey="Inbound" />
+          <ResizableColumns headers={headers} pageKey="ReceiveNoImage" />
           <tbody>
             {ReceiveNoImage.map((t) => (
               <tr key={crypto.randomUUID()}>
