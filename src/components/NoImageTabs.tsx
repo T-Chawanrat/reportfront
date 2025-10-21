@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReceiveNoImage from "../pages/NoImage/ReceiveNoImage";
 import MissingV2 from "../pages/NoImage/MissingV2";
+// import ImageV1 from "../pages/NoImage/ImageV1";
 
 interface NoImageTabs {
   id: number;
@@ -11,7 +12,7 @@ interface NoImageTabs {
 const NoImageTabs: React.FC = () => {
   const [tabs] = useState<NoImageTabs[]>([
     { id: 1, title: "ไม่มีรูป 1 วัน", content: <ReceiveNoImage /> },
-    { id: 2, title: "บิลวันที่xxไม่มีรูป", content: <MissingV2 /> },
+    // { id: 2, title: "บิลวันที่xxไม่มีรูป", content: <ImageV1 /> },
     { id: 3, title: "ปิดบิลวันที่xxไม่มีรูป", content: <MissingV2 /> },
   ]);
   const [activeTabId, setActiveTabId] = useState<number>(1);
