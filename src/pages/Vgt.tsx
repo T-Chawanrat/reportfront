@@ -106,7 +106,6 @@ export default function Vgt() {
     }
   };
 
-  // add listener แบบ concise
   if (typeof window !== "undefined") {
     window.addEventListener("mousedown", handleClickOutside);
   }
@@ -124,6 +123,10 @@ export default function Vgt() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setPage(1);
+  }, [bookStatus]);
 
   useEffect(() => {
     fetchVtg();

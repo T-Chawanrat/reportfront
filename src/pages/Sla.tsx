@@ -94,6 +94,10 @@ export default function Sla() {
   };
 
   useEffect(() => {
+    setPage(1);
+  }, [searchTambon, searchAmpur, searchProvince]);
+
+  useEffect(() => {
     fetchTransactions();
   }, [page, searchTambon, searchAmpur, searchProvince]);
 

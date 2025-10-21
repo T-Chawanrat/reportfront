@@ -102,6 +102,9 @@ export default function Bookings() {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    setPage(1);
+  }, [search, selectedWarehouseId]);
 
   useEffect(() => {
     fetchTransactions();

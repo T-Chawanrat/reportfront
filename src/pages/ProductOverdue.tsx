@@ -154,6 +154,10 @@ export default function ProductOverdue() {
   };
 
   useEffect(() => {
+    setPage(1);
+  }, [search, remark, filterType, selectedWarehouseId, selectedCustomerId]);
+
+  useEffect(() => {
     if (page > pageCount && pageCount > 0) {
       setPage(pageCount);
     } else {

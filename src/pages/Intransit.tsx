@@ -45,8 +45,12 @@ const headers = [
 
 export default function OntruckV05std() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(null);
-  const [selectedOverStatus, setSelectedOverStatus] = useState<"not_yet" | "overtime" | "all">("all");
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(
+    null
+  );
+  const [selectedOverStatus, setSelectedOverStatus] = useState<
+    "not_yet" | "overtime" | "all"
+  >("all");
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const limit = 20;
@@ -99,6 +103,10 @@ export default function OntruckV05std() {
   };
 
   useEffect(() => {
+    setPage(1);
+  }, [selectedWarehouseId, selectedOverStatus]);
+
+  useEffect(() => {
     fetchTransactions();
   }, [page, selectedWarehouseId, selectedOverStatus]);
 
@@ -111,7 +119,10 @@ export default function OntruckV05std() {
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
       <div className="flex flex-wrap items-center justify-between mb-2">
-        <WarehouseOver4W selectedWarehouseId={selectedWarehouseId} setSelectedWarehouseId={setSelectedWarehouseId} />
+        <WarehouseOver4W
+          selectedWarehouseId={selectedWarehouseId}
+          setSelectedWarehouseId={setSelectedWarehouseId}
+        />
         <OverStatusRadio onChange={setSelectedOverStatus} />
         <button
           onClick={handleDownload}
@@ -123,25 +134,56 @@ export default function OntruckV05std() {
         </button>
       </div>
       <div className="overflow-x-auto w-full">
-        <h2 className="text-xl font-semibold mt-2">กำลังนำจ่าย (เรียงตามเวลาส่งตำบล)</h2>
+        <h2 className="text-xl font-semibold mt-2">
+          กำลังนำจ่าย (เรียงตามเวลาส่งตำบล)
+        </h2>
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <ResizableColumns headers={headers} pageKey="intransit" />
           <tbody>
             {transactions.map((t, i) => (
-              <tr key={crypto.randomUUID()} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                <td className="px-4 py-2 border-b truncate">{t.warehouse_name || "-"}</td>
-                <td className="px-4 py-2 border-b truncate">{t.license_plate || "-"}</td>
-                <td className="px-4 py-2 border-b truncate">{t.tambon_name || "-"}</td>
-                <td className="px-4 py-2 border-b truncate">{t.ampur_name || "-"}</td>
-                <td className="px-4 py-2 border-b truncate">{t.time_in || "-"}</td>
-                <td className="px-4 py-2 border-b truncate">{t.time_in_over_status_text || "-"}</td>
-                <td className="px-4 py-2 border-b truncate">{t.time_in_over_amount_text || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.truck_code || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.recipient_name || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.address || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.tel || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.receive_code_count || "-"}</td>
-                <td className="px-4 py-2 border-b truncate max-w-xs">{t.serial_count || "-"}</td>
+              <tr
+                key={crypto.randomUUID()}
+                className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
+              >
+                <td className="px-4 py-2 border-b truncate">
+                  {t.warehouse_name || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate">
+                  {t.license_plate || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate">
+                  {t.tambon_name || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate">
+                  {t.ampur_name || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate">
+                  {t.time_in || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate">
+                  {t.time_in_over_status_text || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate">
+                  {t.time_in_over_amount_text || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate max-w-xs">
+                  {t.truck_code || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate max-w-xs">
+                  {t.recipient_name || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate max-w-xs">
+                  {t.address || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate max-w-xs">
+                  {t.tel || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate max-w-xs">
+                  {t.receive_code_count || "-"}
+                </td>
+                <td className="px-4 py-2 border-b truncate max-w-xs">
+                  {t.serial_count || "-"}
+                </td>
               </tr>
             ))}
           </tbody>

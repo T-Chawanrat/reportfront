@@ -75,6 +75,10 @@ export default function OntruckV05_09({
   };
 
   useEffect(() => {
+    setPage(1);
+  }, [selectedWarehouseId]);
+
+  useEffect(() => {
     fetchTransactions();
   }, [page, selectedWarehouseId]);
 

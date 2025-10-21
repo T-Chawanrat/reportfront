@@ -83,6 +83,16 @@ export default function MissingV2() {
   };
 
   useEffect(() => {
+    setPage(1);
+  }, [
+    searchCustomer,
+    searchRecipient,
+    searchLicensePlate,
+    searchShipper,
+    selectedWarehouseId,
+  ]);
+
+  useEffect(() => {
     fetchReceiveNoImage();
   }, [
     page,

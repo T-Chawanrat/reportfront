@@ -80,6 +80,10 @@ export default function ImageV1() {
   };
 
   useEffect(() => {
+    setPage(1);
+  }, [searchCustomer, searchReceiveCode, searchShipper, selectedWarehouseId]);
+
+  useEffect(() => {
     fetchImageV1();
   }, [
     page,

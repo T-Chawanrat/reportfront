@@ -128,6 +128,10 @@ export default function AppRemark() {
   };
 
   useEffect(() => {
+    setPage(1);
+  }, [search]);
+
+  useEffect(() => {
     if (page > pageCount && pageCount > 0) {
       setPage(pageCount);
     } else {

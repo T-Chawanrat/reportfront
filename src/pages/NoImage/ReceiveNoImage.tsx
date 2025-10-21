@@ -75,6 +75,10 @@ export default function ReceiveNoImage() {
   };
 
   useEffect(() => {
+    setPage(1);
+  }, [searchCustomer, searchRecipient, selectedWarehouseId]);
+
+  useEffect(() => {
     fetchReceiveNoImage();
   }, [page, searchCustomer, searchRecipient, selectedWarehouseId]);
 
