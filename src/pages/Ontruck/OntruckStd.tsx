@@ -144,32 +144,51 @@ export default function OntruckStd() {
                     }`}
                     onClick={() => handleRowClick(t.truck_load_id)}
                   >
-                    <td className="px-4 py-2 border-b truncate max-w-xs">{t.warehouse_name || "-"}</td>
-                    <td className="px-4 py-2 border-b truncate max-w-xs">{t.to_warehouse_name || "-"}</td>
-                    <td className="px-4 py-2 border-b truncate max-w-xs">{t.license_plate || "-"}</td>
-                    <td className="px-4 py-2 border-b truncate max-w-xs">{t.truck_code || "-"}</td>
-                    <td className="px-4 py-2 border-b truncate">
-                      {t.close_datetime ? format(new Date(t.close_datetime), "dd-MM-yyyy | HH:mm") : "-"}
+                    <td className="px-4 py-2 border-b truncate max-w-xs">
+                      {t.warehouse_name || "-"}
+                    </td>
+                    <td className="px-4 py-2 border-b truncate max-w-xs">
+                      {t.to_warehouse_name || "-"}
+                    </td>
+                    <td className="px-4 py-2 border-b truncate max-w-xs">
+                      {t.license_plate || "-"}
+                    </td>
+                    <td className="px-4 py-2 border-b truncate max-w-xs">
+                      {t.truck_code || "-"}
                     </td>
                     <td className="px-4 py-2 border-b truncate">
-                      {t.go_datetime ? format(new Date(t.go_datetime), "dd-MM-yyyy | HH:mm") : "-"}
+                      {t.close_datetime
+                        ? format(
+                            new Date(t.close_datetime),
+                            "dd-MM-yyyy | HH:mm"
+                          )
+                        : "-"}
                     </td>
-                    <td className="px-4 py-2 border-b truncate">{t.status_message_web || "-"}</td>
-                    <td className="px-4 py-2 border-b truncate">{t.time_remaining_text || "-"}</td>
+                    <td className="px-4 py-2 border-b truncate">
+                      {t.go_datetime
+                        ? format(new Date(t.go_datetime), "dd-MM-yyyy | HH:mm")
+                        : "-"}
+                    </td>
+                    <td className="px-4 py-2 border-b truncate">
+                      {t.status_message_web || "-"}
+                    </td>
+                    <td className="px-4 py-2 border-b truncate">
+                      {t.time_remaining_text || "-"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <Pagination
-              page={page}
-              pageCount={pageCount}
-              onPageChange={(newPage) => {
-                setPage(newPage);
-                resetSelection();
-              }}
-              disabled={loading}
-            />
           </div>
+          <Pagination
+            page={page}
+            pageCount={pageCount}
+            onPageChange={(newPage) => {
+              setPage(newPage);
+              resetSelection();
+            }}
+            disabled={loading}
+          />
         </div>
 
         {/* ฝั่ง 20% */}
@@ -177,16 +196,25 @@ export default function OntruckStd() {
           {selectedDetails && selectedDetails.length > 0 ? (
             <ul className="space-y-1 h-64 lg:h-[calc(100vh-10rem)] overflow-y-auto">
               {selectedDetails.map((t) => (
-                <li key={crypto.randomUUID()} className="p-3 border border-gray-200 rounded bg-white shadow-sm">
+                <li
+                  key={crypto.randomUUID()}
+                  className="p-3 border border-gray-200 rounded bg-white shadow-sm"
+                >
                   <p className="text-sm">
                     <span className="font-medium">{t.receive_code || "-"}</span>
                   </p>
-                  <p className="text-sm font-semibold text-brand-600">SN: {t.serial_no || "-"}</p>
+                  <p className="text-sm font-semibold text-brand-600">
+                    SN: {t.serial_no || "-"}
+                  </p>
                   <p className="text-sm">
-                    <span className="font-medium">{t.status_message || "-"}</span>
+                    <span className="font-medium">
+                      {t.status_message || "-"}
+                    </span>
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    {t.datetime ? format(new Date(t.datetime), "dd-MM-yyyy | HH:mm") : "-"}
+                    {t.datetime
+                      ? format(new Date(t.datetime), "dd-MM-yyyy | HH:mm")
+                      : "-"}
                   </p>
                 </li>
               ))}

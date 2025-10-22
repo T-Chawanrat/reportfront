@@ -122,7 +122,6 @@ export default function OntruckV05_n09n11({
                 <td className="px-4 py-2 border-b truncate max-w-xs">
                   {t.serial_no || "-"}
                 </td>
-
                 <td className="px-4 py-2 border-b truncate max-w-xs">
                   {t.time_remaining_text || "-"}
                 </td>
@@ -133,15 +132,15 @@ export default function OntruckV05_n09n11({
             ))}
           </tbody>
         </table>
-        <Pagination
-          page={page}
-          pageCount={pageCount}
-          onPageChange={(newPage) => {
-            setPage(newPage);
-          }}
-          disabled={loading}
-        />
       </div>
+      <Pagination
+        page={page}
+        pageCount={pageCount}
+        onPageChange={(newPage) => {
+          setPage(newPage);
+        }}
+        disabled={loading}
+      />
 
       {loading && (
         <div className="flex justify-center mt-4">

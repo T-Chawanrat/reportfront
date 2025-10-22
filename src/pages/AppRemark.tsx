@@ -57,7 +57,7 @@ export default function AppRemark() {
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
-  const limit = 17;
+  const limit = 18;
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const pageCount = Math.ceil(total / limit);

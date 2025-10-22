@@ -152,15 +152,15 @@ export default function ReceiveNoImage() {
             ))}
           </tbody>
         </table>
-        <Pagination
-          page={page}
-          pageCount={pageCount}
-          onPageChange={(newPage) => {
-            setPage(newPage);
-          }}
-          disabled={loading}
-        />
       </div>
+      <Pagination
+        page={page}
+        pageCount={pageCount}
+        onPageChange={(newPage) => {
+          setPage(newPage);
+        }}
+        disabled={loading}
+      />
 
       {loading && (
         <div className="flex justify-center mt-4">

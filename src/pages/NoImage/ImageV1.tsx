@@ -132,8 +132,8 @@ export default function ImageV1() {
         </div>
         <div>
           <ExportExcelButton
-            url="/export-missingv2"
-            filename="MissingV2.xlsx"
+            url="/export-images1"
+            filename="ImagesV1.xlsx"
             label="Export Excel"
           />
         </div>
@@ -171,15 +171,15 @@ export default function ImageV1() {
             ))}
           </tbody>
         </table>
-        <Pagination
-          page={page}
-          pageCount={pageCount}
-          onPageChange={(newPage) => {
-            setPage(newPage);
-          }}
-          disabled={loading}
-        />
       </div>
+      <Pagination
+        page={page}
+        pageCount={pageCount}
+        onPageChange={(newPage) => {
+          setPage(newPage);
+        }}
+        disabled={loading}
+      />
 
       {loading && (
         <div className="flex justify-center mt-4">
