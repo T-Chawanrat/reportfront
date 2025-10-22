@@ -10,6 +10,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ProductWarehouse from "./pages/ProductWarehouse";
 import ProductOverdue from "./pages/ProductOverdue";
 import { ColumnWidthsProvider } from "./context/ColumnWidths";
+
 // import Videos from "./pages/UiElements/Videos";
 // import Images from "./pages/UiElements/Images";
 // import Alerts from "./pages/UiElements/Alerts";
@@ -21,6 +22,7 @@ import { ColumnWidthsProvider } from "./context/ColumnWidths";
 // import BasicTables from "./pages/Tables/BasicTables";
 // import FormElements from "./pages/Forms/FormElements";
 // import Home from "./pages/Dashboard/Home";
+
 import TrackingStatus from "./pages/TrackingStatus";
 import HomeCopy from "./pages/Dashboard/Home copy";
 import LayoutOver4w from "./pages/Over4W/LayoutOver4w";
@@ -140,15 +142,15 @@ export default function App() {
 
               {/* Ui Elements */}
               {/* <Route path="/alerts" element={<Alerts />} />
-            <Route path="/avatars" element={<Avatars />} />
-            <Route path="/badge" element={<Badges />} />
-            <Route path="/buttons" element={<Buttons />} />
-            <Route path="/images" element={<Images />} />
-            <Route path="/videos" element={<Videos />} /> */}
+              <Route path="/avatars" element={<Avatars />} />
+              <Route path="/badge" element={<Badges />} />
+              <Route path="/buttons" element={<Buttons />} />
+              <Route path="/images" element={<Images />} />
+              <Route path="/videos" element={<Videos />} /> */}
 
               {/* Charts */}
               {/* <Route path="/line-chart" element={<LineChart />} />
-            <Route path="/bar-chart" element={<BarChart />} /> */}
+              <Route path="/bar-chart" element={<BarChart />} /> */}
             </Route>
 
             {/* Auth Layout */}

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import AxiosInstance from "../../utils/AxiosInstance";
 import ResizableColumns from "../../components/ResizableColumns";
+import WarehouseDropdown from "../../components/dropdown/WarehouseDropdown";
 
 export interface Transaction {
   warehouse_name: string;
@@ -17,10 +18,6 @@ export interface Transaction {
   serial_no: string;
   status_message: string;
   time_remaining_text: string;
-}
-
-interface OntruckV05_n09n11Props {
-  selectedWarehouseId: number | null;
 }
 
 const headers = [
@@ -34,10 +31,11 @@ const headers = [
   "สถานะ",
 ];
 
-export default function OntruckV05_n09n11({
-  selectedWarehouseId,
-}: OntruckV05_n09n11Props) {
+export default function OntruckV05_n09n11() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(
+    null
+  );
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const limit = 20;
@@ -91,9 +89,11 @@ export default function OntruckV05_n09n11({
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
       <div className="overflow-x-auto w-full">
-        <h2 className="text-xl font-semibold mt-10">
-          อื่นๆ (&gt; วันที่ล่าสุด+1ชม.)
-        </h2>
+        <WarehouseDropdown
+          onChange={(warehouseId) =>
+            setSelectedWarehouseId(warehouseId ? Number(warehouseId) : null)
+          }
+        />
         <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
           <ResizableColumns headers={headers} pageKey="V05_n09n11" />
           <tbody>

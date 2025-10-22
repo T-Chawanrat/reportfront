@@ -9,7 +9,8 @@ export interface Warehouse {
 }
 
 interface WarehouseDropdownProps {
-  onChange: (warehouseId: number | null) => void; // Callback สำหรับส่งค่า warehouse_id ไปยัง parent
+  onChange: (warehouseId: number | null) => void;
+  className?: string;
 }
 
 const WarehouseDropdown: React.FC<WarehouseDropdownProps> = ({ onChange }) => {
@@ -104,7 +105,7 @@ const WarehouseDropdown: React.FC<WarehouseDropdownProps> = ({ onChange }) => {
   };
 
   return (
-    <div className="relative max-w-xs" ref={dropdownRef}>
+    <div className="relative max-w-xs lg:w-48" ref={dropdownRef}>
       <div className="flex items-center border border-gray-300 rounded-lg px-3 py-1 h-9">
         <input
           type="text"

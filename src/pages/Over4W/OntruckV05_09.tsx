@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import AxiosInstance from "../../utils/AxiosInstance";
 import ResizableColumns from "../../components/ResizableColumns";
+import WarehouseDropdown from "../../components/dropdown/WarehouseDropdown";
+import ExportExcelButton from "../../components/ExportExcelButton";
 
 export interface Transaction {
   warehouse_name: string;
@@ -17,10 +19,6 @@ export interface Transaction {
   serial_no: string;
   status_message: string;
   time_remaining_text: string;
-}
-
-interface OntruckV05_09Props {
-  selectedWarehouseId: number | null;
 }
 
 const headers = [
@@ -34,13 +32,14 @@ const headers = [
   "สถานะ",
 ];
 
-export default function OntruckV05_09({
-  selectedWarehouseId,
-}: OntruckV05_09Props) {
+export default function OntruckV05_09() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(
+    null
+  );
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
-  const limit = 20;
+  const limit = 18;
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const pageCount = Math.ceil(total / limit);
@@ -91,10 +90,19 @@ export default function OntruckV05_09({
   return (
     <div className={`font-thai w-full ${loading ? "cursor-wait" : ""}`}>
       <div className="overflow-x-auto w-full">
-        <h2 className="text-xl font-semibold mt-2">
-          กำลังนำจ่าย (เกินเวลาเข้าตำบลนั้นๆ)
-        </h2>
-        <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden">
+          <div className="flex justify-between mb-1">
+          <WarehouseDropdown
+            onChange={(warehouseId) =>
+              setSelectedWarehouseId(warehouseId ? Number(warehouseId) : null)
+            }
+          />
+          <ExportExcelButton
+            url="/export05"
+            filename="Over4w.xlsx"
+            label="Export Excel"
+          />
+        </div>
+        <table className="w-full table-fixed border border-gray-300 rounded overflow-hidden mt-1">
           <ResizableColumns headers={headers} pageKey="v05_09" />
           <tbody>
             {transactions.map((t, i) => (

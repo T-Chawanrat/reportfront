@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-import ReceiveNoImage from "../pages/NoImage/ReceiveNoImage";
-import MissingV2 from "../pages/NoImage/MissingV2";
-import ImageV1 from "../pages/NoImage/ImageV1";
+import OntruckV05_09 from "../pages/Over4W/OntruckV05_09";
+import OntruckV05_11 from "../pages/Over4W/OntruckV05_11";
+import OntruckV05_n09n11 from "../pages/Over4W/OntruckV05_n09n11";
 
-interface NoImageTabs {
+
+interface Over4wTabs {
   id: number;
   title: string;
   content: React.ReactNode;
 }
 
-const NoImageTabs: React.FC = () => {
-  const [tabs] = useState<NoImageTabs[]>([
-    { id: 1, title: "ไม่มีรูป 1 วัน", content: <ReceiveNoImage /> },
-    { id: 2, title: "บิลวันที่xxไม่มีรูป", content: <ImageV1 /> },
-    { id: 3, title: "ปิดบิลวันที่xxไม่มีรูป", content: <MissingV2 /> },
+const Over4wTabs: React.FC = () => {
+  const [tabs] = useState<Over4wTabs[]>([
+    { id: 1, title: "กำลังนำจ่าย (เกินเวลาเข้าตำบลนั้นๆ)", content: <OntruckV05_09 /> },
+    { id: 2, title: "ไม่คืนคลัง (> เวลาเปิดศูนย์+4ชม.)", content: <OntruckV05_11 /> },
+    { id: 3, title: "อื่นๆ (> วันที่ล่าสุด+1ชม.)", content: <OntruckV05_n09n11 /> },
   ]);
   const [activeTabId, setActiveTabId] = useState<number>(1);
   const [underlineStyle, setUnderlineStyle] = useState({
@@ -81,4 +82,4 @@ const NoImageTabs: React.FC = () => {
   );
 };
 
-export default NoImageTabs;
+export default Over4wTabs;
