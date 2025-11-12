@@ -58,6 +58,20 @@ layer(base);
   --color-brand-900: #262e89;
   --color-brand-950: #161950;
 
+  /* --color-brand-25:  #f7f7f7; เทาอ่อนเกือบขาว
+  --color-brand-50:  #f0f0f0;
+  --color-brand-100: #e0e0e0;
+  --color-brand-200: #c8c8c8;
+  --color-brand-300: #a8a8a8;
+  --color-brand-400: #8c8c8c;
+  --color-brand-500: #707070;
+  --color-brand-600: #555555;
+  --color-brand-700: #3b3b3b;
+  --color-brand-800: #2a2a2a;
+  --color-brand-900: #1a1a1a;
+  --color-brand-950: #0f0f0f; ดำสนิท */
+
+
   --color-blue-light-25: #f5fbff;
   --color-blue-light-50: #f0f9ff;
   --color-blue-light-100: #e0f2fe;

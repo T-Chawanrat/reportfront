@@ -7,7 +7,10 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
 import AxiosInstance from "../utils/AxiosInstance";
 import Button from "../components/ui/button/Button";
-import { Loader2, Logs } from "lucide-react";
+import {
+  Loader2,
+  // Logs
+} from "lucide-react";
 import ResizableColumns from "../components/ResizableColumns";
 import SearchInput from "../components/SearchInput";
 import ExportExcelButton from "../components/ExportExcelButton";
@@ -40,7 +43,7 @@ export interface LeditRow {
 }
 
 const headers = [
-  "Log",
+  // "Log",
   "วันที่จากแอป",
   "หมายเหตุแอป",
   "หมายเหตุ",
@@ -225,7 +228,7 @@ export default function AppRemark() {
                   key={t.id ?? i}
                   className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
                 >
-                  <td className="px-4 py-1 border-b truncate">
+                  {/* <td className="px-4 py-1 border-b truncate">
                     <button
                       className="inline-flex gap-1 px-1.5 py-1 rounded text-xs bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-300"
                       onClick={async () => {
@@ -236,7 +239,7 @@ export default function AppRemark() {
                     >
                       <Logs size={23} />
                     </button>
-                  </td>
+                  </td> */}
                   <td className="px-4 py-2 border-b truncate">
                     {t.Create_date_tm_resend
                       ? format(

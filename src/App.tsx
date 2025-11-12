@@ -31,6 +31,7 @@ import Intransit from "./pages/Intransit";
 import Sla from "./pages/Sla";
 import Bookings from "./pages/Bookings";
 import Vgt from "./pages/Vgt";
+import Bills from "./pages/Bills";
 import LayoutONtruck from "./pages/Ontruck/LayoutOntruck";
 import LayoutNoImage from "./pages/NoImage/LayoutNoImage";
 
@@ -133,6 +134,7 @@ export default function App() {
                 }
               />
               <Route path="/vgt" element={<Vgt />} />
+              <Route path="/bills" element={<Bills />} />
 
               {/* Forms */}
               {/* <Route path="/form-elements" element={<FormElements />} /> */}
