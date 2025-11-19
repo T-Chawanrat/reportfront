@@ -17,7 +17,7 @@ import ExportExcelButton from "../components/ExportExcelButton";
 import SearchInput from "../components/SearchInput";
 
 export interface Transaction {
-  id?: number | string;
+  id?: number;
   receive_code?: string;
   customer_name?: string;
   recipient_name?: string;

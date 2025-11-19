@@ -6,7 +6,7 @@ import ProtectedRoute from "./context/ProtectedRoute";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import AppRemark from "./pages/AppRemark";
-import { AuthProvider } from "./context/AuthContext";
+// import { AuthProvider } from "./context/AuthContext";
 import ProductWarehouse from "./pages/ProductWarehouse";
 import ProductOverdue from "./pages/ProductOverdue";
 import { ColumnWidthsProvider } from "./context/ColumnWidths";
@@ -34,10 +34,11 @@ import Vgt from "./pages/Vgt";
 import Bills from "./pages/Bills";
 import LayoutONtruck from "./pages/Ontruck/LayoutOntruck";
 import LayoutNoImage from "./pages/NoImage/LayoutNoImage";
+import BillImport from "./pages/BillImport";
 
 export default function App() {
   return (
-    <AuthProvider>
+    // <AuthProvider>
       <ColumnWidthsProvider>
         <Router>
           <ScrollToTop />
@@ -135,6 +136,7 @@ export default function App() {
               />
               <Route path="/vgt" element={<Vgt />} />
               <Route path="/bills" element={<Bills />} />
+              <Route path="/import" element={<BillImport />} />
 
               {/* Forms */}
               {/* <Route path="/form-elements" element={<FormElements />} /> */}
@@ -165,6 +167,8 @@ export default function App() {
           </Routes>
         </Router>
       </ColumnWidthsProvider>
-    </AuthProvider>
+
+    // </AuthProvider> 
+
   );
 }

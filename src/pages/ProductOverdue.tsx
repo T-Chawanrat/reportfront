@@ -35,7 +35,7 @@ export interface Transaction {
 }
 
 export interface LeditRow {
-  pk_id: number | string;
+  pk_id: number;
   create_date?: string;
   value_new?: string;
   column?: string;
